@@ -12,7 +12,7 @@
                     for a better web.
                 </div>
             </div>
-            <div class="mt-0 w-full max-w-full shrink-0 px-3 lg:w-1/2 lg:flex-none">
+            <div class="mt-0 w-full max-w-full shrink-0 px-3 lg:flex-none">
                 <ul class="mb-0 flex list-none flex-wrap justify-center pl-0 lg:justify-end">
                     <li class="nav-item">
                         <a href="https://www.instagram.com/akbarwp002" class="block px-4 pb-1 pt-0 text-sm font-normal text-slate-500 transition-colors ease-in-out" target="_blank">Instagram</a>

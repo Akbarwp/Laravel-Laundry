@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('username');
             $table->string('password');
-            $table->foreignId('cabang_id')->constrained('cabang', 'id');
+            $table->foreignId('cabang_id')->nullable()->constrained('cabang', 'id');
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

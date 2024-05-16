@@ -48,7 +48,6 @@ class DatabaseSeeder extends Seeder
         $lurah = User::factory()->create([
             'username' => 'Lurah',
             'email' => 'lurah@gmail.com',
-            'cabang_id' => $cabang->id,
         ]);
         $lurah->assignRole($roleLurah);
         Lurah::create([
@@ -96,7 +95,6 @@ class DatabaseSeeder extends Seeder
         $rw = User::factory()->create([
             'username' => 'RW',
             'email' => 'rw@gmail.com',
-            'cabang_id' => $cabang->id,
         ]);
         $rw->assignRole($roleRW);
         RW::create([

@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Cabang extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory, HasSlug, SoftDeletes;
 
     protected $table = 'cabang';
     protected $primaryKey = 'id';
@@ -32,5 +33,10 @@ class Cabang extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama')->unique();
             $table->string('slug');
             $table->string('lokasi');
-            $table->text('alamat');
+            $table->text('alamat')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
