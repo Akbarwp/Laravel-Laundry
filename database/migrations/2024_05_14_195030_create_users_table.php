@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('username');
+            $table->string('username')->unique();
+            $table->string('slug');
             $table->string('password');
             $table->foreignId('cabang_id')->nullable()->constrained('cabang', 'id');
             $table->softDeletes();

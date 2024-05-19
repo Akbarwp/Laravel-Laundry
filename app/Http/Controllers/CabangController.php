@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabang;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -92,6 +93,7 @@ class CabangController extends Controller
     public function delete(Request $request)
     {
         $hapus = Cabang::where('id', $request->id)->delete();
+        User::where('cabang_id', $request->id)->delete();
         if ($hapus) {
             abort(200, 'Cabang Berhasil Dihapus');
         } else {
@@ -101,7 +103,8 @@ class CabangController extends Controller
 
     public function restore(Request $request)
     {
-        $pulih = Cabang::onlyTrashed()->where('id', $request->id)->restore();
+        $pulih = Cabang::where('id', $request->id)->restore();
+        User::where('cabang_id', $request->id)->restore();
         if ($pulih) {
             abort(200, 'Cabang Berhasil Dihapus');
         } else {
@@ -111,7 +114,7 @@ class CabangController extends Controller
 
     public function destroy(Request $request)
     {
-        $hapusPermanen = Cabang::onlyTrashed()->where('id', $request->id)->forceDelete();
+        $hapusPermanen = Cabang::where('id', $request->id)->forceDelete();
         if ($hapusPermanen) {
             abort(200, 'Cabang Berhasil Dihapus');
         } else {

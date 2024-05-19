@@ -4,7 +4,7 @@
     <div>
         <!-- row 1 -->
         <div class="-mx-3 flex flex-wrap">
-            <!-- card1 -->
+            <!-- Jumlah Cabang -->
             <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
                 <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                     <div class="flex-auto p-4">
@@ -12,17 +12,16 @@
                             <div class="w-2/3 max-w-full flex-none px-3">
                                 <div>
                                     <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">
-                                        Today's Money</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">$53,000</h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-bold leading-normal text-emerald-500">+55%</span>
-                                        since yesterday
+                                        {{ $userRole != 'lurah' ? 'Cabang' : 'Jumlah Cabang' }}
                                     </p>
+                                    <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
+                                        {{ $userRole != 'lurah' ? auth()->user()->cabang->nama : $jmlCabang }}
+                                    </h5>
                                 </div>
                             </div>
                             <div class="basis-1/3 px-3 text-right">
                                 <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-blue-500 to-violet-500 text-center">
-                                    <i class="ri-money-dollar-box-line relative top-3 text-2xl leading-none text-white"></i>
+                                    <i class="ri-home-smile-line relative top-3 text-2xl leading-none text-white"></i>
                                 </div>
                             </div>
                         </div>
@@ -30,20 +29,15 @@
                 </div>
             </div>
 
-            <!-- card2 -->
+            <!-- Jumlah User -->
             <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
                 <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                     <div class="flex-auto p-4">
                         <div class="-mx-3 flex flex-row">
                             <div class="w-2/3 max-w-full flex-none px-3">
                                 <div>
-                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">
-                                        Today's Users</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">2,300</h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-bold leading-normal text-emerald-500">+3%</span>
-                                        since last week
-                                    </p>
+                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Jumlah User</p>
+                                    <h5 class="mb-2 font-bold text-blue-700 dark:text-white">{{ $jmlUser }}</h5>
                                 </div>
                             </div>
                             <div class="basis-1/3 px-3 text-right">
@@ -56,20 +50,15 @@
                 </div>
             </div>
 
-            <!-- card3 -->
+            <!-- UMR -->
             <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
                 <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                     <div class="flex-auto p-4">
                         <div class="-mx-3 flex flex-row">
                             <div class="w-2/3 max-w-full flex-none px-3">
                                 <div>
-                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">
-                                        New Clients</p>
-                                    <h5 class="mb-2 font-bold dark:text-white">+3,462</h5>
-                                    <p class="mb-0 dark:text-white dark:opacity-60">
-                                        <span class="text-sm font-bold leading-normal text-red-600">-2%</span>
-                                        since last quarter
-                                    </p>
+                                    <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">UMR <span class="capitalize">{{ $umr->regional }}</span> ({{ $umr->tahun }})</p>
+                                    <h5 class="mb-2 font-bold text-blue-700 dark:text-white">Rp{{ number_format($umr->upah, 2, ',', '.') }}</h5>
                                 </div>
                             </div>
                             <div class="basis-1/3 px-3 text-right">

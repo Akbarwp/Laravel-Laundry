@@ -68,7 +68,19 @@ Route::group([
     ], function() {
 
         Route::get('/', [UserController::class, 'index'])->name('user');
-        Route::get('/{cabang:slug}', [UserController::class, 'indexCabang'])->name('user.cabang');
+        Route::get('/cabang/{cabang:slug}', [UserController::class, 'indexCabang'])->name('user.cabang');
+        Route::get('/cabang/{cabang:slug}/tambah', [UserController::class, 'createUserCabang'])->name('user.cabang.create');
+        Route::get('/tambah', [UserController::class, 'create'])->name('user.create');
+        Route::post('/tambah', [UserController::class, 'store'])->name('user.store');
+        Route::get('/lihat/{user:slug}', [UserController::class, 'view'])->name('user.view');
+        Route::get('/ubah/{user:slug}', [UserController::class, 'edit'])->name('user.edit');
+        Route::post('/ubah/{user:slug}', [UserController::class, 'update'])->name('user.update');
+        Route::get('/ubah-password/{user:slug}', [UserController::class, 'editPassword'])->name('user.edit.password');
+        Route::post('/ubah-password/{user:slug}', [UserController::class, 'updatePassword'])->name('user.update.password');
+        Route::post('/hapus', [UserController::class, 'delete'])->name('user.delete');
+        Route::get('/trash', [UserController::class, 'trash'])->name('user.trash');
+        Route::post('/pulihkan', [UserController::class, 'restore'])->name('user.restore');
+        Route::post('/hapus-permanen', [UserController::class, 'destroy'])->name('user.destroy');
     });
 
     Route::post('/laundry/logout', [AuthController::class, 'logout'])->name('logout');

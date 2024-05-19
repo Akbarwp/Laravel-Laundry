@@ -14,25 +14,26 @@ class DetailGamis extends Model
     public $incrementing = "true";
     public $timestamps = "true";
     protected $fillable = [
+        'nama',
         'foto',
-        'nama_lengkap',
-        'nik',
         'jenis_kelamin',
         'tempat_lahir',
         'tanggal_lahir',
-        'agama',
-        'pendidikan',
-        'golongan_darah',
-        'status_keluarga',
         'telepon',
         'alamat',
         'mulai_kerja',
         'selesai_kerja',
         'user_id',
+        'gamis_id',
     ];
 
     public function gamis()
     {
         return $this->belongsTo(Gamis::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

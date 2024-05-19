@@ -25,4 +25,9 @@ class RW extends Model
         'selesai_jabatan',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

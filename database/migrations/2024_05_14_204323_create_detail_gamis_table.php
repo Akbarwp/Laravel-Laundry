@@ -13,16 +13,11 @@ return new class extends Migration
     {
         Schema::create('detail_gamis', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
             $table->string('foto')->nullable();
-            $table->string('nama_lengkap');
-            $table->string('nik')->unique();
-            $table->string('jenis_kelamin');
+            $table->string('jenis_kelamin', 1);
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->string('agama');
-            $table->string('pendidikan');
-            $table->char('golongan_darah', 2);
-            $table->string('status_keluarga');
             $table->string('telepon');
             $table->text('alamat');
             $table->date('mulai_kerja')->nullable();

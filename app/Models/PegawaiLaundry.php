@@ -25,4 +25,9 @@ class PegawaiLaundry extends Model
         'selesai_kerja',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

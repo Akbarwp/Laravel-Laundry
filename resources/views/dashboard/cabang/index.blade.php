@@ -501,7 +501,7 @@
                                         Created_at
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        deleted_at
+                                        Deleted_at
                                     </th>
                                     <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Aksi

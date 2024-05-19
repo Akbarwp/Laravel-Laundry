@@ -2,8 +2,8 @@
     <div class="h-19">
         <i class="ri-close-large-fill absolute right-0 top-0 cursor-pointer p-4 text-slate-400 opacity-50 dark:text-white xl:hidden" sidenav-close></i>
         <a class="m-0 block whitespace-nowrap px-8 py-6 text-sm text-slate-700 dark:text-white" href="https://demos.creative-tim.com/argon-dashboard-tailwind/pages/dashboard.html" target="_blank">
-            <img src="{{ asset('img/logo-ct-dark.png') }}" class="ease-nav-brand inline h-full max-h-8 max-w-full transition-all duration-200 dark:hidden" alt="main_logo" />
-            <img src="{{ asset('img/logo-ct.png') }}" class="ease-nav-brand hidden h-full max-h-8 max-w-full transition-all duration-200 dark:inline" alt="main_logo" />
+            <img src="{{ asset("img/logo-ct-dark.png") }}" class="ease-nav-brand inline h-full max-h-8 max-w-full transition-all duration-200 dark:hidden" alt="main_logo" />
+            <img src="{{ asset("img/logo-ct.png") }}" class="ease-nav-brand hidden h-full max-h-8 max-w-full transition-all duration-200 dark:inline" alt="main_logo" />
             <span class="ease-nav-brand ml-1 font-semibold transition-all duration-200">Laundry Lurah</span>
         </a>
     </div>
@@ -13,7 +13,7 @@
     <div class="h-sidenav block max-h-screen w-auto grow basis-full items-center overflow-auto">
         <ul class="mb-0 flex flex-col pl-0">
             <li class="mt-0.5 w-full">
-                <a class="py-2.7 ease-nav-brand {{ Request::routeIs('dashboard') ? 'rounded-lg font text-slate-700 bg-blue-500/13' : '' }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors dark:text-white" href="{{ route('dashboard') }}">
+                <a class="py-2.7 ease-nav-brand {{ Request::routeIs("dashboard") ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("dashboard") }}">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="ri-tv-2-line relative top-0 text-lg leading-normal text-blue-500"></i>
                     </div>
@@ -21,14 +21,14 @@
                 </a>
             </li>
 
-            @role('lurah')
+            @role("lurah")
                 {{-- Awal Data Master --}}
                 <li class="mt-4 w-full">
                     <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Data Master</h6>
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(['cabang']) ? 'rounded-lg font text-slate-700 bg-blue-500/13' : '' }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors dark:text-white" href="{{ route('cabang') }}">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["cabang"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("cabang") }}">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="ri-home-smile-fill relative top-0 text-lg leading-normal text-blue-500"></i>
                         </div>
@@ -37,7 +37,7 @@
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(['umr']) ? 'rounded-lg font text-slate-700 bg-blue-500/13' : '' }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors dark:text-white" href="{{ route('umr') }}">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["umr"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("umr") }}">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="ri-currency-fill relative top-0 text-lg leading-normal text-blue-500"></i>
                         </div>
@@ -47,35 +47,36 @@
                 {{-- Akhir Data Master --}}
             @endrole
 
-            {{-- Awal User Management --}}
-            <li class="mt-4 w-full">
-                <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">User Management</h6>
-            </li>
+            @role(["lurah", "manajer_laundry"])
+                {{-- Awal User Management --}}
+                <li class="mt-4 w-full">
+                    <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">User Management</h6>
+                </li>
 
-            <li class="mt-0.5 w-full">
-                <a class="py-2.7 ease-nav-brand {{ Request::routeIs(['user', 'user.cabang']) ? 'rounded-lg font text-slate-700 bg-blue-500/13' : '' }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors dark:text-white" href="{{ route('user') }}">
-                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                        <i class="ri-user-3-fill relative top-0 text-lg leading-normal text-blue-500"></i>
-                    </div>
-                    <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Akun</span>
-                </a>
-            </li>
-            {{-- Akhir User Management --}}
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["user", "user.cabang", "user.cabang.create", "user.create", "user.view", "user.edit", "user.edit.password"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("user") }}">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-user-3-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Akun</span>
+                    </a>
+                </li>
+                {{-- Akhir User Management --}}
+            @endrole
 
             <li class="mt-4 w-full">
                 <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Pengaturan</h6>
             </li>
 
             <li class="mt-0.5 w-full">
-                <form method="POST" action="{{ route('logout') }}" class="py-2.7 ease-nav-brand mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors dark:text-white">
+                <form method="POST" action="{{ route("logout") }}" enctype="multipart/form-data">
                     @csrf
-                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                        <i class="ri-login-box-line relative top-0 text-lg leading-normal text-cyan-500"></i>
+                    <div class="py-2.7 ease-nav-brand mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-login-box-line relative top-0 text-lg leading-normal text-cyan-500"></i>
+                        </div>
+                        <button type="submit" class="ease ml-1 opacity-100 duration-300">Logout</button>
                     </div>
-                    {{-- <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-dropdown-link> --}}
-                    <button type="submit" class="ease ml-1 opacity-100 duration-300">Logout</button>
                 </form>
             </li>
         </ul>

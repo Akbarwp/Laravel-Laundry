@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, SoftDeletes;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes, HasSlug;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +22,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
+        'slug',
         'email',
         'password',
         'cabang_id',
@@ -48,8 +51,45 @@ class User extends Authenticatable
         ];
     }
 
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('username')
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function cabang()
     {
         return $this->belongsTo(Cabang::class);
+    }
+
+    public function lurah()
+    {
+        return $this->hasMany(Lurah::class);
+    }
+
+    public function manajer()
+    {
+        return $this->hasMany(ManajerLaundry::class);
+    }
+
+    public function pegawai()
+    {
+        return $this->hasMany(PegawaiLaundry::class);
+    }
+
+    public function rw()
+    {
+        return $this->hasMany(RW::class);
+    }
+
+    public function gamis()
+    {
+        return $this->hasMany(DetailGamis::class);
     }
 }
