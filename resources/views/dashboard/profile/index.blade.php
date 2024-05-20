@@ -2,27 +2,35 @@
 
 @section("js")
     <script>
-        $(document).ready(function() {
-            if ($("input[name='role']").value() == 'lurah' || $("input[name='role']").value() == 'rw') {
-                $("input[name='cabang_id']").attr('disabled', true);
-            } else {
-                $("input[name='cabang_id']").attr('disabled', false);
-            }
+        @if (session()->has("success"))
+            Swal.fire({
+                title: 'Berhasil',
+                text: '{{ session("success") }}',
+                icon: 'success',
+                confirmButtonColor: '#6419E6',
+                confirmButtonText: 'OK',
+            });
+        @endif
 
-            if ($("input[name='role']").value() == 'gamis') {
-                $("#form_gamis").append(`
-                    <label id="form_kk_gamis" class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold dark:text-slate-100">
-                                Kartu Keluarga Gamis |
-                                <a href="#" class="link link-primary">Sudah membuat KK Gamis?</a>
-                            </span>
-                        </div>
-                        <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? 'tes' : 'ada' }}" readonly />
-                    </label>
-                `);
-            }
-        });
+        @if (session()->has("error"))
+            Swal.fire({
+                title: 'Gagal',
+                text: '{{ session("error") }}',
+                icon: 'error',
+                confirmButtonColor: '#6419E6',
+                confirmButtonText: 'OK',
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                title: 'Gagal',
+                text: '{{ $title }} Gagal Dibuat',
+                icon: 'error',
+                confirmButtonColor: '#6419E6',
+                confirmButtonText: 'OK',
+            })
+        @endif
     </script>
 @endsection
 
@@ -32,10 +40,33 @@
             {{-- Awal Form --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                    <h6 class="font-bold dark:text-white">{{ $title }}</h6>
+                    <div class="flex items-center gap-x-3">
+                        <h6 class="font-bold dark:text-white">{{ $title }}</h6>
+                        <a href="{{ route("profile.edit", $user->slug) }}" class="btn btn-warning btn-sm max-w-md text-slate-700">
+                            <i class="ri-pencil-fill text-lg"></i>
+                            Ubah User
+                        </a>
+                        <a href="{{ route("profile.edit.password", $user->slug) }}" class="btn btn-outline tooltip btn-primary btn-sm" data-tip="Ganti Password">
+                            <i class="ri-lock-password-line text-base"></i>
+                        </a>
+                    </div>
                 </div>
                 <div class="flex-auto px-6 pb-6 pt-0">
-                    <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text font-semibold dark:text-slate-100">Foto Profile</span>
+                        </div>
+                        @if ($profile->foto)
+                            <div class="avatar">
+                                <div class="w-24 rounded-full">
+                                    <img src="{{ asset("storage/" . $profile->foto) }}" alt="{{ $user->slug }}" />
+                                </div>
+                            </div>
+                        @else
+                            <input type="file" class="file-input file-input-bordered w-full dark:file-input-info" type="file" name="foto" id="foto" disabled />
+                        @endif
+                    </label>
+                    <div class="flex w-full flex-wrap justify-center gap-2 lg:flex-nowrap">
                         <label class="form-control w-full lg:w-1/2">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Role</span>
@@ -46,7 +77,7 @@
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Cabang</span>
                             </div>
-                            <input type="text" name="cabang_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->cabang? $user->cabang->nama : '-' }}" readonly />
+                            <input type="text" name="cabang_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->cabang ? $user->cabang->nama : "-" }}" readonly />
                         </label>
                     </div>
                     <label class="form-control w-full">
@@ -87,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                    <div class="flex w-full flex-wrap justify-center gap-2 lg:flex-nowrap">
                         <label class="form-control w-full lg:w-1/2">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Tempat Lahir</span>
@@ -120,35 +151,28 @@
                         <input type="date" name="mulai_kerja" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->mulai_kerja }}" readonly />
                     </label>
 
-                    @if($user->roles[0]->name == "gamis")
-                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                    @if ($user->roles[0]->name == "gamis")
+                        <div class="flex w-full flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/3">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">Kartu Keluarga</span>
                                 </div>
-                                <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? $profile->gamis->kartu_keluarga : '-' }}" readonly />
+                                <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? $profile->gamis->kartu_keluarga : "-" }}" readonly />
                             </label>
                             <label class="form-control w-full lg:w-1/3">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">RT</span>
                                 </div>
-                                <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? $profile->gamis->rt : '-' }}" readonly />
+                                <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? $profile->gamis->rt : "-" }}" readonly />
                             </label>
                             <label class="form-control w-full lg:w-1/3">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">RW</span>
                                 </div>
-                                <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? $profile->gamis->rw : '-' }}" readonly />
+                                <input type="text" name="gamis_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->gamis ? $profile->gamis->rw : "-" }}" readonly />
                             </label>
                         </div>
                     @endif
-
-                    <div class="mt-5 flex flex-wrap justify-center gap-2">
-                        @if (!$trash)
-                            <a href="{{ route("user.edit", $user->slug) }}" class="btn btn-warning w-full max-w-md text-slate-700">Ubah User</a>
-                        @endif
-                        <a href="{{ url()->previous() }}" class="btn btn-ghost w-full max-w-md bg-slate-500 text-white dark:bg-slate-500 dark:hover:opacity-80">Kembali</a>
-                    </div>
                 </div>
             </div>
             {{-- Akhir Form --}}

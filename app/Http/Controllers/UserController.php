@@ -27,7 +27,7 @@ class UserController extends Controller
         $role = Role::get();
 
         if ($userRole == 'lurah') {
-            $lurah = Lurah::join('users as u', 'lurah.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('lurah.created_at', 'asc')->get();
+            $lurah = Lurah::join('users as u', 'lurah.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('lurah.created_at', 'asc')->get()->except(auth()->id());
             $rw = RW::join('users as u', 'rw.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('rw.created_at', 'asc')->get();
             $manajer = ManajerLaundry::join('users as u', 'manajer_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('manajer_laundry.created_at', 'asc')->get();
             $pegawai = PegawaiLaundry::join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('pegawai_laundry.created_at', 'asc')->get();
@@ -56,8 +56,16 @@ class UserController extends Controller
     public function view(Request $request)
     {
         $title = "Detail User";
+        $trash = false;
         $userRole = auth()->user()->roles[0]->name;
         $user = User::where('slug', $request->user)->first();
+
+        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            return abort(403);
+        } else if ($user->slug == auth()->user()->slug ) {
+            return to_route('profile', $user->slug);
+        }
+
         if ($user->getRoleNames()[0] == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
@@ -68,10 +76,9 @@ class UserController extends Controller
             $profile = PegawaiLaundry::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'gamis') {
             $profile = DetailGamis::where('user_id', $user->id)->first();
-            // dd($profile->gamis ? "ada" : "tidak ada");
         }
 
-        return view('dashboard.user.lihat', compact('title', 'user', 'profile'));
+        return view('dashboard.user.lihat', compact('title', 'user', 'profile', 'trash'));
     }
 
     public function create()
@@ -189,6 +196,12 @@ class UserController extends Controller
         }
 
         $user = User::where('slug', $request->user)->first();
+        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            return abort(403);
+        } else if ($user->slug == auth()->user()->slug ) {
+            return to_route('profile', $user->slug);
+        }
+
         if ($user->getRoleNames()[0] == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
@@ -206,7 +219,7 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $user = User::where('id', $request->id)->first();
+        $user = User::where('slug', $request->user)->first();
         $validatorUser = Validator::make($request->all(), [
             'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user)],
             'email' => ['required', 'email', Rule::unique('users')->ignore($user)],
@@ -291,6 +304,12 @@ class UserController extends Controller
     {
         $title = "Ubah Password User";
         $user = User::where('slug', $request->user)->first();
+        $userRole = auth()->user()->roles[0]->name;
+        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            return abort(403);
+        } else if ($user->slug == auth()->user()->slug ) {
+            return to_route('profile', $user->slug);
+        }
         return view('dashboard.user.ubahPassword', compact('title', 'user'));
     }
 
@@ -326,6 +345,34 @@ class UserController extends Controller
         } else {
             abort(400, 'User Gagal Dihapus');
         }
+    }
+
+    public function trash(Request $request)
+    {
+        $title = "Detail User Trash";
+        $trash = true;
+        $userRole = auth()->user()->roles[0]->name;
+        $user = User::where('slug', $request->user)->onlyTrashed()->first();
+
+        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            return abort(403);
+        } else if ($user->slug == auth()->user()->slug ) {
+            return to_route('profile', $user->slug);
+        }
+
+        if ($user->getRoleNames()[0] == 'lurah') {
+            $profile = Lurah::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'rw') {
+            $profile = RW::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'manajer_laundry') {
+            $profile = ManajerLaundry::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'pegawai_laundry') {
+            $profile = PegawaiLaundry::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'gamis') {
+            $profile = DetailGamis::where('user_id', $user->id)->first();
+        }
+
+        return view('dashboard.user.lihat', compact('title', 'user', 'profile', 'trash'));
     }
 
     public function restore(Request $request)
@@ -370,8 +417,8 @@ class UserController extends Controller
         $title = "Users Management";
 
         $userRole = auth()->user()->roles[0]->name;
-        if (!$userRole == 'lurah') {
-            abort(403);
+        if ($userRole != 'lurah') {
+            abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
         $cabang = Cabang::where('slug', $request->cabang)->first();
@@ -393,6 +440,11 @@ class UserController extends Controller
 
     public function createUserCabang(Request $request)
     {
+        $userRole = auth()->user()->roles[0]->name;
+        if ($userRole != 'lurah') {
+            abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
+        }
+
         $kkGamis = Gamis::get();
         $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
         $cabang = Cabang::where('deleted_at', null)->where('slug', $request->cabang)->get();

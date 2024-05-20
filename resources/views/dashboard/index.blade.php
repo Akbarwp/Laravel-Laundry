@@ -15,7 +15,7 @@
                                         {{ $userRole != 'lurah' ? 'Cabang' : 'Jumlah Cabang' }}
                                     </p>
                                     <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
-                                        {{ $userRole != 'lurah' ? auth()->user()->cabang->nama : $jmlCabang }}
+                                        {{ $userRole != 'lurah' ? (auth()->user()->cabang ? auth()->user()->cabang->nama : 'Cabang Dihapus') : $jmlCabang }}
                                     </h5>
                                 </div>
                             </div>

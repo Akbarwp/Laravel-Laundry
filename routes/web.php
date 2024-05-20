@@ -34,6 +34,16 @@ Route::group([
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group([
+        'prefix' => 'profile',
+    ], function() {
+        Route::get('/{user:slug}', [ProfileController::class, 'index'])->name('profile');
+        Route::get('/ubah/{user:slug}', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/ubah/{user:slug}', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/ubah-password/{user:slug}', [ProfileController::class, 'editPassword'])->name('profile.edit.password');
+        Route::post('/ubah-password/{user:slug}', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+    });
+
+    Route::group([
         'prefix' => 'cabang',
         'middleware' => ['role:lurah'],
     ], function() {
@@ -78,7 +88,7 @@ Route::group([
         Route::get('/ubah-password/{user:slug}', [UserController::class, 'editPassword'])->name('user.edit.password');
         Route::post('/ubah-password/{user:slug}', [UserController::class, 'updatePassword'])->name('user.update.password');
         Route::post('/hapus', [UserController::class, 'delete'])->name('user.delete');
-        Route::get('/trash', [UserController::class, 'trash'])->name('user.trash');
+        Route::get('/trash/{user:slug}', [UserController::class, 'trash'])->name('user.trash');
         Route::post('/pulihkan', [UserController::class, 'restore'])->name('user.restore');
         Route::post('/hapus-permanen', [UserController::class, 'destroy'])->name('user.destroy');
     });

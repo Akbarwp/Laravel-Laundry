@@ -653,9 +653,9 @@
                                                     </td>
                                                     <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                         <div>
-                                                            <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                                            <a href="{{ route("user.trash", $item->slug) }}" class="btn btn-outline btn-info btn-sm">
                                                                 <i class="ri-eye-line text-base"></i>
-                                                            </label>
+                                                            </a>
                                                             <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                                 <i class="ri-history-line text-base"></i>
                                                             </label>
@@ -706,9 +706,9 @@
                                                     </td>
                                                     <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                         <div>
-                                                            <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                                            <a href="{{ route("user.trash", $item->slug) }}" class="btn btn-outline btn-info btn-sm">
                                                                 <i class="ri-eye-line text-base"></i>
-                                                            </label>
+                                                            </a>
                                                             <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                                 <i class="ri-history-line text-base"></i>
                                                             </label>
@@ -759,9 +759,9 @@
                                                     </td>
                                                     <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                         <div>
-                                                            <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                                            <a href="{{ route("user.trash", [$item->slug, 'trash' => true]) }}" class="btn btn-outline btn-info btn-sm">
                                                                 <i class="ri-eye-line text-base"></i>
-                                                            </label>
+                                                            </a>
                                                             <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                                 <i class="ri-history-line text-base"></i>
                                                             </label>
@@ -813,9 +813,9 @@
                                                 </td>
                                                 <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                     <div>
-                                                        <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                                        <a href="{{ route("user.trash", $item->slug) }}" class="btn btn-outline btn-info btn-sm">
                                                                 <i class="ri-eye-line text-base"></i>
-                                                            </label>
+                                                            </a>
                                                             <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                                 <i class="ri-history-line text-base"></i>
                                                             </label>
@@ -866,9 +866,9 @@
                                                 </td>
                                                 <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                     <div>
-                                                        <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                                        <a href="{{ route("user.trash", $item->slug) }}" class="btn btn-outline btn-info btn-sm">
                                                                 <i class="ri-eye-line text-base"></i>
-                                                            </label>
+                                                            </a>
                                                             <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                                 <i class="ri-history-line text-base"></i>
                                                             </label>

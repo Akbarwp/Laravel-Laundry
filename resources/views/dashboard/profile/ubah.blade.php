@@ -2,89 +2,19 @@
 
 @section("js")
     <script>
-        $(document).ready(function() {
-            $("select[name='role']").change(function() {
-                if ($("select[name='role']").find(":selected").text() == 'lurah' || $("select[name='role']").find(":selected").text() == 'rw') {
-                    $("select[name='cabang_id']").prop('selectedIndex', 0);
-                    $("select[name='cabang_id']").attr('disabled', true);
-                } else {
-                    $("select[name='cabang_id']").attr('disabled', false);
-                }
+        function previewImage() {
+            const image = document.querySelector('#foto');
+            const imgPreview = document.querySelector('.img-preview');
 
-                if ($("select[name='role']").find(":selected").text() == 'gamis') {
-                    $("#form_gamis").append(`
-                        <label id="form_kk_gamis" class="form-control w-full">
-                            <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">
-                                    Kartu Keluarga Gamis |
-                                    <a href="#" class="link link-primary">Sudah membuat KK Gamis?</a>
-                                </span>
-                            </div>
-                            <select name="gamis_id" class="select select-bordered" required>
-                                <option disabled selected>Pilih Kartu Keluarga!</option>
-                                @foreach ($kkGamis as $item)
-                                    <option
-                                        value="{{ $item->id }}"
-                                        @if ($item->id == $profile->gamis_id) selected @endif
-                                        >
-                                        KK: {{ $item->kartu_keluarga }}
-                                        RT: {{ $item->rt }}
-                                        RW: {{ $item->rw }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error("gamis_id")
-                                <div class="label">
-                                    <span class="label-text-alt text-error text-sm">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </label>
-                    `);
-                } else {
-                    $("#form_kk_gamis").remove();
-                }
-            });
+            imgPreview.style.display = 'block';
 
-            if ($("select[name='role']").find(":selected").text() == 'lurah' || $("select[name='role']").find(":selected").text() == 'rw') {
-                $("select[name='cabang_id']").prop('selectedIndex', 0);
-                $("select[name='cabang_id']").attr('disabled', true);
-            } else {
-                $("select[name='cabang_id']").attr('disabled', false);
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
             }
-
-            if ($("select[name='role']").find(":selected").text() == 'gamis') {
-                $("#form_gamis").append(`
-                    <label id="form_kk_gamis" class="form-control w-full">
-                        <div class="label">
-                            <span class="label-text font-semibold dark:text-slate-100">
-                                Kartu Keluarga Gamis |
-                                <a href="#" class="link link-primary">Sudah membuat KK Gamis?</a>
-                            </span>
-                        </div>
-                        <select name="gamis_id" class="select select-bordered" required>
-                            <option disabled selected>Pilih Kartu Keluarga!</option>
-                            @foreach ($kkGamis as $item)
-                                <option
-                                    value="{{ $item->id }}"
-                                    @if ($item->id == $profile->gamis_id) selected @endif
-                                    >
-                                    KK: {{ $item->kartu_keluarga }}
-                                    RT: {{ $item->rt }}
-                                    RW: {{ $item->rw }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error("gamis_id")
-                            <div class="label">
-                                <span class="label-text-alt text-error text-sm">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                `);
-            } else {
-                $("#form_kk_gamis").remove();
-            }
-        });
+        }
 
         @if (session()->has("success"))
             Swal.fire({
@@ -127,42 +57,36 @@
                     <h6 class="font-bold dark:text-white">{{ $title }}</h6>
                 </div>
                 <div class="flex-auto px-6 pb-6 pt-0">
-                    <form action="{{ route("user.update", $user->slug) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route("profile.update", $user->slug) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                            <label class="form-control w-full lg:w-1/2">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Role</span>
-                                </div>
-                                <select name="role" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
-                                    <option disabled selected>Pilih Role!</option>
-                                    @foreach ($role as $item)
-                                        <option value="{{ $item->name }}" @if ($item->name == $user->roles[0]->name) selected @endif>{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error("role")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold dark:text-slate-100">Foto Profile</span>
+                            </div>
+                            <div class="relative">
+                                <input type="file" class="file-input file-input-bordered w-full dark:file-input-info" type="file" name="foto" id="foto" onchange="previewImage()" />
+                                <div class="avatar mt-3">
+                                    <div class="w-24 rounded-full">
+                                        @if ($profile->foto)
+                                            <img src="{{ asset("storage/" . $profile->foto) }}" alt="{{ $user->slug }}" class="img-preview" />
+                                        @else
+                                            @if ($profile->jenis_kelamin == "L")
+                                                <img class="img-preview" src="{{ asset("img/team-2.jpg") }}" />
+                                            @elseif ($profile->jenis_kelamin == "P")
+                                                <img class="img-preview" src="{{ asset("img/team-1.jpg") }}" />
+                                            @else
+                                                <img class="img-preview" src="{{ asset("img/home-decor-1.jpg") }}" />
+                                            @endif
+                                        @endif
                                     </div>
-                                @enderror
-                            </label>
-                            <label class="form-control w-full lg:w-1/2">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Cabang</span>
                                 </div>
-                                <select name="cabang_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
-                                    <option disabled selected>Pilih Cabang!</option>
-                                    @foreach ($cabang as $item)
-                                        <option value="{{ $item->id }}" @if ($item->id == auth()->user()->cabang_id || $item->id == $user->cabang_id) selected @endif>{{ $item->nama }}</option>
-                                    @endforeach
-                                </select>
-                                @error("cabang_id")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                        </div>
+                            </div>
+                            @error("foto")
+                                <div class="label">
+                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </label>
                         <label class="form-control w-full">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Username</span>
@@ -221,7 +145,7 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                        <div class="flex w-full flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">Tempat Lahir</span>
@@ -267,19 +191,6 @@
                                 </div>
                             @enderror
                         </label>
-                        <label class="form-control w-full">
-                            <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Mulai Kerja</span>
-                            </div>
-                            <input type="date" name="mulai_kerja" placeholder="Mulai Kerja" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->mulai_kerja }}" />
-                            @error("mulai_kerja")
-                                <div class="label">
-                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </label>
-
-                        <div id="form_gamis"></div>
 
                         <div class="mt-5 flex flex-wrap justify-center gap-2">
                             <button type="submit" class="btn btn-warning w-full max-w-md text-slate-700">Perbarui</button>

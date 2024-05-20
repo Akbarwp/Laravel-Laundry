@@ -54,7 +54,7 @@
                 </li>
 
                 <li class="mt-0.5 w-full">
-                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["user", "user.cabang", "user.cabang.create", "user.create", "user.view", "user.edit", "user.edit.password"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("user") }}">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["user", "user.cabang", "user.cabang.create", "user.create", "user.view", "user.edit", "user.edit.password", "user.trash"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("user") }}">
                         <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="ri-user-3-fill relative top-0 text-lg leading-normal text-blue-500"></i>
                         </div>
@@ -64,8 +64,34 @@
                 {{-- Akhir User Management --}}
             @endrole
 
+            @role(["lurah", "manajer_laundry"])
+                {{-- Awal Transaksi --}}
+                <li class="mt-4 w-full">
+                    <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Transaksi</h6>
+                </li>
+
+                {{-- <li class="mt-0.5 w-full">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["user", "user.cabang", "user.cabang.create", "user.create", "user.view", "user.edit", "user.edit.password"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("user") }}">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-user-3-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pelanggan</span>
+                    </a>
+                </li> --}}
+                {{-- Akhir Transaksi --}}
+            @endrole
+
             <li class="mt-4 w-full">
                 <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Pengaturan</h6>
+            </li>
+
+            <li class="mt-0.5 w-full">
+                <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["profile", "profile.edit", "profile.edit.password"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("profile", auth()->user()->slug) }}">
+                    <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                        <i class="ri-profile-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                    </div>
+                    <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Profile</span>
+                </a>
             </li>
 
             <li class="mt-0.5 w-full">
