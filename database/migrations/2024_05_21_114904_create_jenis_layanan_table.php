@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jenis_layanan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->string('nama')->unique();
             $table->text('deskripsi')->nullable();
             $table->boolean('for_gamis');
             $table->foreignId('cabang_id')->constrained('cabang', 'id');

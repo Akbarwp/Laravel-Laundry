@@ -19,6 +19,7 @@ class JenisPakaian extends Model
         'deskripsi',
         'lokasi',
         'alamat',
+        'cabang_id',
     ];
 
     public function hargaJenisLayanan()

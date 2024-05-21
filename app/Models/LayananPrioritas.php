@@ -20,5 +20,6 @@ class LayananPrioritas extends Model
         'jenis_satuan',
         'harga',
         'prioritas',
+        'cabang_id',
     ];
 }

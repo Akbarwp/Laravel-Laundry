@@ -759,7 +759,7 @@
                                                     </td>
                                                     <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                         <div>
-                                                            <a href="{{ route("user.trash", [$item->slug, 'trash' => true]) }}" class="btn btn-outline btn-info btn-sm">
+                                                            <a href="{{ route("user.trash", [$item->slug]) }}" class="btn btn-outline btn-info btn-sm">
                                                                 <i class="ri-eye-line text-base"></i>
                                                             </a>
                                                             <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">

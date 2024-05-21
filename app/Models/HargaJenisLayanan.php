@@ -19,15 +19,16 @@ class HargaJenisLayanan extends Model
         'jenis_satuan',
         'jenis_layanan_id',
         'jenis_pakaian_id',
+        'cabang_id',
     ];
 
     public function jenisLayanan()
     {
-        return $this->hasMany(JenisLayanan::class);
+        return $this->belongsTo(JenisLayanan::class);
     }
 
     public function jenisPakaian()
     {
-        return $this->hasMany(JenisPakaian::class);
+        return $this->belongsTo(JenisPakaian::class);
     }
 }

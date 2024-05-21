@@ -3,6 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HargaJenisLayananController;
+use App\Http\Controllers\JenisLayananController;
+use App\Http\Controllers\JenisPakaianController;
+use App\Http\Controllers\LayananCabangController;
+use App\Http\Controllers\LayananPrioritasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UMRController;
 use App\Http\Controllers\UserController;
@@ -32,6 +37,7 @@ Route::group([
 ], function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/laundry/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::group([
         'prefix' => 'profile',
@@ -93,7 +99,78 @@ Route::group([
         Route::post('/hapus-permanen', [UserController::class, 'destroy'])->name('user.destroy');
     });
 
-    Route::post('/laundry/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::group([
+        'prefix' => 'layanan-cabang',
+        'middleware' => ['role:lurah'],
+    ], function() {
+
+        Route::get('/', [LayananCabangController::class, 'index'])->name('layanan-cabang');
+        Route::get('/{cabang:slug}', [LayananCabangController::class, 'indexCabang'])->name('layanan-cabang.cabang');
+    });
+
+    Route::group([
+        'prefix' => 'jenis-layanan',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [JenisLayananController::class, 'index'])->name('jenis-layanan');
+        Route::post('/tambah', [JenisLayananController::class, 'store'])->name('jenis-layanan.store');
+        Route::get('/lihat', [JenisLayananController::class, 'show'])->name('jenis-layanan.show');
+        Route::get('/ubah', [JenisLayananController::class, 'edit'])->name('jenis-layanan.edit');
+        Route::post('/ubah', [JenisLayananController::class, 'update'])->name('jenis-layanan.update');
+        Route::post('/hapus', [JenisLayananController::class, 'delete'])->name('jenis-layanan.delete');
+        Route::get('/trash', [JenisLayananController::class, 'trash'])->name('jenis-layanan.trash');
+        Route::post('/pulihkan', [JenisLayananController::class, 'restore'])->name('jenis-layanan.restore');
+        Route::post('/hapus-permanen', [JenisLayananController::class, 'destroy'])->name('jenis-layanan.destroy');
+    });
+
+    Route::group([
+        'prefix' => 'jenis-pakaian',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [JenisPakaianController::class, 'index'])->name('jenis-pakaian');
+        Route::post('/tambah', [JenisPakaianController::class, 'store'])->name('jenis-pakaian.store');
+        Route::get('/lihat', [JenisPakaianController::class, 'show'])->name('jenis-pakaian.show');
+        Route::get('/ubah', [JenisPakaianController::class, 'edit'])->name('jenis-pakaian.edit');
+        Route::post('/ubah', [JenisPakaianController::class, 'update'])->name('jenis-pakaian.update');
+        Route::post('/hapus', [JenisPakaianController::class, 'delete'])->name('jenis-pakaian.delete');
+        Route::get('/trash', [JenisPakaianController::class, 'trash'])->name('jenis-pakaian.trash');
+        Route::post('/pulihkan', [JenisPakaianController::class, 'restore'])->name('jenis-pakaian.restore');
+        Route::post('/hapus-permanen', [JenisPakaianController::class, 'destroy'])->name('jenis-pakaian.destroy');
+    });
+
+    Route::group([
+        'prefix' => 'harga-jenis-layanan',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [HargaJenisLayananController::class, 'index'])->name('harga-jenis-layanan');
+        Route::post('/tambah', [HargaJenisLayananController::class, 'store'])->name('harga-jenis-layanan.store');
+        Route::get('/lihat', [HargaJenisLayananController::class, 'show'])->name('harga-jenis-layanan.show');
+        Route::get('/ubah', [HargaJenisLayananController::class, 'edit'])->name('harga-jenis-layanan.edit');
+        Route::post('/ubah', [HargaJenisLayananController::class, 'update'])->name('harga-jenis-layanan.update');
+        Route::post('/hapus', [HargaJenisLayananController::class, 'delete'])->name('harga-jenis-layanan.delete');
+        Route::get('/trash', [HargaJenisLayananController::class, 'trash'])->name('harga-jenis-layanan.trash');
+        Route::post('/pulihkan', [HargaJenisLayananController::class, 'restore'])->name('harga-jenis-layanan.restore');
+        Route::post('/hapus-permanen', [HargaJenisLayananController::class, 'destroy'])->name('harga-jenis-layanan.destroy');
+    });
+
+    Route::group([
+        'prefix' => 'layanan-prioritas',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [LayananPrioritasController::class, 'index'])->name('layanan-prioritas');
+        Route::post('/tambah', [LayananPrioritasController::class, 'store'])->name('layanan-prioritas.store');
+        Route::get('/lihat', [LayananPrioritasController::class, 'show'])->name('layanan-prioritas.show');
+        Route::get('/ubah', [LayananPrioritasController::class, 'edit'])->name('layanan-prioritas.edit');
+        Route::post('/ubah', [LayananPrioritasController::class, 'update'])->name('layanan-prioritas.update');
+        Route::post('/hapus', [LayananPrioritasController::class, 'delete'])->name('layanan-prioritas.delete');
+        Route::get('/trash', [LayananPrioritasController::class, 'trash'])->name('layanan-prioritas.trash');
+        Route::post('/pulihkan', [LayananPrioritasController::class, 'restore'])->name('layanan-prioritas.restore');
+        Route::post('/hapus-permanen', [LayananPrioritasController::class, 'destroy'])->name('layanan-prioritas.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

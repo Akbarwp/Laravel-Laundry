@@ -18,6 +18,7 @@ class JenisLayanan extends Model
         'nama',
         'deskripsi',
         'for_gamis',
+        'cabang_id',
     ];
 
     public function hargaJenisLayanan()

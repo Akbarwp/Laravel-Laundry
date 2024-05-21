@@ -52,11 +52,7 @@ class CabangController extends Controller
 
     public function show(Request $request)
     {
-        if ($request->tipe == "trash") {
-            $cabang = Cabang::onlyTrashed()->find($request->id);
-        } else {
-            $cabang = Cabang::find($request->id);
-        }
+        $cabang = Cabang::withTrashed()->findOrFail($request->id);
         return $cabang;
     }
 

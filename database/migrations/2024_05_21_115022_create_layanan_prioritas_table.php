@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('layanan_prioritas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->string('nama')->unique();
             $table->text('deskripsi')->nullable();
             $table->string('jenis_satuan');
             $table->double('harga');

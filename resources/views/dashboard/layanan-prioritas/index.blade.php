@@ -66,10 +66,12 @@
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
             $("#loading_edit3").html(loading);
+            $("#loading_edit4").html(loading);
+            $("#loading_edit5").html(loading);
 
             $.ajax({
                 type: "get",
-                url: "{{ route('cabang.show') }}",
+                url: "{{ route('layanan-prioritas.show') }}",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "id": id
@@ -82,14 +84,18 @@
                     });
 
                     $("input[name='nama']").val(items[1]);
-                    $("input[name='lokasi']").val(items[3]);
-                    $("textarea[name='alamat']").val(items[4]);
+                    $("textarea[name='deskripsi']").val(items[2]);
+                    $("input[name='jenis_satuan']").val(items[3]);
+                    $("input[name='harga']").val(items[4]);
+                    $("input[name='prioritas']").val(items[5]);
 
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
                     $("#loading_edit3").html(loading);
+                    $("#loading_edit4").html(loading);
+                    $("#loading_edit5").html(loading);
                 }
             });
         }
@@ -100,10 +106,12 @@
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
             $("#loading_edit3").html(loading);
+            $("#loading_edit4").html(loading);
+            $("#loading_edit5").html(loading);
 
             $.ajax({
                 type: "get",
-                url: "{{ route('cabang.edit') }}",
+                url: "{{ route('layanan-prioritas.edit') }}",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "id": id
@@ -117,14 +125,18 @@
 
                     $("input[name='id']").val(items[0]);
                     $("input[name='nama']").val(items[1]);
-                    $("input[name='lokasi']").val(items[3]);
-                    $("textarea[name='alamat']").val(items[4]);
+                    $("textarea[name='deskripsi']").val(items[2]);
+                    $("input[name='jenis_satuan']").val(items[3]);
+                    $("input[name='harga']").val(items[4]);
+                    $("input[name='prioritas']").val(items[5]);
 
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
                     $("#loading_edit3").html(loading);
+                    $("#loading_edit4").html(loading);
+                    $("#loading_edit5").html(loading);
                 }
             });
         }
@@ -145,7 +157,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "post",
-                        url: "{{ route('cabang.delete') }}",
+                        url: "{{ route('layanan-prioritas.delete') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "id": id
@@ -189,7 +201,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "post",
-                        url: "{{ route('cabang.restore') }}",
+                        url: "{{ route('layanan-prioritas.restore') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "id": id
@@ -233,7 +245,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "post",
-                        url: "{{ route('cabang.destroy') }}",
+                        url: "{{ route('layanan-prioritas.destroy') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "id": id
@@ -277,13 +289,13 @@
                         </label>
                     </div>
                     <div>
-                        <form action="{{ route('cabang.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('layanan-prioritas.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama</span>
+                                    <span class="label-text font-semibold">Nama Layanan Prioritas</span>
                                 </div>
-                                <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" value="{{ old('nama') }}" required />
+                                <input type="text" name="nama" placeholder="Nama Layanan Prioritas" class="input input-bordered w-full text-blue-700" value="{{ old('nama') }}" required />
                                 @error('nama')
                                     <div class="label">
                                         <span class="label-text-alt text-error text-sm">{{ $message }}</span>
@@ -292,10 +304,10 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Lokasi</span>
+                                    <span class="label-text font-semibold">Deskripsi</span>
                                 </div>
-                                <input type="text" name="lokasi" placeholder="Lokasi" class="input input-bordered w-full text-blue-700" value="{{ old('lokasi') }}" required />
-                                @error('lokasi')
+                                <textarea name="deskripsi" placeholder="Deskripsi" class="textarea textarea-bordered w-full text-base text-blue-500">{{ old('deskripsi') }}</textarea>
+                                @error('deskripsi')
                                     <div class="label">
                                         <span class="label-text-alt text-error text-sm">{{ $message }}</span>
                                     </div>
@@ -303,10 +315,32 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Alamat</span>
+                                    <span class="label-text font-semibold">Jenis Satuan</span>
                                 </div>
-                                <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-base text-blue-500">{{ old('alamat') }}</textarea>
-                                @error('alamat')
+                                <input type="text" name="jenis_satuan" placeholder="Jenis Satuan" class="input input-bordered w-full text-blue-700" value="{{ old('jenis_satuan') }}" required />
+                                @error('jenis_satuan')
+                                    <div class="label">
+                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">Harga</span>
+                                </div>
+                                <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" value="{{ old('harga') }}" required />
+                                @error('harga')
+                                    <div class="label">
+                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">Nilai Prioritas</span>
+                                </div>
+                                <input type="number" min="0" step="1" name="prioritas" placeholder="Nilai Prioritas" class="input input-bordered w-full text-blue-700" value="{{ old('prioritas') }}" required />
+                                @error('prioritas')
                                     <div class="label">
                                         <span class="label-text-alt text-error text-sm">{{ $message }}</span>
                                     </div>
@@ -332,24 +366,38 @@
                     <div>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold">Nama</span>
+                                <span class="label-text font-semibold">Nama Layanan Prioritas</span>
                                 <span class="label-text-alt" id="loading_edit1"></span>
                             </div>
                             <input type="text" name="nama" class="input input-bordered w-full text-blue-700" readonly />
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold">Lokasi</span>
+                                <span class="label-text font-semibold">Deskripsi</span>
                                 <span class="label-text-alt" id="loading_edit2"></span>
                             </div>
-                            <input type="text" name="lokasi" class="input input-bordered w-full text-blue-700" readonly />
+                            <textarea name="deskripsi" class="textarea textarea-bordered w-full text-base text-blue-500" readonly></textarea>
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold">Alamat</span>
+                                <span class="label-text font-semibold">Jenis Satuan</span>
                                 <span class="label-text-alt" id="loading_edit3"></span>
                             </div>
-                            <textarea name="alamat" class="textarea textarea-bordered w-full text-base text-blue-500" readonly></textarea>
+                            <input type="text" name="jenis_satuan" class="input input-bordered w-full text-blue-700" readonly />
+                        </label>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold">Harga</span>
+                                <span class="label-text-alt" id="loading_edit4"></span>
+                            </div>
+                            <input type="number" name="harga" class="input input-bordered w-full text-blue-700" readonly />
+                        </label>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold">Nilai Prioritas</span>
+                                <span class="label-text-alt" id="loading_edit5"></span>
+                            </div>
+                            <input type="number" name="prioritas" class="input input-bordered w-full text-blue-700" readonly />
                         </label>
                     </div>
                 </div>
@@ -367,14 +415,14 @@
                         </label>
                     </div>
                     <div>
-                        <form action="{{ route('cabang.update') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('layanan-prioritas.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="text" name="id" hidden>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama</span>
+                                    <span class="label-text font-semibold">Nama Layanan Prioritas</span>
                                 </div>
-                                <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" required />
+                                <input type="text" name="nama" placeholder="Nama Layanan Prioritas" class="input input-bordered w-full text-blue-700" required />
                                 @error('nama')
                                     <div class="label">
                                         <span class="label-text-alt text-error text-sm">{{ $message }}</span>
@@ -383,10 +431,10 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Lokasi</span>
+                                    <span class="label-text font-semibold">Deskripsi</span>
                                 </div>
-                                <input type="text" name="lokasi" placeholder="Lokasi" class="input input-bordered w-full text-blue-700" required />
-                                @error('lokasi')
+                                <textarea name="deskripsi" placeholder="Deskripsi" class="textarea textarea-bordered w-full text-base text-blue-500"></textarea>
+                                @error('deskripsi')
                                     <div class="label">
                                         <span class="label-text-alt text-error text-sm">{{ $message }}</span>
                                     </div>
@@ -394,10 +442,32 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Alamat</span>
+                                    <span class="label-text font-semibold">Jenis Satuan</span>
                                 </div>
-                                <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-base text-blue-500"></textarea>
-                                @error('alamat')
+                                <input type="text" name="jenis_satuan" placeholder="Jenis Satuan" class="input input-bordered w-full text-blue-700" required />
+                                @error('jenis_satuan')
+                                    <div class="label">
+                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">Harga</span>
+                                </div>
+                                <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" required />
+                                @error('harga')
+                                    <div class="label">
+                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">Nilai Prioritas</span>
+                                </div>
+                                <input type="number" min="0" step="1" name="prioritas" placeholder="Nilai Prioritas" class="input input-bordered w-full text-blue-700" required />
+                                @error('prioritas')
                                     <div class="label">
                                         <span class="label-text-alt text-error text-sm">{{ $message }}</span>
                                     </div>
@@ -410,7 +480,7 @@
             </div>
             {{-- Akhir Modal Edit --}}
 
-            {{-- Awal Tabel Cabang --}}
+            {{-- Awal Tabel Layanan Prioritas --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <h6 class="font-bold dark:text-white">{{ $title }}</h6>
@@ -424,13 +494,19 @@
                 <div class="flex-auto px-0 pb-2 pt-0">
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <table id="myTable" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
-                            <thead class="align-bottom">
+                            <thead>
                                 <tr>
                                     <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Nama
+                                        Nama Layanan Prioritas
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Lokasi
+                                        Jenis Satuan
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Harga
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Nilai Prioritas
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Created_at
@@ -441,7 +517,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($cabang as $item)
+                                @foreach ($layananPrioritas as $item)
                                     <tr>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
@@ -450,12 +526,22 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->lokasi }}
+                                                {{ $item->jenis_satuan }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
+                                                Rp{{ number_format($item->harga, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->prioritas }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ Carbon\Carbon::parse($item->created_at)->translatedFormat("d F Y") }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
@@ -478,9 +564,9 @@
                     </div>
                 </div>
             </div>
-            {{-- Akhir Tabel Cabang --}}
+            {{-- Akhir Tabel Layanan Prioritas --}}
 
-            {{-- Awal Tabel Cabang Trash --}}
+            {{-- Awal Tabel Layanan Prioritas Trash --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <h6 class="font-bold dark:text-white">{{ $title }} Trash <span class="text-error">(data yang telah dihapus)</span></h6>
@@ -488,19 +574,22 @@
                 <div class="flex-auto px-0 pb-2 pt-0">
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <table id="myTable1" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
-                            <thead class="align-bottom">
+                            <thead>
                                 <tr>
                                     <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Nama
+                                        Nama Layanan Prioritas
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Lokasi
+                                        Jenis Satuan
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Harga
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Nilai Prioritas
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Created_at
-                                    </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Deleted_at
                                     </th>
                                     <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Aksi
@@ -508,7 +597,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($cabangTrash as $item)
+                                @foreach ($layananPrioritasTrash as $item)
                                     <tr>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
@@ -517,17 +606,22 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->lokasi }}
+                                                {{ $item->jenis_satuan }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
+                                                Rp{{ number_format($item->harga, 2, ',', '.') }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ Carbon\Carbon::parse($item->deleted_at)->translatedFormat('d F Y H:i:s') }}
+                                                {{ $item->prioritas }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ Carbon\Carbon::parse($item->created_at)->translatedFormat("d F Y") }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
@@ -550,7 +644,7 @@
                     </div>
                 </div>
             </div>
-            {{-- Akhir Tabel Cabang Trash --}}
+            {{-- Akhir Tabel Layanan Prioritas Trash --}}
         </div>
     </div>
 @endsection
