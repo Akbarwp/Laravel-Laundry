@@ -5,6 +5,10 @@ namespace Database\Seeders;
 use App\Models\Cabang;
 use App\Models\DetailGamis;
 use App\Models\Gamis;
+use App\Models\HargaJenisLayanan;
+use App\Models\JenisLayanan;
+use App\Models\JenisPakaian;
+use App\Models\LayananPrioritas;
 use App\Models\Lurah;
 use App\Models\ManajerLaundry;
 use App\Models\PegawaiLaundry;
@@ -200,6 +204,129 @@ class DatabaseSeeder extends Seeder
             'alamat' => 'Kelurahan Simokerto, Surabaya',
             'gamis_id' => $keluargaGamis->id,
             'user_id' => $gamis2->id,
+        ]);
+
+        //? Seeder --> create Jenis Layanan
+        $jenisLayananCuci = JenisLayanan::create([
+            'nama' => 'Cuci',
+            'for_gamis' => false,
+            'cabang_id' => $cabang->id,
+        ]);
+        $jenisLayananSetrika = JenisLayanan::create([
+            'nama' => 'Setrika',
+            'for_gamis' => true,
+            'cabang_id' => $cabang->id,
+        ]);
+        $jenisLayananAntar = JenisLayanan::create([
+            'nama' => 'Antar',
+            'for_gamis' => true,
+            'cabang_id' => $cabang->id,
+        ]);
+
+        //? Seeder --> create Jenis Pakaian
+        $jenisPakaianKemeja = JenisPakaian::create([
+            'nama' => 'Kemeja',
+            'cabang_id' => $cabang->id,
+        ]);
+        $jenisPakaianKaos = JenisPakaian::create([
+            'nama' => 'Kaos',
+            'cabang_id' => $cabang->id,
+        ]);
+        $jenisPakaianJeans = JenisPakaian::create([
+            'nama' => 'Jeans',
+            'cabang_id' => $cabang->id,
+        ]);
+
+        //? Seeder --> make Harga Jenis Layanan Kaos
+        HargaJenisLayanan::create([
+            'harga' => 1000,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananCuci->id,
+            'jenis_pakaian_id' => $jenisPakaianKaos->id,
+            'cabang_id' => $cabang->id,
+        ]);
+        HargaJenisLayanan::create([
+            'harga' => 1500,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananSetrika->id,
+            'jenis_pakaian_id' => $jenisPakaianKaos->id,
+            'cabang_id' => $cabang->id,
+        ]);
+        HargaJenisLayanan::create([
+            'harga' => 1500,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananAntar->id,
+            'jenis_pakaian_id' => $jenisPakaianKaos->id,
+            'cabang_id' => $cabang->id,
+        ]);
+
+        //? Seeder --> make Harga Jenis Layanan Kemeja
+        HargaJenisLayanan::create([
+            'harga' => 1500,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananCuci->id,
+            'jenis_pakaian_id' => $jenisPakaianKemeja->id,
+            'cabang_id' => $cabang->id,
+        ]);
+        HargaJenisLayanan::create([
+            'harga' => 2000,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananSetrika->id,
+            'jenis_pakaian_id' => $jenisPakaianKemeja->id,
+            'cabang_id' => $cabang->id,
+        ]);
+        HargaJenisLayanan::create([
+            'harga' => 2000,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananAntar->id,
+            'jenis_pakaian_id' => $jenisPakaianKemeja->id,
+            'cabang_id' => $cabang->id,
+        ]);
+
+        //? Seeder --> make Harga Jenis Layanan Jeans
+        HargaJenisLayanan::create([
+            'harga' => 2000,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananCuci->id,
+            'jenis_pakaian_id' => $jenisPakaianJeans->id,
+            'cabang_id' => $cabang->id,
+        ]);
+        HargaJenisLayanan::create([
+            'harga' => 2500,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananSetrika->id,
+            'jenis_pakaian_id' => $jenisPakaianJeans->id,
+            'cabang_id' => $cabang->id,
+        ]);
+        HargaJenisLayanan::create([
+            'harga' => 2500,
+            'jenis_satuan' => 'kg',
+            'jenis_layanan_id' => $jenisLayananAntar->id,
+            'jenis_pakaian_id' => $jenisPakaianJeans->id,
+            'cabang_id' => $cabang->id,
+        ]);
+
+        //? Seeder --> create Layanan Prioritas
+        LayananPrioritas::create([
+            'nama' => 'Reguler',
+            'jenis_satuan' => 'kg',
+            'harga' => 0,
+            'prioritas' => 1,
+            'cabang_id' => $cabang->id,
+        ]);
+        LayananPrioritas::create([
+            'nama' => 'Kilat',
+            'jenis_satuan' => 'kg',
+            'harga' => 1500,
+            'prioritas' => 2,
+            'cabang_id' => $cabang->id,
+        ]);
+        LayananPrioritas::create([
+            'nama' => 'Cahaya',
+            'jenis_satuan' => 'kg',
+            'harga' => 2000,
+            'prioritas' => 3,
+            'cabang_id' => $cabang->id,
         ]);
     }
 }
