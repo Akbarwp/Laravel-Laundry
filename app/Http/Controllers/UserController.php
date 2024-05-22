@@ -243,6 +243,7 @@ class UserController extends Controller
                 'telepon' => 'required|string|max:20',
                 'alamat' => 'required|string',
                 'mulai_kerja' => 'nullable|date',
+                'selesai_kerja' => 'nullable|date',
                 'gamis_id' => 'required',
             ],
             [
@@ -261,6 +262,7 @@ class UserController extends Controller
                 'telepon' => 'required|string|max:20',
                 'alamat' => 'required|string',
                 'mulai_kerja' => 'nullable|date',
+                'selesai_kerja' => 'nullable|date',
             ],
             [
                 'required' => ':attribute harus diisi.',

@@ -278,6 +278,17 @@
                                 </div>
                             @enderror
                         </label>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold dark:text-slate-100">Selesai Kerja</span>
+                            </div>
+                            <input type="date" name="selesai_kerja" placeholder="Selesai Kerja" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->selesai_kerja }}" />
+                            @error("selesai_kerja")
+                                <div class="label">
+                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </label>
 
                         <div id="form_gamis"></div>
 
