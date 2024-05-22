@@ -128,14 +128,14 @@
 
                     $("select[id='jenis_layanan_select']").html(`
                         <option disabled>Pilih Jenis Layanan!</option>
-                        @foreach ($jenis_layanan as $item)
+                        @foreach ($jenisLayanan as $item)
                             <option value="{{ $item->id }}" {{ $item->id == `+ items[3] +` ? 'selected' : '' }}>{{ $item->nama }}</option>
                         @endforeach
                     `);
 
                     $("select[id='jenis_pakaian_select']").html(`
                         <option disabled>Pilih Jenis Pakaian!</option>
-                        @foreach ($jenis_pakaian as $item)
+                        @foreach ($jenisPakaian as $item)
                             <option value="{{ $item->id }}" {{ $item->id == `+ items[4] +` ? 'selected' : '' }}>{{ $item->nama }}</option>
                         @endforeach
                     `);
@@ -153,7 +153,7 @@
             });
         }
 
-        function delete_button(id, layanan, pakaian) {
+        function delete_button(id, cabang_id, layanan, pakaian) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 html: "<p>Data akan masuk ke dalam Trash!</p>" +
@@ -173,7 +173,8 @@
                         url: "{{ route('harga-jenis-layanan.delete') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            "id": id
+                            "id": id,
+                            "cabang_id": cabang_id
                         },
                         success: function(response) {
                             Swal.fire({
@@ -313,7 +314,7 @@
                                     </div>
                                     <select name="jenis_layanan_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                         <option disabled selected>Pilih Jenis Layanan!</option>
-                                        @foreach ($jenis_layanan as $item)
+                                        @foreach ($jenisLayanan as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @endforeach
                                     </select>
@@ -329,7 +330,7 @@
                                     </div>
                                     <select name="jenis_pakaian_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                         <option disabled selected>Pilih Jenis Pakaian!</option>
-                                        @foreach ($jenis_pakaian as $item)
+                                        @foreach ($jenisPakaian as $item)
                                             <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                         @endforeach
                                     </select>
@@ -433,6 +434,7 @@
                                 <label class="form-control w-full lg:w-1/2">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100">Jenis Layanan</span>
+                                        <span class="label-text-alt" id="loading_edit1"></span>
                                     </div>
                                     <select id="jenis_layanan_select" name="jenis_layanan_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                     </select>
@@ -445,6 +447,7 @@
                                 <label class="form-control w-full lg:w-1/2">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100">Jenis Pakaian</span>
+                                        <span class="label-text-alt" id="loading_edit2"></span>
                                     </div>
                                     <select id="jenis_pakaian_select" name="jenis_pakaian_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                     </select>
@@ -458,6 +461,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Harga</span>
+                                    <span class="label-text-alt" id="loading_edit3"></span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" required />
                                 @error('harga')
@@ -469,6 +473,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Jenis Satuan</span>
+                                    <span class="label-text-alt" id="loading_edit4"></span>
                                 </div>
                                 <input type="text" name="jenis_satuan" placeholder="Jenis Satuan" class="input input-bordered w-full text-blue-700" required />
                                 @error('jenis_satuan')
@@ -556,7 +561,7 @@
                                                 <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
                                                     <i class="ri-pencil-fill text-base"></i>
                                                 </label>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
+                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
                                                     <i class="ri-delete-bin-line text-base"></i>
                                                 </label>
                                             </div>

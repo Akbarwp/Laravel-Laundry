@@ -84,9 +84,11 @@
                     $("input[name='nama']").val(items[1]);
                     $("textarea[name='deskripsi']").val(items[2]);
                     if (items[3]) {
-                        $("input[name='for_gamis'][value='1']").attr("checked", true);
+                        $("input[name='for_gamis'][value='1']").prop("checked", true);
+                        $("input[name='for_gamis'][value='0']").prop("checked", false);
                     } else {
-                        $("input[name='for_gamis'][value='0']").attr("checked", true);
+                        $("input[name='for_gamis'][value='1']").prop("checked", false);
+                        $("input[name='for_gamis'][value='0']").prop("checked", true);
                     }
 
                     // Loading effect end
@@ -113,7 +115,7 @@
                     "id": id
                 },
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     let items = [];
                     $.each(data, function(key, val) {
                         items.push(val);
@@ -123,9 +125,11 @@
                     $("input[name='nama']").val(items[1]);
                     $("textarea[name='deskripsi']").val(items[2]);
                     if (items[3]) {
-                        $("input[name='for_gamis'][value='1']").attr("checked", true);
+                        $("input[name='for_gamis'][value='1']").prop("checked", true);
+                        $("input[name='for_gamis'][value='0']").prop("checked", false);
                     } else {
-                        $("input[name='for_gamis'][value='0']").attr("checked", true);
+                        $("input[name='for_gamis'][value='1']").prop("checked", false);
+                        $("input[name='for_gamis'][value='0']").prop("checked", true);
                     }
 
                     // Loading effect end
@@ -137,7 +141,7 @@
             });
         }
 
-        function delete_button(id, nama) {
+        function delete_button(id, cabang_id, nama) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 html: "<p>Data akan masuk ke dalam Trash!</p>" +
@@ -156,7 +160,8 @@
                         url: "{{ route('jenis-layanan.delete') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            "id": id
+                            "id": id,
+                            "cabang_id": cabang_id
                         },
                         success: function(response) {
                             Swal.fire({
@@ -412,6 +417,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Nama Layanan</span>
+                                    <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama Layanan" class="input input-bordered w-full text-blue-700" required />
                                 @error('nama')
@@ -423,6 +429,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Deskripsi</span>
+                                    <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <textarea name="deskripsi" placeholder="Deskripsi" class="textarea textarea-bordered w-full text-base text-blue-500"></textarea>
                                 @error('deskripsi')
@@ -434,6 +441,7 @@
                             <div class="mt-3 w-full max-w-md">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">Untuk Gamis</span>
+                                    <span class="label-text-alt" id="loading_edit3"></span>
                                 </div>
                                 <div class="rounded-lg border border-slate-300 px-3 py-2">
                                     <div class="form-control">
@@ -520,7 +528,7 @@
                                                 <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
                                                     <i class="ri-pencil-fill text-base"></i>
                                                 </label>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                     <i class="ri-delete-bin-line text-base"></i>
                                                 </label>
                                             </div>

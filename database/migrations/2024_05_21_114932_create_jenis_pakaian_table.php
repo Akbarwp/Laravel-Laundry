@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jenis_pakaian', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->unique();
+            $table->string('nama');
             $table->text('deskripsi')->nullable();
             $table->foreignId('cabang_id')->constrained('cabang', 'id');
             $table->softDeletes();

@@ -106,6 +106,7 @@ Route::group([
 
         Route::get('/', [LayananCabangController::class, 'index'])->name('layanan-cabang');
         Route::get('/{cabang:slug}', [LayananCabangController::class, 'indexCabang'])->name('layanan-cabang.cabang');
+        Route::get('/{cabang:slug}/trash', [LayananCabangController::class, 'indexCabangTrash'])->name('layanan-cabang.trash');
     });
 
     Route::group([

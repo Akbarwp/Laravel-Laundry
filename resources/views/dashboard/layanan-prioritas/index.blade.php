@@ -117,7 +117,7 @@
                     "id": id
                 },
                 success: function(data) {
-                    console.log(data);
+                    // console.log(data);
                     let items = [];
                     $.each(data, function(key, val) {
                         items.push(val);
@@ -141,7 +141,7 @@
             });
         }
 
-        function delete_button(id, nama) {
+        function delete_button(id, cabang_id, nama) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 html: "<p>Data akan masuk ke dalam Trash!</p>" +
@@ -160,7 +160,8 @@
                         url: "{{ route('layanan-prioritas.delete') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            "id": id
+                            "id": id,
+                            "cabang_id": cabang_id
                         },
                         success: function(response) {
                             Swal.fire({
@@ -552,7 +553,7 @@
                                                 <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
                                                     <i class="ri-pencil-fill text-base"></i>
                                                 </label>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                     <i class="ri-delete-bin-line text-base"></i>
                                                 </label>
                                             </div>

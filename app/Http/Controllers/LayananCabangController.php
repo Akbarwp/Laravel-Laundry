@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabang;
+use App\Models\HargaJenisLayanan;
 use App\Models\JenisLayanan;
 use App\Models\JenisPakaian;
 use App\Models\LayananPrioritas;
@@ -26,13 +27,37 @@ class LayananCabangController extends Controller
 
     public function indexCabang(Request $request)
     {
-        $cabang = Cabang::where('slug', $request->cabang)->withTrashed()->first();
         $title = "Layanan Cabang";
+        $cabang = Cabang::where('slug', $request->cabang)->withTrashed()->first();
 
-        $jenisLayanan = JenisLayanan::where('cabang_id', $cabang->id)->get();
-        $jenisPakaian = JenisPakaian::where('cabang_id', $cabang->id)->get();
-        $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->get();
+        $jenisLayanan = JenisLayanan::where('cabang_id', $cabang->id)->orderBy('created_at', 'asc')->get();
+        $jenisPakaian = JenisPakaian::where('cabang_id', $cabang->id)->orderBy('created_at', 'asc')->get();
+        $hargaJenisLayanan = HargaJenisLayanan::query()
+            ->join('jenis_layanan as jl', 'harga_jenis_layanan.jenis_layanan_id', '=', 'jl.id')
+            ->join('jenis_pakaian as jp', 'harga_jenis_layanan.jenis_pakaian_id', '=', 'jp.id')
+            ->where('harga_jenis_layanan.cabang_id', $cabang->id)
+            ->select('harga_jenis_layanan.*', 'jl.nama as nama_layanan', 'jp.nama as nama_pakaian')
+            ->orderBy('jenis_pakaian_id', 'asc')->orderBy('jenis_layanan_id', 'asc')->get();
+        $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->orderBy('created_at', 'asc')->get();
 
-        return view('dashboard.layanan-cabang.cabang', compact('title', 'cabang', 'jenisLayanan', 'jenisPakaian', 'layananPrioritas'));
+        return view('dashboard.layanan-cabang.cabang', compact('title', 'cabang', 'jenisLayanan', 'jenisPakaian', 'hargaJenisLayanan', 'layananPrioritas'));
+    }
+
+    public function indexCabangTrash(Request $request)
+    {
+        $title = "Layanan Cabang Trash";
+        $cabang = Cabang::where('slug', $request->cabang)->withTrashed()->first();
+
+        $jenisLayananTrash = JenisLayanan::where('cabang_id', $cabang->id)->onlyTrashed()->orderBy('created_at', 'asc')->get();
+        $jenisPakaianTrash = JenisPakaian::where('cabang_id', $cabang->id)->onlyTrashed()->orderBy('created_at', 'asc')->get();
+        $hargaJenisLayananTrash = HargaJenisLayanan::query()
+            ->join('jenis_layanan as jl', 'harga_jenis_layanan.jenis_layanan_id', '=', 'jl.id')
+            ->join('jenis_pakaian as jp', 'harga_jenis_layanan.jenis_pakaian_id', '=', 'jp.id')
+            ->where('harga_jenis_layanan.cabang_id', $cabang->id)
+            ->select('harga_jenis_layanan.*', 'jl.nama as nama_layanan', 'jp.nama as nama_pakaian')
+            ->onlyTrashed()->orderBy('jenis_pakaian_id', 'asc')->orderBy('jenis_layanan_id', 'asc')->get();
+        $layananPrioritasTrash = LayananPrioritas::where('cabang_id', $cabang->id)->onlyTrashed()->orderBy('created_at', 'asc')->get();
+
+        return view('dashboard.layanan-cabang.trash', compact('title', 'cabang', 'jenisLayananTrash', 'jenisPakaianTrash', 'hargaJenisLayananTrash', 'layananPrioritasTrash'));
     }
 }

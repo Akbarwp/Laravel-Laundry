@@ -71,9 +71,13 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             @if ($item->deleted_at)
-                                                <div class="badge badge-error text-white">Cabang Non Aktif</div>
+                                                <div>
+                                                    <div class="badge badge-error text-white">Cabang Non Aktif</div>
+                                                </div>
                                             @else
-                                                <div class="badge badge-success text-white">Cabang Aktif</div>
+                                                <div>
+                                                    <div class="badge badge-success text-white">Cabang Aktif</div>
+                                                </div>
                                             @endif
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">

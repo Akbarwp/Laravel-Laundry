@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cabang;
 use App\Models\LayananPrioritas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class LayananPrioritasController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255|unique:App\Models\LayananPrioritas,nama',
+            'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable',
             'jenis_satuan' => 'required|string|max:255',
             'harga' => 'required|decimal:0,2',
@@ -36,20 +37,35 @@ class LayananPrioritasController extends Controller
         ],
         [
             'required' => ':attribute harus diisi.',
-            'unique' => ':attribute sudah ada, silakan isi yang lain.',
             'max' => ':attribute tidak boleh lebih dari :max karakter.',
             'integer' => ':attribute harus berupa angka.',
             'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
         ]);
 
         $validated = $validator->validated();
-        $validated['cabang_id'] = auth()->user()->cabang_id;
+        $userRole = auth()->user()->roles[0]->name;
+
+        if ($userRole == 'manajer_laundry') {
+            $validated['cabang_id'] = auth()->user()->cabang_id;
+        } else if ($userRole == 'lurah') {
+            $cabang = Cabang::where('slug', $request->cabang_slug)->first();
+            $validated['cabang_id'] = $cabang->id;
+        }
 
         $tambah = LayananPrioritas::create($validated);
-        if ($tambah) {
-            return to_route('layanan-prioritas')->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
-        } else {
-            return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Ditambahkan');
+
+        if ($userRole == 'manajer_laundry') {
+            if ($tambah) {
+                return to_route('layanan-prioritas')->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
+            } else {
+                return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Ditambahkan');
+            }
+        } else if ($userRole == 'lurah') {
+            if ($tambah) {
+                return back()->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
+            } else {
+                return back()->with('error', 'Layanan Prioritas Gagal Ditambahkan');
+            }
         }
     }
 
@@ -67,9 +83,8 @@ class LayananPrioritasController extends Controller
 
     public function update(Request $request)
     {
-        $layananPrioritas = LayananPrioritas::find($request->id);
         $validator = Validator::make($request->all(), [
-            'nama' => ['required', 'string', 'max:255', Rule::unique('layanan_prioritas')->ignore($layananPrioritas)],
+            'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable',
             'jenis_satuan' => 'required|string|max:255',
             'harga' => 'required|decimal:0,2',
@@ -77,20 +92,27 @@ class LayananPrioritasController extends Controller
         ],
         [
             'required' => ':attribute harus diisi.',
-            'unique' => ':attribute sudah ada, silakan isi yang lain.',
             'max' => ':attribute tidak boleh lebih dari :max karakter.',
             'integer' => ':attribute harus berupa angka.',
             'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
         ]);
 
         $validated = $validator->validated();
-        $validated['cabang_id'] = auth()->user()->cabang_id;
-
+        $userRole = auth()->user()->roles[0]->name;
         $perbarui = LayananPrioritas::where('id', $request->id)->update($validated);
-        if ($perbarui) {
-            return to_route('layanan-prioritas')->with('success', 'Layanan Prioritas Berhasil Diperbarui');
-        } else {
-            return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Diperbarui');
+
+        if ($userRole == 'manajer_laundry') {
+            if ($perbarui) {
+                return to_route('layanan-prioritas')->with('success', 'Layanan Prioritas Berhasil Diperbarui');
+            } else {
+                return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Diperbarui');
+            }
+        } else if ($userRole == 'lurah') {
+            if ($perbarui) {
+                return back()->with('success', 'Layanan Prioritas Berhasil Diperbarui');
+            } else {
+                return back()->with('error', 'Layanan Prioritas Gagal Diperbarui');
+            }
         }
     }
 
