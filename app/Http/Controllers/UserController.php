@@ -60,8 +60,8 @@ class UserController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $user = User::where('slug', $request->user)->first();
 
-        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
-            return abort(403);
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
         }
@@ -196,8 +196,8 @@ class UserController extends Controller
         }
 
         $user = User::where('slug', $request->user)->first();
-        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
-            return abort(403);
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
         }
@@ -307,8 +307,8 @@ class UserController extends Controller
         $title = "Ubah Password User";
         $user = User::where('slug', $request->user)->first();
         $userRole = auth()->user()->roles[0]->name;
-        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
-            return abort(403);
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
         }
@@ -356,8 +356,8 @@ class UserController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $user = User::where('slug', $request->user)->onlyTrashed()->first();
 
-        if ($user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
-            return abort(403);
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
         }
@@ -423,7 +423,11 @@ class UserController extends Controller
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
-        $cabang = Cabang::where('slug', $request->cabang)->first();
+        $cabang = Cabang::where('slug', $request->cabang)->withTrashed()->first();
+        if ($cabang == null || $cabang->deleted_at) {
+            abort(404, 'CABANG TIDAK DITEMUKAN ATAU SUDAH DIHAPUS.');
+        }
+
         $role = Role::get();
         $users = User::where('cabang_id', $cabang->id)->get();
 
@@ -447,9 +451,13 @@ class UserController extends Controller
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
+        $cabang = Cabang::where('deleted_at', null)->where('slug', $request->cabang)->get();
+        if ($cabang->first() == null) {
+            abort(404, 'CABANG TIDAK DITEMUKAN ATAU SUDAH DIHAPUS.');
+        }
+
         $kkGamis = Gamis::get();
         $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
-        $cabang = Cabang::where('deleted_at', null)->where('slug', $request->cabang)->get();
         $title = "Tambah User";
         $isCabang = [true, $cabang[0]->nama, $cabang[0]->id];
 

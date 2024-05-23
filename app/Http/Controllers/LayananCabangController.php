@@ -29,6 +29,9 @@ class LayananCabangController extends Controller
     {
         $title = "Layanan Cabang";
         $cabang = Cabang::where('slug', $request->cabang)->withTrashed()->first();
+        if ($cabang == null) {
+            abort(404, 'CABANG TIDAK DITEMUKAN.');
+        }
 
         $jenisLayanan = JenisLayanan::where('cabang_id', $cabang->id)->orderBy('created_at', 'asc')->get();
         $jenisPakaian = JenisPakaian::where('cabang_id', $cabang->id)->orderBy('created_at', 'asc')->get();
@@ -47,6 +50,9 @@ class LayananCabangController extends Controller
     {
         $title = "Layanan Cabang Trash";
         $cabang = Cabang::where('slug', $request->cabang)->withTrashed()->first();
+        if ($cabang == null) {
+            abort(404, 'CABANG TIDAK DITEMUKAN.');
+        }
 
         $jenisLayananTrash = JenisLayanan::where('cabang_id', $cabang->id)->onlyTrashed()->orderBy('created_at', 'asc')->get();
         $jenisPakaianTrash = JenisPakaian::where('cabang_id', $cabang->id)->onlyTrashed()->orderBy('created_at', 'asc')->get();

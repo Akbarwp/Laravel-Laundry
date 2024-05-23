@@ -713,19 +713,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_layanan('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_layanan('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="restore_button_jenis_layanan" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             <i class="ri-history-line text-base"></i>
                                                         </label>
                                                         <label for="destroy_button_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             Hapus Permanen
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -811,19 +811,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_jenis_pakaian" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_pakaian('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_jenis_pakaian" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_pakaian('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="restore_button_jenis_pakaian" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button_jenis_pakaian('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             <i class="ri-history-line text-base"></i>
                                                         </label>
                                                         <label for="destroy_button_jenis_pakaian" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button_jenis_pakaian('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             Hapus Permanen
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -949,19 +949,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_harga_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_harga_jenis_layanan('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_harga_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_harga_jenis_layanan('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="restore_button_harga_jenis_layanan" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button_harga_jenis_layanan('{{ $item->id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
                                                             <i class="ri-history-line text-base"></i>
                                                         </label>
                                                         <label for="destroy_button_harga_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button_harga_jenis_layanan('{{ $item->id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
                                                             Hapus Permanen
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -1084,19 +1084,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_layanan_prioritas" class="btn btn-outline btn-info btn-sm" onclick="return show_button_layanan_prioritas('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_layanan_prioritas" class="btn btn-outline btn-info btn-sm" onclick="return show_button_layanan_prioritas('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="restore_button_layanan_prioritas" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button_layanan_prioritas('{{ $item->id }}', '{{ $item->nama }}')">
                                                             <i class="ri-history-line text-base"></i>
                                                         </label>
                                                         <label for="destroy_button_layanan_prioritas" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button_layanan_prioritas('{{ $item->id }}', '{{ $item->nama }}')">
                                                             Hapus Permanen
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

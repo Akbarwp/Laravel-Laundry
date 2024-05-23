@@ -23,8 +23,8 @@ class ProfileController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $user = User::where('slug', $request->user)->first();
 
-        if ($user->slug != auth()->user()->slug) {
-            return abort(403);
+        if ($user == null || $user->slug != auth()->user()->slug) {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         }
 
         if ($user->getRoleNames()[0] == 'lurah') {
@@ -46,8 +46,8 @@ class ProfileController extends Controller
     {
         $title = "Ubah Profile User";
         $user = User::where('slug', $request->user)->first();
-        if ($user->slug != auth()->user()->slug) {
-            return abort(403);
+        if ($user == null || $user->slug != auth()->user()->slug) {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         }
 
         if ($user->getRoleNames()[0] == 'lurah') {
@@ -153,8 +153,8 @@ class ProfileController extends Controller
     {
         $title = "Ubah Password User";
         $user = User::where('slug', $request->user)->first();
-        if ($user->slug != auth()->user()->slug) {
-            return abort(403);
+        if ($user == null || $user->slug != auth()->user()->slug) {
+            abort(404, 'USER TIDAK DITEMUKAN.');
         }
         return view('dashboard.user.ubahPassword', compact('title', 'user'));
     }

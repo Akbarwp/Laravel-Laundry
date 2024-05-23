@@ -856,19 +856,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_layanan('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_layanan('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="edit_button_jenis_layanan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_jenis_layanan('{{ $item->id }}')">
                                                             <i class="ri-pencil-fill text-base"></i>
                                                         </label>
                                                         <label for="delete_button_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             <i class="ri-delete-bin-line text-base"></i>
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -1040,19 +1040,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_jenis_pakaian" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_pakaian('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_jenis_pakaian" class="btn btn-outline btn-info btn-sm" onclick="return show_button_jenis_pakaian('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="edit_button_jenis_pakaian" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_jenis_pakaian('{{ $item->id }}')">
                                                             <i class="ri-pencil-fill text-base"></i>
                                                         </label>
                                                         <label for="delete_button_jenis_pakaian" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_jenis_pakaian('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             <i class="ri-delete-bin-line text-base"></i>
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -1329,19 +1329,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_harga_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_harga_jenis_layanan('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_harga_jenis_layanan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_harga_jenis_layanan('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="edit_button_harga_jenis_layanan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_harga_jenis_layanan('{{ $item->id }}')">
                                                             <i class="ri-pencil-fill text-base"></i>
                                                         </label>
                                                         <label for="delete_button_harga_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_harga_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
                                                             <i class="ri-delete-bin-line text-base"></i>
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -1622,19 +1622,19 @@
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                @if (!$cabang->deleted_at)
-                                                    <div>
-                                                        <label for="show_button_layanan_prioritas" class="btn btn-outline btn-info btn-sm" onclick="return show_button_layanan_prioritas('{{ $item->id }}')">
-                                                            <i class="ri-eye-line text-base"></i>
-                                                        </label>
+                                                <div>
+                                                    <label for="show_button_layanan_prioritas" class="btn btn-outline btn-info btn-sm" onclick="return show_button_layanan_prioritas('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
                                                         <label for="edit_button_layanan_prioritas" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_layanan_prioritas('{{ $item->id }}')">
                                                             <i class="ri-pencil-fill text-base"></i>
                                                         </label>
                                                         <label for="delete_button_layanan_prioritas" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_layanan_prioritas('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
                                                             <i class="ri-delete-bin-line text-base"></i>
                                                         </label>
-                                                    </div>
-                                                @endif
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

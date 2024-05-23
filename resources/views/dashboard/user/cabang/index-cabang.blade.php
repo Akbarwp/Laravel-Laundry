@@ -209,10 +209,12 @@
                             <i class="ri-arrow-left-line"></i>
                             Kembali
                         </a>
-                        <a href="{{ route("user.cabang.create", $cabang->slug) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                            <i class="ri-add-fill"></i>
-                            Tambah
-                        </a>
+                        @if (!$cabang->deleted_at)
+                            <a href="{{ route("user.cabang.create", $cabang->slug) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-add-fill"></i>
+                                Tambah
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">
@@ -478,17 +480,19 @@
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <div>
-                                                <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
-                                                    <i class="ri-eye-line text-base"></i>
-                                                </label>
-                                                <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
-                                                    <i class="ri-history-line text-base"></i>
-                                                </label>
-                                                <label for="destroy_button" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button('{{ $item->slug }}', '{{ $item->nama }}')">
-                                                    Hapus Permanen
-                                                </label>
-                                            </div>
+                                            @if (!$cabang->deleted_at)
+                                                <div>
+                                                    <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
+                                                        <i class="ri-history-line text-base"></i>
+                                                    </label>
+                                                    <label for="destroy_button" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button('{{ $item->slug }}', '{{ $item->nama }}')">
+                                                        Hapus Permanen
+                                                    </label>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -531,8 +535,9 @@
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <div>
-                                                <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                            @if (!$cabang->deleted_at)
+                                                <div>
+                                                    <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
@@ -541,7 +546,8 @@
                                                     <label for="destroy_button" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                         Hapus Permanen
                                                     </label>
-                                            </div>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -584,8 +590,9 @@
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <div>
-                                                <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
+                                            @if (!$cabang->deleted_at)
+                                                <div>
+                                                    <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->slug }}', 'trash')">
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->slug }}', '{{ $item->nama }}')">
@@ -594,7 +601,8 @@
                                                     <label for="destroy_button" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button('{{ $item->slug }}', '{{ $item->nama }}')">
                                                         Hapus Permanen
                                                     </label>
-                                            </div>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
