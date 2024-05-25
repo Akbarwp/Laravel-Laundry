@@ -11,3 +11,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css" />
 {{-- <link rel="stylesheet" href="{{ asset("css/datatable.css") }}"> --> untuk styling datatable --}}
+
+{{-- Remix Icon --}}
+{{-- <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" /> --}}

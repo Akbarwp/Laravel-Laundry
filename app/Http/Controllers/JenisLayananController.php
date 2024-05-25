@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Layanan\JenisLayananRequest;
 use App\Models\Cabang;
 use App\Models\HargaJenisLayanan;
 use App\Models\JenisLayanan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class JenisLayananController extends Controller
 {
@@ -16,6 +15,7 @@ class JenisLayananController extends Controller
         $title = "Jenis Layanan";
         $userCabang = auth()->user()->cabang_id;
         $userRole = auth()->user()->roles[0]->name;
+        $cabang = Cabang::where('id', $userCabang)->withTrashed()->first();
 
         if ($userRole != 'manajer_laundry') {
             return abort(403);
@@ -24,22 +24,12 @@ class JenisLayananController extends Controller
         $jenisLayanan = JenisLayanan::where('cabang_id', $userCabang)->orderBy('created_at', 'asc')->get();
         $jenisLayananTrash = JenisLayanan::where('cabang_id', $userCabang)->onlyTrashed()->orderBy('created_at', 'asc')->get();
 
-        return view('dashboard.jenis-layanan.index', compact('title', 'jenisLayanan', 'jenisLayananTrash'));
+        return view('dashboard.jenis-layanan.index', compact('title', 'jenisLayanan', 'jenisLayananTrash', 'cabang'));
     }
 
-    public function store(Request $request)
+    public function store(JenisLayananRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable',
-            'for_gamis' => 'required|boolean',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
 
         if ($userRole == 'manajer_laundry') {
@@ -78,20 +68,9 @@ class JenisLayananController extends Controller
         return $jenisLayanan;
     }
 
-    public function update(Request $request)
+    public function update(JenisLayananRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable',
-            'for_gamis' => 'required|boolean',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'unique' => ':attribute sudah ada, silakan isi yang lain.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
         $perbarui = JenisLayanan::where('id', $request->id)->update($validated);
 

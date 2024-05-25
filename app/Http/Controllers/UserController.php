@@ -86,6 +86,11 @@ class UserController extends Controller
         $title = "Tambah User";
         $userRole = auth()->user()->roles[0]->name;
 
+        $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
+        if ($cabang && $cabang->deleted_at) {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $kkGamis = Gamis::get();
         $isCabang = [false];
 
@@ -186,6 +191,11 @@ class UserController extends Controller
         $title = "Ubah User";
         $userRole = auth()->user()->roles[0]->name;
         $kkGamis = Gamis::get();
+
+        $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
+        if ($cabang && $cabang->deleted_at) {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
 
         if ($userRole == 'lurah') {
             $role = Role::get();
@@ -305,6 +315,12 @@ class UserController extends Controller
     public function editPassword(Request $request)
     {
         $title = "Ubah Password User";
+
+        $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
+        if ($cabang && $cabang->deleted_at) {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $user = User::where('slug', $request->user)->first();
         $userRole = auth()->user()->roles[0]->name;
         if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
@@ -341,6 +357,11 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
+        $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
+        if ($cabang && $cabang->deleted_at) {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $hapus = User::where('slug', $request->slug)->delete();
         if ($hapus) {
             abort(200, 'User Berhasil Dihapus');
@@ -379,6 +400,11 @@ class UserController extends Controller
 
     public function restore(Request $request)
     {
+        $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
+        if ($cabang && $cabang->deleted_at) {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $pulih = User::where('slug', $request->slug)->restore();
         if ($pulih) {
             abort(200, 'User Berhasil Dihapus');
@@ -389,6 +415,11 @@ class UserController extends Controller
 
     public function destroy(Request $request)
     {
+        $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
+        if ($cabang && $cabang->deleted_at) {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $user = User::where('slug', $request->slug)->onlyTrashed()->first();
         $userRole = $user->roles[0]->name;
 
@@ -431,8 +462,6 @@ class UserController extends Controller
         $role = Role::get();
         $users = User::where('cabang_id', $cabang->id)->get();
 
-        $titleCabang = $cabang->nama;
-
         $manajer = ManajerLaundry::join('users as u', 'manajer_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->where('u.cabang_id', $cabang->id)->orderBy('manajer_laundry.created_at', 'asc')->get();
         $pegawai = PegawaiLaundry::join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->where('u.cabang_id', $cabang->id)->orderBy('pegawai_laundry.created_at', 'asc')->get();
         $gamis = DetailGamis::join('users as u', 'detail_gamis.user_id', '=', 'u.id')->where('u.deleted_at', null)->where('u.cabang_id', $cabang->id)->orderBy('detail_gamis.created_at', 'asc')->get();
@@ -441,7 +470,7 @@ class UserController extends Controller
         $pegawaiTrash = User::join('pegawai_laundry as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->where('users.cabang_id', $cabang->id)->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
         $gamisTrash = User::join('detail_gamis as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->where('users.cabang_id', $cabang->id)->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
 
-        return view('dashboard.user.cabang.index-cabang', compact('title', 'titleCabang', 'cabang', 'role', 'manajer', 'pegawai', 'gamis', 'manajerTrash', 'pegawaiTrash', 'gamisTrash'));
+        return view('dashboard.user.cabang.index-cabang', compact('title', 'cabang', 'role', 'manajer', 'pegawai', 'gamis', 'manajerTrash', 'pegawaiTrash', 'gamisTrash'));
     }
 
     public function createUserCabang(Request $request)

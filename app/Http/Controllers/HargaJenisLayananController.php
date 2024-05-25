@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Layanan\HargaJenisLayananRequest;
 use App\Models\Cabang;
 use App\Models\HargaJenisLayanan;
 use App\Models\JenisLayanan;
 use App\Models\JenisPakaian;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class HargaJenisLayananController extends Controller
 {
@@ -16,6 +16,7 @@ class HargaJenisLayananController extends Controller
         $title = "Harga Jenis Layanan";
         $userCabang = auth()->user()->cabang_id;
         $userRole = auth()->user()->roles[0]->name;
+        $cabang = Cabang::where('id', $userCabang)->withTrashed()->first();
 
         if ($userRole != 'manajer_laundry') {
             return abort(403);
@@ -37,25 +38,12 @@ class HargaJenisLayananController extends Controller
             ->select('harga_jenis_layanan.*', 'jl.nama as nama_layanan', 'jp.nama as nama_pakaian')
             ->onlyTrashed()->orderBy('harga_jenis_layanan.jenis_pakaian_id', 'asc')->orderBy('harga_jenis_layanan.jenis_layanan_id', 'asc')->get();
 
-        return view('dashboard.harga-jenis-layanan.index', compact('title', 'hargaJenisLayanan', 'hargaJenisLayananTrash', 'jenisLayanan', 'jenisPakaian'));
+        return view('dashboard.harga-jenis-layanan.index', compact('title', 'hargaJenisLayanan', 'hargaJenisLayananTrash', 'jenisLayanan', 'jenisPakaian', 'cabang'));
     }
 
-    public function store(Request $request)
+    public function store(HargaJenisLayananRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'harga' => 'required|decimal:0,2',
-            'jenis_satuan' => 'required|string|max:255',
-            'jenis_layanan_id' => 'required|integer',
-            'jenis_pakaian_id' => 'required|integer',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-            'integer' => ':attribute harus berupa angka.',
-            'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
 
         if ($userRole == 'manajer_laundry') {
@@ -107,22 +95,9 @@ class HargaJenisLayananController extends Controller
         return $hargaJenisLayanan;
     }
 
-    public function update(Request $request)
+    public function update(HargaJenisLayananRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'harga' => 'required|decimal:0,2',
-            'jenis_satuan' => 'required|string|max:255',
-            'jenis_layanan_id' => 'required|integer',
-            'jenis_pakaian_id' => 'required|integer',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-            'integer' => ':attribute harus berupa angka.',
-            'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
 
         if ($userRole == 'manajer_laundry') {

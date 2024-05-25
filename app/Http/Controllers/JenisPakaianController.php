@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Layanan\JenisPakaianRequest;
 use App\Models\Cabang;
 use App\Models\HargaJenisLayanan;
 use App\Models\JenisPakaian;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class JenisPakaianController extends Controller
 {
@@ -16,6 +15,7 @@ class JenisPakaianController extends Controller
         $title = "Jenis Pakaian";
         $userCabang = auth()->user()->cabang_id;
         $userRole = auth()->user()->roles[0]->name;
+        $cabang = Cabang::where('id', $userCabang)->withTrashed()->first();
 
         if ($userRole != 'manajer_laundry') {
             return abort(403);
@@ -24,21 +24,12 @@ class JenisPakaianController extends Controller
         $jenisPakaian = JenisPakaian::where('cabang_id', $userCabang)->orderBy('created_at', 'asc')->get();
         $jenisPakaianTrash = JenisPakaian::where('cabang_id', $userCabang)->onlyTrashed()->orderBy('created_at', 'asc')->get();
 
-        return view('dashboard.jenis-pakaian.index', compact('title', 'jenisPakaian', 'jenisPakaianTrash'));
+        return view('dashboard.jenis-pakaian.index', compact('title', 'jenisPakaian', 'jenisPakaianTrash', 'cabang'));
     }
 
-    public function store(Request $request)
+    public function store(JenisPakaianRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
 
         if ($userRole == 'manajer_laundry') {
@@ -77,19 +68,9 @@ class JenisPakaianController extends Controller
         return $jenisPakaian;
     }
 
-    public function update(Request $request)
+    public function update(JenisPakaianRequest $request)
     {
-        $jenisPakaian = JenisPakaian::find($request->id);
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
         $perbarui = JenisPakaian::where('id', $request->id)->update($validated);
 

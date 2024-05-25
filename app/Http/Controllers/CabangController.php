@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Cabang\StoreCabangRequest;
+use App\Http\Requests\Cabang\UpdateCabangRequest;
 use App\Models\Cabang;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class CabangController extends Controller
 {
@@ -27,20 +27,9 @@ class CabangController extends Controller
         return view('dashboard.cabang.index', compact('title', 'cabang', 'cabangTrash'));
     }
 
-    public function store(Request $request)
+    public function store(StoreCabangRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255|unique:App\Models\Cabang,nama',
-            'lokasi' => 'required|string|max:255',
-            'alamat' => 'nullable',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'unique' => ':attribute sudah ada, silakan isi yang lain.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
 
         $tambah = Cabang::create($validated);
         if ($tambah) {
@@ -62,21 +51,9 @@ class CabangController extends Controller
         return $cabang;
     }
 
-    public function update(Request $request)
+    public function update(UpdateCabangRequest $request)
     {
-        $cabang = Cabang::find($request->id);
-        $validator = Validator::make($request->all(), [
-            'nama' => ['required', 'string', 'max:255', Rule::unique('cabang')->ignore($cabang)],
-            'lokasi' => 'required|string|max:255',
-            'alamat' => 'nullable',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'unique' => ':attribute sudah ada, silakan isi yang lain.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
 
         $perbarui = Cabang::where('id', $request->id)->update($validated);
         if ($perbarui) {

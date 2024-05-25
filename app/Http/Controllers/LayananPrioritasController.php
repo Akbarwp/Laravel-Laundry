@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Layanan\LayananPrioritasRequest;
 use App\Models\Cabang;
 use App\Models\LayananPrioritas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class LayananPrioritasController extends Controller
 {
@@ -15,6 +14,7 @@ class LayananPrioritasController extends Controller
         $title = "Layanan Prioritas";
         $userCabang = auth()->user()->cabang_id;
         $userRole = auth()->user()->roles[0]->name;
+        $cabang = Cabang::where('id', $userCabang)->withTrashed()->first();
 
         if ($userRole != 'manajer_laundry') {
             return abort(403);
@@ -23,26 +23,12 @@ class LayananPrioritasController extends Controller
         $layananPrioritas = LayananPrioritas::where('cabang_id', $userCabang)->orderBy('created_at', 'asc')->get();
         $layananPrioritasTrash = LayananPrioritas::where('cabang_id', $userCabang)->onlyTrashed()->orderBy('created_at', 'asc')->get();
 
-        return view('dashboard.layanan-prioritas.index', compact('title', 'layananPrioritas', 'layananPrioritasTrash'));
+        return view('dashboard.layanan-prioritas.index', compact('title', 'layananPrioritas', 'layananPrioritasTrash', 'cabang'));
     }
 
-    public function store(Request $request)
+    public function store(LayananPrioritasRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable',
-            'jenis_satuan' => 'required|string|max:255',
-            'harga' => 'required|decimal:0,2',
-            'prioritas' => 'required|integer',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-            'integer' => ':attribute harus berupa angka.',
-            'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
 
         if ($userRole == 'manajer_laundry') {
@@ -81,23 +67,9 @@ class LayananPrioritasController extends Controller
         return $layananPrioritas;
     }
 
-    public function update(Request $request)
+    public function update(LayananPrioritasRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'deskripsi' => 'nullable',
-            'jenis_satuan' => 'required|string|max:255',
-            'harga' => 'required|decimal:0,2',
-            'prioritas' => 'required|integer',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-            'integer' => ':attribute harus berupa angka.',
-            'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
-        ]);
-
-        $validated = $validator->validated();
+        $validated = $request->validated();
         $userRole = auth()->user()->roles[0]->name;
         $perbarui = LayananPrioritas::where('id', $request->id)->update($validated);
 

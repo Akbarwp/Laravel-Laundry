@@ -475,10 +475,12 @@
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <h6 class="font-bold dark:text-white">{{ $title }}</h6>
                     <div class="w-1/2 max-w-full flex-none px-3 text-right">
-                        <label for="create_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                            <i class="ri-add-fill"></i>
-                            Tambah
-                        </label>
+                        @if (!$cabang->deleted_at)
+                            <label for="create_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-add-fill"></i>
+                                Tambah
+                            </label>
+                        @endif
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">
@@ -525,12 +527,14 @@
                                                 <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->id }}')">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </label>
-                                                <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
-                                                    <i class="ri-pencil-fill text-base"></i>
-                                                </label>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
-                                                    <i class="ri-delete-bin-line text-base"></i>
-                                                </label>
+                                                @if (!$cabang->deleted_at)
+                                                    <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
+                                                        <i class="ri-pencil-fill text-base"></i>
+                                                    </label>
+                                                    <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                        <i class="ri-delete-bin-line text-base"></i>
+                                                    </label>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -599,12 +603,14 @@
                                                 <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->id }}')">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </label>
-                                                <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->id }}', '{{ $item->nama }}')">
-                                                    <i class="ri-history-line text-base"></i>
-                                                </label>
-                                                <label for="destroy_button" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button('{{ $item->id }}', '{{ $item->nama }}')">
-                                                    Hapus Permanen
-                                                </label>
+                                                @if (!$cabang->deleted_at)
+                                                    <label for="restore_button" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                                        <i class="ri-history-line text-base"></i>
+                                                    </label>
+                                                    <label for="destroy_button" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                                        Hapus Permanen
+                                                    </label>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
