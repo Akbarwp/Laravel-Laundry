@@ -43,7 +43,7 @@
                     <h6 class="font-bold dark:text-white">{{ $title }} | <span class="text-blue-500">{{ $user->email }}</span></h6>
                 </div>
                 <div class="flex-auto px-6 pb-6 pt-0">
-                    <form action="{{ route("user.update.password", $user->slug) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route("rw.update.password", $user->slug) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="text" name="slug" value="{{ $user->slug }}" hidden >
                         {{-- <label class="form-control w-full">
@@ -67,11 +67,9 @@
                             <input type="password" name="password_confirmation" placeholder="Konfirmasi Password baru" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" required />
                         </label>
 
-                        <div id="form_gamis"></div>
-
                         <div class="mt-5 flex flex-wrap justify-center gap-2">
                             <button type="submit" class="btn btn-warning w-full max-w-md text-slate-700">Ganti Password</button>
-                            <a href="{{ url()->previous() }}" class="btn btn-ghost w-full max-w-md bg-slate-500 text-white dark:bg-slate-500 dark:hover:opacity-80">Kembali</a>
+                            <a href="{{ route('rw') }}" class="btn btn-ghost w-full max-w-md bg-slate-500 text-white dark:bg-slate-500 dark:hover:opacity-80">Kembali</a>
                         </div>
                     </form>
                 </div>

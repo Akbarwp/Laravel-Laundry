@@ -43,16 +43,16 @@
                     <h6 class="font-bold dark:text-white">{{ $title }} | <span class="text-blue-500">{{ $user->email }}</span></h6>
                 </div>
                 <div class="flex-auto px-6 pb-6 pt-0">
-                    <form action="{{ route("user.update.password", $user->slug) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route("profile.update.password", $user->slug) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="text" name="slug" value="{{ $user->slug }}" hidden >
-                        {{-- <label class="form-control w-full">
+                        <label class="form-control w-full">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Password Lama</span>
                             </div>
                             <input type="password" name="current_password" placeholder="Password Lama" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" required />
                             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-                        </label> --}}
+                        </label>
                         <label class="form-control w-full">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Password Baru</span>

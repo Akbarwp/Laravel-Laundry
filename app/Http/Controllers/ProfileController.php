@@ -156,7 +156,7 @@ class ProfileController extends Controller
         if ($user == null || $user->slug != auth()->user()->slug) {
             abort(404, 'USER TIDAK DITEMUKAN.');
         }
-        return view('dashboard.user.ubahPassword', compact('title', 'user'));
+        return view('dashboard.profile.ubahPassword', compact('title', 'user'));
     }
 
     public function updatePassword(Request $request)
@@ -177,9 +177,9 @@ class ProfileController extends Controller
         ]);
 
         if ($updatePassword) {
-            return to_route('user')->with('success', 'Password User Berhasil Diganti');
+            return to_route('profile', $request->slug)->with('success', 'Password User Berhasil Diganti');
         } else {
-            return to_route('user')->with('error', 'Password User Gagal Diganti');
+            return to_route('profile', $request->slug)->with('error', 'Password User Gagal Diganti');
         }
     }
 }

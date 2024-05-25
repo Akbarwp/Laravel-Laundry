@@ -334,12 +334,12 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         $validated = $request->validateWithBag('updatePassword', [
-            'current_password' => ['required', 'current_password'],
+            // 'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ],
         [
             'required' => ':attribute harus diisi.',
-            'current_password' => 'Password lama salah.',
+            // 'current_password' => 'Password lama salah.',
             'confirmed' => 'Konfirmasi :attribute tidak sama.',
             'min' => 'minimal :min karakter.',
         ]);
