@@ -3,11 +3,13 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GamisController;
 use App\Http\Controllers\HargaJenisLayananController;
 use App\Http\Controllers\JenisLayananController;
 use App\Http\Controllers\JenisPakaianController;
 use App\Http\Controllers\LayananCabangController;
 use App\Http\Controllers\LayananPrioritasController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\Auth\ProfileController as ProfileController2;
 use App\Http\Controllers\RWController;
@@ -192,6 +194,35 @@ Route::group([
         Route::get('/trash', [LayananPrioritasController::class, 'trash'])->name('layanan-prioritas.trash');
         Route::post('/pulihkan', [LayananPrioritasController::class, 'restore'])->name('layanan-prioritas.restore');
         Route::post('/hapus-permanen', [LayananPrioritasController::class, 'destroy'])->name('layanan-prioritas.destroy');
+    });
+
+    Route::group([
+        'prefix' => 'pelanggan',
+        'middleware' => ['role:lurah|manajer_laundry|pegawai_laundry'],
+    ], function() {
+
+        Route::get('/', [PelangganController::class, 'index'])->name('pelanggan');
+        Route::post('/tambah', [PelangganController::class, 'store'])->name('pelanggan.store');
+        Route::get('/lihat', [PelangganController::class, 'show'])->name('pelanggan.show');
+        Route::get('/ubah', [PelangganController::class, 'edit'])->name('pelanggan.edit');
+        Route::post('/ubah', [PelangganController::class, 'update'])->name('pelanggan.update');
+        Route::post('/hapus', [PelangganController::class, 'delete'])->name('pelanggan.delete');
+        Route::get('/{cabang:slug}', [PelangganController::class, 'indexCabang'])->name('pelanggan.cabang')->middleware('role:lurah');
+    });
+
+    Route::group([
+        'prefix' => 'gamis',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [GamisController::class, 'index'])->name('gamis');
+        Route::post('/tambah', [GamisController::class, 'store'])->name('gamis.store');
+        Route::get('/lihat', [GamisController::class, 'show'])->name('gamis.show');
+        Route::get('/ubah', [GamisController::class, 'edit'])->name('gamis.edit');
+        Route::post('/ubah', [GamisController::class, 'update'])->name('gamis.update');
+        Route::post('/hapus', [GamisController::class, 'delete'])->name('gamis.delete');
+        Route::get('/anggota/{detail_gamis:kartu_keluarga}', [GamisController::class, 'anggota'])->name('gamis.anggota');
+        Route::get('/detail-anggota', [GamisController::class, 'detailAnggota'])->name('gamis.anggota.show');
     });
 });
 

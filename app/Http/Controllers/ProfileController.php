@@ -94,6 +94,7 @@ class ProfileController extends Controller
             'required' => ':attribute harus diisi.',
             'max' => ':attribute tidak boleh lebih dari :max karakter.',
             'date' => ':attribute harus berupa tanggal.',
+            'uploaded' => 'Silakan pilih foto lain.',
         ]);
         $validatedProfile = $validatorProfile->validated();
 

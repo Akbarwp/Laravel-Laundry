@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('gamis', function (Blueprint $table) {
             $table->id();
             $table->string('kartu_keluarga')->unique();
-            $table->text('alamat');
+            $table->text('alamat')->nullable();
             $table->integer('rt');
             $table->integer('rw');
             $table->timestamps();

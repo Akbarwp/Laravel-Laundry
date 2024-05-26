@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'jenis_kelamin' => 'L',
             'telepon' => '081',
             'alamat' => '-',
+            'cabang_id' => 1,
         ]);
 
         $transaksi = Transaksi::create([

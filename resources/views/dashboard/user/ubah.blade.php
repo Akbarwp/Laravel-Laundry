@@ -17,7 +17,7 @@
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">
                                     Kartu Keluarga Gamis |
-                                    <a href="#" class="link link-primary">Sudah membuat KK Gamis?</a>
+                                    <a href="{{ route('gamis') }}" class="link link-primary">Sudah membuat KK Gamis?</a>
                                 </span>
                             </div>
                             <select name="gamis_id" class="select select-bordered" required>
@@ -58,7 +58,7 @@
                         <div class="label">
                             <span class="label-text font-semibold dark:text-slate-100">
                                 Kartu Keluarga Gamis |
-                                <a href="#" class="link link-primary">Sudah membuat KK Gamis?</a>
+                                <a href="{{ route('gamis') }}" class="link link-primary">Sudah membuat KK Gamis?</a>
                             </span>
                         </div>
                         <select name="gamis_id" class="select select-bordered" required>
