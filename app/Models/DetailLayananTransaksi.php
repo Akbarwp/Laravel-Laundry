@@ -9,7 +9,7 @@ class DetailLayananTransaksi extends Model
 {
     use HasFactory;
 
-    protected $table = 'detail_transaksi';
+    protected $table = 'detail_layanan_transaksi';
     protected $primaryKey = 'id';
     public $incrementing = "true";
     public $timestamps = "true";
@@ -21,5 +21,10 @@ class DetailLayananTransaksi extends Model
     public function detailTransaksi()
     {
         return $this->belongsTo(DetailTransaksi::class);
+    }
+
+    public function hargaJenisLayanan()
+    {
+        return $this->belongsTo(HargaJenisLayanan::class);
     }
 }

@@ -16,14 +16,16 @@ return new class extends Migration
             $table->string('nota_layanan')->unique();
             $table->string('nota_pelanggan')->unique();
             $table->dateTime('waktu');
-            $table->double('total_biaya_akhir');
+            $table->double('total_biaya_layanan');
             $table->double('total_biaya_prioritas');
+            $table->double('total_bayar_akhir');
             $table->string('jenis_pembayaran');
-            $table->double('bayar');
-            $table->double('kembalian');
-            $table->foreignId('layanan_prioritas_id')->constrained('layanan_prioritas', 'id');
+            $table->double('bayar')->nullable();
+            $table->double('kembalian')->nullable();
+            $table->foreignId('pelanggan_id')->constrained('pelanggan', 'id');
             $table->foreignId('pegawai_laundry_id')->constrained('pegawai_laundry', 'id');
             $table->foreignId('gamis_id')->constrained('detail_gamis', 'id');
+            $table->foreignId('cabang_id')->constrained('cabang', 'id');
             $table->timestamps();
         });
     }

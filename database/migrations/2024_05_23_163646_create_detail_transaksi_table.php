@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->integer('total_pakaian');
             $table->string('jenis_satuan');
-            $table->double('harga_akhir');
-            $table->double('total_harga_akhir');
-            $table->double('total_harga_prioritas');
+            $table->double('harga_layanan_akhir');
+            $table->double('total_biaya_layanan');
+            $table->double('total_biaya_prioritas');
+            $table->foreignId('layanan_prioritas_id')->constrained('layanan_prioritas', 'id');
             $table->foreignUuid('transaksi_id')->constrained('transaksi', 'id');
             $table->timestamps();
         });

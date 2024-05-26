@@ -17,18 +17,17 @@ class Transaksi extends Model
     protected $fillable = [
         'nota_layanan',
         'nota_pelanggan',
-        'jam',
-        'tanggal',
         'waktu',
-        'total_biaya_akhir',
+        'total_biaya_layanan',
         'total_biaya_prioritas',
+        'total_bayar_akhir',
         'jenis_pembayaran',
         'bayar',
         'kembalian',
-        'layanan_prioritas_id',
         'pelanggan_id',
         'pegawai_laundry_id',
         'gamis_id',
+        'cabang_id',
     ];
 
     public function detailTransaksi()
