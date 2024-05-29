@@ -24,8 +24,10 @@ class Transaksi extends Model
         'jenis_pembayaran',
         'bayar',
         'kembalian',
+        'status',
+        'layanan_prioritas_id',
         'pelanggan_id',
-        'pegawai_laundry_id',
+        'pegawai_id',
         'gamis_id',
         'cabang_id',
     ];
@@ -45,9 +47,9 @@ class Transaksi extends Model
         return $this->belongsTo(Pelanggan::class);
     }
 
-    public function pegawaiLaundry()
+    public function pegawai()
     {
-        return $this->belongsTo(PegawaiLaundry::class);
+        return $this->belongsTo(User::class);
     }
 
     public function gamis()

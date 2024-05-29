@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\StatusTransaksi;
 use App\Models\DetailLayananTransaksi;
 use App\Models\DetailTransaksi;
 use App\Models\Pelanggan;
@@ -53,9 +54,10 @@ class DatabaseSeeder extends Seeder
             'cabang_id' => 1,
         ]);
 
+        $nota1 = Carbon::now()->format('His') . '-' . Carbon::now()->format('dmY') . '-' . str()->uuid();
         $transaksi = Transaksi::create([
-            'nota_layanan' => 'nota_pelayanan',
-            'nota_pelanggan' => 'nota_pelanggan',
+            'nota_layanan' => 'layanan-' . $nota1,
+            'nota_pelanggan' => 'pelanggan-' . $nota1,
             'waktu' => Carbon::now(),
             'total_biaya_layanan' => 17000,
             'total_biaya_prioritas' => 9000,
@@ -63,8 +65,10 @@ class DatabaseSeeder extends Seeder
             'jenis_pembayaran' => 'tunai',
             'bayar' => 30000,
             'kembalian' => 4000,
+            'status' => StatusTransaksi::PROSES,
+            'layanan_prioritas_id' => 2,
             'pelanggan_id' => $pelanggan->id,
-            'pegawai_laundry_id' => 1,
+            'pegawai_id' => 7,
             'gamis_id' => 1,
             'cabang_id' => 1,
         ]);
@@ -75,7 +79,6 @@ class DatabaseSeeder extends Seeder
             'harga_layanan_akhir' => 2500,
             'total_biaya_layanan' => 10000,
             'total_biaya_prioritas' => 6000,
-            'layanan_prioritas_id' => 2,
             'transaksi_id' => $transaksi->id,
         ]);
         DetailLayananTransaksi::create([
@@ -93,7 +96,6 @@ class DatabaseSeeder extends Seeder
             'harga_layanan_akhir' => 3500,
             'total_biaya_layanan' => 7000,
             'total_biaya_prioritas' => 3000,
-            'layanan_prioritas_id' => 2,
             'transaksi_id' => $transaksi->id,
         ]);
         DetailLayananTransaksi::create([
@@ -106,9 +108,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
+        $nota2 = Carbon::now()->format('His') . '-' . Carbon::now()->format('dmY') . '-' . str()->uuid();
         $transaksi2 = Transaksi::create([
-            'nota_layanan' => 'nota_pelayanan2',
-            'nota_pelanggan' => 'nota_pelanggan2',
+            'nota_layanan' => 'layanan-' . $nota2,
+            'nota_pelanggan' => 'pelanggan-' . $nota2,
             'waktu' => Carbon::now(),
             'total_biaya_layanan' => 29000,
             'total_biaya_prioritas' => 15000,
@@ -116,8 +119,10 @@ class DatabaseSeeder extends Seeder
             'jenis_pembayaran' => 'tunai',
             'bayar' => 50000,
             'kembalian' => 6000,
+            'status' => StatusTransaksi::BARU,
+            'layanan_prioritas_id' => 2,
             'pelanggan_id' => $pelanggan->id,
-            'pegawai_laundry_id' => 1,
+            'pegawai_id' => 7,
             'gamis_id' => 1,
             'cabang_id' => 1,
         ]);
@@ -128,7 +133,6 @@ class DatabaseSeeder extends Seeder
             'harga_layanan_akhir' => 4500,
             'total_biaya_layanan' => 18000,
             'total_biaya_prioritas' => 6000,
-            'layanan_prioritas_id' => 2,
             'transaksi_id' => $transaksi2->id,
         ]);
         DetailLayananTransaksi::create([
@@ -146,7 +150,6 @@ class DatabaseSeeder extends Seeder
             'harga_layanan_akhir' => 3500,
             'total_biaya_layanan' => 7000,
             'total_biaya_prioritas' => 3000,
-            'layanan_prioritas_id' => 2,
             'transaksi_id' => $transaksi2->id,
         ]);
         DetailLayananTransaksi::create([
@@ -164,7 +167,6 @@ class DatabaseSeeder extends Seeder
             'harga_layanan_akhir' => 1000,
             'total_biaya_layanan' => 4000,
             'total_biaya_prioritas' => 6000,
-            'layanan_prioritas_id' => 2,
             'transaksi_id' => $transaksi2->id,
         ]);
         DetailLayananTransaksi::create([

@@ -65,7 +65,6 @@
             let loading = `<span class="loading loading-dots loading-md text-blue-500"></span>`;
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
-            $("#loading_edit3").html(loading);
             $("#loading_edit4").html(loading);
             $("#loading_edit5").html(loading);
 
@@ -85,15 +84,13 @@
 
                     $("input[name='nama']").val(items[1]);
                     $("textarea[name='deskripsi']").val(items[2]);
-                    $("input[name='jenis_satuan']").val(items[3]);
-                    $("input[name='harga']").val(items[4]);
-                    $("input[name='prioritas']").val(items[5]);
+                    $("input[name='harga']").val(items[3]);
+                    $("input[name='prioritas']").val(items[4]);
 
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
-                    $("#loading_edit3").html(loading);
                     $("#loading_edit4").html(loading);
                     $("#loading_edit5").html(loading);
                 }
@@ -105,7 +102,6 @@
             let loading = `<span class="loading loading-dots loading-md text-purple-600"></span>`;
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
-            $("#loading_edit3").html(loading);
             $("#loading_edit4").html(loading);
             $("#loading_edit5").html(loading);
 
@@ -126,15 +122,13 @@
                     $("input[name='id']").val(items[0]);
                     $("input[name='nama']").val(items[1]);
                     $("textarea[name='deskripsi']").val(items[2]);
-                    $("input[name='jenis_satuan']").val(items[3]);
-                    $("input[name='harga']").val(items[4]);
-                    $("input[name='prioritas']").val(items[5]);
+                    $("input[name='harga']").val(items[3]);
+                    $("input[name='prioritas']").val(items[4]);
 
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
-                    $("#loading_edit3").html(loading);
                     $("#loading_edit4").html(loading);
                     $("#loading_edit5").html(loading);
                 }
@@ -316,17 +310,6 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Jenis Satuan</span>
-                                </div>
-                                <input type="text" name="jenis_satuan" placeholder="Jenis Satuan" class="input input-bordered w-full text-blue-700" value="{{ old('jenis_satuan') }}" required />
-                                @error('jenis_satuan')
-                                    <div class="label">
-                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                            <label class="form-control w-full">
-                                <div class="label">
                                     <span class="label-text font-semibold">Harga</span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" value="{{ old('harga') }}" required />
@@ -378,13 +361,6 @@
                                 <span class="label-text-alt" id="loading_edit2"></span>
                             </div>
                             <textarea name="deskripsi" class="textarea textarea-bordered w-full text-base text-blue-500" readonly></textarea>
-                        </label>
-                        <label class="form-control w-full">
-                            <div class="label">
-                                <span class="label-text font-semibold">Jenis Satuan</span>
-                                <span class="label-text-alt" id="loading_edit3"></span>
-                            </div>
-                            <input type="text" name="jenis_satuan" class="input input-bordered w-full text-blue-700" readonly />
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
@@ -443,17 +419,6 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Jenis Satuan</span>
-                                </div>
-                                <input type="text" name="jenis_satuan" placeholder="Jenis Satuan" class="input input-bordered w-full text-blue-700" required />
-                                @error('jenis_satuan')
-                                    <div class="label">
-                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                            <label class="form-control w-full">
-                                <div class="label">
                                     <span class="label-text font-semibold">Harga</span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" required />
@@ -503,9 +468,6 @@
                                         Nama Layanan Prioritas
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Jenis Satuan
-                                    </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Harga
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
@@ -525,11 +487,6 @@
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                 {{ $item->nama }}
-                                            </p>
-                                        </td>
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->jenis_satuan }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
@@ -585,9 +542,6 @@
                                         Nama Layanan Prioritas
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Jenis Satuan
-                                    </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Harga
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
@@ -607,11 +561,6 @@
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                 {{ $item->nama }}
-                                            </p>
-                                        </td>
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->jenis_satuan }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">

@@ -19,7 +19,6 @@ class DetailTransaksi extends Model
         'harga_layanan_akhir',
         'total_biaya_layanan',
         'total_biaya_prioritas',
-        'layanan_prioritas_id',
         'transaksi_id',
     ];
 

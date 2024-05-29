@@ -29,7 +29,7 @@ class DashboardController extends Controller
         //? Mencari detail transaksi yang jenis layanannya untuk Gamis
         $transaksi = Transaksi::query()
             ->join('detail_transaksi as dt', 'dt.transaksi_id', '=', 'transaksi.id')
-            ->join('layanan_prioritas as lp', 'lp.id', '=', 'dt.layanan_prioritas_id')
+            ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->join('detail_layanan_transaksi as dlt', 'dlt.detail_transaksi_id', '=', 'dt.id')
             ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
             ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
@@ -52,7 +52,7 @@ class DashboardController extends Controller
         //? Mencari jenis layanan yang untuk Gamis && Menghitung total_biaya_layanan per detail transaksi
         $transaksi2 = Transaksi::query()
             ->join('detail_transaksi as dt', 'dt.transaksi_id', '=', 'transaksi.id')
-            ->join('layanan_prioritas as lp', 'lp.id', '=', 'dt.layanan_prioritas_id')
+            ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->join('detail_layanan_transaksi as dlt', 'dlt.detail_transaksi_id', '=', 'dt.id')
             ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
             ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
@@ -74,7 +74,7 @@ class DashboardController extends Controller
         //? Menghitung total_pendapatan_gamis per transaksi
         $transaksi3 = Transaksi::query()
             ->join('detail_transaksi as dt', 'dt.transaksi_id', '=', 'transaksi.id')
-            ->join('layanan_prioritas as lp', 'lp.id', '=', 'dt.layanan_prioritas_id')
+            ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->join('detail_layanan_transaksi as dlt', 'dlt.detail_transaksi_id', '=', 'dt.id')
             ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
             ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DetailLayananTransaksiController;
 use App\Http\Controllers\GamisController;
 use App\Http\Controllers\HargaJenisLayananController;
 use App\Http\Controllers\JenisLayananController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\Auth\ProfileController as ProfileController2;
 use App\Http\Controllers\RWController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UMRController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -223,6 +225,49 @@ Route::group([
         Route::post('/hapus', [GamisController::class, 'delete'])->name('gamis.delete');
         Route::get('/anggota/{detail_gamis:kartu_keluarga}', [GamisController::class, 'anggota'])->name('gamis.anggota');
         Route::get('/detail-anggota', [GamisController::class, 'detailAnggota'])->name('gamis.anggota.show');
+    });
+
+    Route::group([
+        'prefix' => 'transaksi',
+        'middleware' => ['role:lurah|manajer_laundry|pegawai_laundry'],
+    ], function() {
+
+        Route::group([
+            'prefix' => 'lurah',
+            'middleware' => ['role:lurah'],
+        ], function() {
+
+            Route::get('/', [TransaksiController::class, 'index'])->name('transaksi.lurah');
+            Route::get('/{cabang:slug}', [TransaksiController::class, 'indexCabang'])->name('transaksi.lurah.cabang');
+            Route::get('/{cabang:slug}/jadwal', [TransaksiController::class, 'indexCabangJadwal'])->name('transaksi.lurah.cabang.jadwal');
+            Route::get('/{cabang:slug}/lihat/{transaksi:id}', [TransaksiController::class, 'viewDetailTransaksi'])->name('transaksi.lurah.view');
+            Route::get('/{cabang:slug}/lihat/{transaksi:id}/layanan', [DetailLayananTransaksiController::class, 'viewDetailLayanan'])->name('transaksi.lurah.view.layanan');
+            Route::get('/{cabang:slug}/tambah', [TransaksiController::class, 'createTransaksiCabang'])->name('transaksi.lurah.cabang.create');
+            Route::post('/{cabang:slug}/tambah', [TransaksiController::class, 'storeTransaksiCabang'])->name('transaksi.lurah.cabang.store');
+            Route::get('/{cabang:slug}/ubah-jenis-pakaian', [TransaksiController::class, 'ubahJenisPakaian'])->name('transaksi.lurah.cabang.create.ubahJenisPakaian');
+            Route::get('/{cabang:slug}/ubah-jenis-layanan', [TransaksiController::class, 'ubahJenisLayanan'])->name('transaksi.lurah.cabang.create.ubahJenisLayanan');
+            Route::get('/{cabang:slug}/hitung-total-bayar', [TransaksiController::class, 'hitungTotalBayar'])->name('transaksi.lurah.cabang.create.hitungTotalBayar');
+            Route::get('/{cabang:slug}/ubah/{transaksi:id}', [TransaksiController::class, 'editTransaksiCabang'])->name('transaksi.lurah.cabang.edit');
+            Route::post('/{cabang:slug}/ubah/{transaksi:id}', [TransaksiController::class, 'updateTransaksiCabang'])->name('transaksi.lurah.cabang.update');
+            Route::get('/{cabang:slug}/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.lurah.cabang.edit.status');
+            Route::post('/{cabang:slug}/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.lurah.cabang.update.status');
+            Route::post('/{cabang:slug}/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.lurah.cabang.delete');
+        });
+
+        Route::get('/', [TransaksiController::class, 'index'])->name('transaksi');
+        Route::get('/jadwal', [TransaksiController::class, 'indexJadwal'])->name('transaksi.jadwal');
+        Route::get('/lihat/{transaksi:id}', [TransaksiController::class, 'viewDetailTransaksi'])->name('transaksi.view');
+        Route::get('/lihat/{transaksi:id}/layanan', [DetailLayananTransaksiController::class, 'viewDetailLayanan'])->name('transaksi.view.layanan');
+        Route::get('/tambah', [TransaksiController::class, 'createTransaksiCabang'])->name('transaksi.create');
+        Route::post('/tambah', [TransaksiController::class, 'storeTransaksiCabang'])->name('transaksi.store');
+        Route::get('/ubah-jenis-pakaian', [TransaksiController::class, 'ubahJenisPakaian'])->name('transaksi.create.ubahJenisPakaian');
+        Route::get('/ubah-jenis-layanan', [TransaksiController::class, 'ubahJenisLayanan'])->name('transaksi.create.ubahJenisLayanan');
+        Route::get('/hitung-total-bayar', [TransaksiController::class, 'hitungTotalBayar'])->name('transaksi.create.hitungTotalBayar');
+        Route::get('/ubah/{transaksi:id}', [TransaksiController::class, 'editTransaksiCabang'])->name('transaksi.edit');
+        Route::post('/ubah/{transaksi:id}', [TransaksiController::class, 'updateTransaksiCabang'])->name('transaksi.update');
+        Route::get('/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.edit.status');
+        Route::post('/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.update.status');
+        Route::post('/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.delete');
     });
 });
 

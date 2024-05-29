@@ -20,11 +20,13 @@ return new class extends Migration
             $table->double('total_biaya_prioritas');
             $table->double('total_bayar_akhir');
             $table->string('jenis_pembayaran');
-            $table->double('bayar')->nullable();
-            $table->double('kembalian')->nullable();
+            $table->double('bayar');
+            $table->double('kembalian');
+            $table->string('status');
+            $table->foreignId('layanan_prioritas_id')->constrained('layanan_prioritas', 'id');
             $table->foreignId('pelanggan_id')->constrained('pelanggan', 'id');
-            $table->foreignId('pegawai_laundry_id')->constrained('pegawai_laundry', 'id');
-            $table->foreignId('gamis_id')->constrained('detail_gamis', 'id');
+            $table->foreignId('pegawai_id')->constrained('users', 'id');
+            $table->foreignId('gamis_id')->nullable()->constrained('detail_gamis', 'id');
             $table->foreignId('cabang_id')->constrained('cabang', 'id');
             $table->timestamps();
         });

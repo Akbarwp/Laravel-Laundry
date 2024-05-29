@@ -338,6 +338,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Regional</span>
+                                    <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
                                 <input type="text" name="regional" placeholder="Regional" class="input input-bordered w-full text-blue-700" required />
                                 @error('regional')
@@ -349,6 +350,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Upah</span>
+                                    <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="upah" placeholder="Upah" class="input input-bordered w-full text-blue-700" required />
                                 @error('upah')
@@ -360,6 +362,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Tahun</span>
+                                    <span class="label-text-alt" id="loading_edit3"></span>
                                 </div>
                                 <input type="number" min="0" name="tahun" placeholder="Tahun" class="input input-bordered w-full text-blue-700" required />
                                 @error('tahun')
@@ -371,6 +374,7 @@
                             <div class="mt-3 w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Is_Used?</span>
+                                    <span class="label-text-alt" id="loading_edit4"></span>
                                 </div>
                                 <div class="form-control">
                                     <label class="label cursor-pointer">

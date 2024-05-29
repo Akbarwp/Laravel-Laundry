@@ -249,18 +249,18 @@
                             </label>
                             <div class="mt-3 w-full max-w-md">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Jenis Kelamin</span>
+                                    <span class="label-text font-semibold">Jenis Kelamin</span>
                                 </div>
                                 <div class="rounded-lg border border-slate-300 px-3 py-2">
                                     <div class="form-control">
                                         <label class="label cursor-pointer">
-                                            <span class="label-text text-blue-700 dark:text-blue-300">Laki-laki</span>
+                                            <span class="label-text text-blue-700">Laki-laki</span>
                                             <input type="radio" value="L" name="jenis_kelamin" class="radio-primary radio" required />
                                         </label>
                                     </div>
                                     <div class="form-control">
                                         <label class="label cursor-pointer">
-                                            <span class="label-text text-blue-700 dark:text-blue-300">Perempuan</span>
+                                            <span class="label-text text-blue-700">Perempuan</span>
                                             <input type="radio" value="P" name="jenis_kelamin" class="radio-primary radio" required />
                                         </label>
                                     </div>
@@ -329,19 +329,19 @@
                         </label>
                         <div class="mt-3 w-full max-w-md">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Jenis Kelamin</span>
+                                <span class="label-text font-semibold">Jenis Kelamin</span>
                                 <span class="label-text-alt" id="loading_edit2"></span>
                             </div>
                             <div class="rounded-lg border border-slate-300 px-3 py-2">
                                 <div class="form-control">
                                     <label class="label cursor-pointer">
-                                        <span class="label-text text-blue-700 dark:text-blue-300">Laki-laki</span>
+                                        <span class="label-text text-blue-700">Laki-laki</span>
                                         <input type="radio" value="L" name="jenis_kelamin" class="radio-primary radio" disabled />
                                     </label>
                                 </div>
                                 <div class="form-control">
                                     <label class="label cursor-pointer">
-                                        <span class="label-text text-blue-700 dark:text-blue-300">Perempuan</span>
+                                        <span class="label-text text-blue-700">Perempuan</span>
                                         <input type="radio" value="P" name="jenis_kelamin" class="radio-primary radio" disabled />
                                     </label>
                                 </div>
@@ -412,19 +412,19 @@
                             </label>
                             <div class="mt-3 w-full max-w-md">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Jenis Kelamin</span>
+                                    <span class="label-text font-semibold">Jenis Kelamin</span>
                                     <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <div class="rounded-lg border border-slate-300 px-3 py-2">
                                     <div class="form-control">
                                         <label class="label cursor-pointer">
-                                            <span class="label-text text-blue-700 dark:text-blue-300">Laki-laki</span>
+                                            <span class="label-text text-blue-700">Laki-laki</span>
                                             <input type="radio" value="L" name="jenis_kelamin" class="radio-primary radio" required />
                                         </label>
                                     </div>
                                     <div class="form-control">
                                         <label class="label cursor-pointer">
-                                            <span class="label-text text-blue-700 dark:text-blue-300">Perempuan</span>
+                                            <span class="label-text text-blue-700">Perempuan</span>
                                             <input type="radio" value="P" name="jenis_kelamin" class="radio-primary radio" required />
                                         </label>
                                     </div>

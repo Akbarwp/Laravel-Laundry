@@ -18,7 +18,6 @@ return new class extends Migration
             $table->double('harga_layanan_akhir');
             $table->double('total_biaya_layanan');
             $table->double('total_biaya_prioritas');
-            $table->foreignId('layanan_prioritas_id')->constrained('layanan_prioritas', 'id');
             $table->foreignUuid('transaksi_id')->constrained('transaksi', 'id');
             $table->timestamps();
         });

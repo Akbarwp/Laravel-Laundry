@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->text('deskripsi')->nullable();
-            $table->string('jenis_satuan');
             $table->double('harga');
             $table->integer('prioritas');
             $table->foreignId('cabang_id')->constrained('cabang', 'id');

@@ -17,7 +17,6 @@ class LayananPrioritas extends Model
     protected $fillable = [
         'nama',
         'deskripsi',
-        'jenis_satuan',
         'harga',
         'prioritas',
         'cabang_id',

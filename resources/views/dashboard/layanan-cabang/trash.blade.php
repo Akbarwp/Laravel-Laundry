@@ -466,7 +466,6 @@
             let loading = `<span class="loading loading-dots loading-md text-blue-500"></span>`;
             $("#loading_edit1").html(loading);
             $("#loading_edit2").html(loading);
-            $("#loading_edit3").html(loading);
             $("#loading_edit4").html(loading);
             $("#loading_edit5").html(loading);
 
@@ -486,15 +485,13 @@
 
                     $("input[name='nama']").val(items[1]);
                     $("textarea[name='deskripsi']").val(items[2]);
-                    $("input[name='jenis_satuan']").val(items[3]);
-                    $("input[name='harga']").val(items[4]);
-                    $("input[name='prioritas']").val(items[5]);
+                    $("input[name='harga']").val(items[3]);
+                    $("input[name='prioritas']").val(items[4]);
 
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
-                    $("#loading_edit3").html(loading);
                     $("#loading_edit4").html(loading);
                     $("#loading_edit5").html(loading);
                 }
@@ -1001,13 +998,6 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Jenis Satuan</span>
-                                    <span class="label-text-alt" id="loading_edit3"></span>
-                                </div>
-                                <input type="text" name="jenis_satuan" class="input input-bordered w-full text-blue-700" readonly />
-                            </label>
-                            <label class="form-control w-full">
-                                <div class="label">
                                     <span class="label-text font-semibold">Harga</span>
                                     <span class="label-text-alt" id="loading_edit4"></span>
                                 </div>
@@ -1039,9 +1029,6 @@
                                             Nama Layanan Prioritas
                                         </th>
                                         <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                            Jenis Satuan
-                                        </th>
-                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                             Harga
                                         </th>
                                         <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
@@ -1061,11 +1048,6 @@
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                 <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                     {{ $item->nama }}
-                                                </p>
-                                            </td>
-                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    {{ $item->jenis_satuan }}
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">

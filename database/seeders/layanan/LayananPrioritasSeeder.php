@@ -20,28 +20,24 @@ class LayananPrioritasSeeder extends Seeder
         //? Cabang 1
         LayananPrioritas::create([
             'nama' => 'Reguler',
-            'jenis_satuan' => 'kg',
             'harga' => 0,
             'prioritas' => 1,
             'cabang_id' => $cabang->id,
         ]);
         LayananPrioritas::create([
             'nama' => 'Kilat',
-            'jenis_satuan' => 'kg',
             'harga' => 1500,
             'prioritas' => 2,
             'cabang_id' => $cabang->id,
         ]);
         LayananPrioritas::create([
             'nama' => 'Cahaya',
-            'jenis_satuan' => 'kg',
             'harga' => 2000,
             'prioritas' => 3,
             'cabang_id' => $cabang->id,
         ]);
         LayananPrioritas::create([
             'nama' => 'Raja Ratu',
-            'jenis_satuan' => 'kg',
             'harga' => 10000,
             'prioritas' => 99,
             'cabang_id' => $cabang->id,
@@ -51,14 +47,12 @@ class LayananPrioritasSeeder extends Seeder
         //? Cabang 2
         LayananPrioritas::create([
             'nama' => 'Reguler',
-            'jenis_satuan' => 'kg',
             'harga' => 0,
             'prioritas' => 1,
             'cabang_id' => $cabang2->id,
         ]);
         LayananPrioritas::create([
             'nama' => 'Raja Ratu',
-            'jenis_satuan' => 'kg',
             'harga' => 10000,
             'prioritas' => 99,
             'cabang_id' => $cabang2->id,
