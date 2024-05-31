@@ -17,6 +17,17 @@
                 order: [],
                 pagingType: 'full_numbers',
             });
+
+            $('#myTable1').DataTable({
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr',
+                    },
+                },
+                order: [],
+                pagingType: 'full_numbers',
+            });
         });
 
         @if (session()->has("success"))
@@ -130,10 +141,12 @@
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <h6 class="font-bold dark:text-white">{{ $title }}</h6>
                     <div class="w-1/2 max-w-full flex-none px-3 text-right">
-                        <a href="{{ route("transaksi.create", ['isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                            <i class="ri-add-fill"></i>
-                            Tambah
-                        </a>
+                        @if (!$cabang->deleted_at)
+                            <a href="{{ route("transaksi.create", ['isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-add-fill"></i>
+                                Tambah
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">
@@ -192,15 +205,12 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                @php
-                                                    $userRole = $item->pegawai->roles[0]->name;
-                                                @endphp
-                                                @if ($userRole == 'manajer_laundry')
-                                                    {{ $item->pegawai->manajer->first()->nama }}
-                                                @elseif ($userRole == 'pegawai_laundry')
-                                                    {{ $item->pegawai->pegawai->first()->nama }}
-                                                @elseif ($userRole == 'lurah')
-                                                    {{ $item->pegawai->lurah->first()->nama }}
+                                                @if ($item->pegawai->roles[0]->name == 'manajer_laundry')
+                                                    {{ $item->pegawai->manajer[0]->nama }}
+                                                @elseif ($item->pegawai->roles[0]->name == 'pegawai_laundry')
+                                                    {{ $item->pegawai->pegawai[0]->nama }}
+                                                @elseif ($item->pegawai->roles[0]->name == 'lurah')
+                                                    {{ $item->pegawai->lurah[0]->nama }}
                                                 @endif
                                             </p>
                                         </td>
@@ -219,15 +229,17 @@
                                                 <a href="{{ route("transaksi.view", ['transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-info btn-sm">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </a>
-                                                <a href="{{ route("transaksi.edit", ['transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
-                                                    <i class="ri-pencil-fill text-base"></i>
-                                                </a>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
-                                                    <i class="ri-delete-bin-line text-base"></i>
-                                                </label>
-                                                <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
-                                                    <i class="ri-draft-line text-base"></i>
-                                                </label>
+                                                @if (!$cabang->deleted_at)
+                                                    <a href="{{ route("transaksi.edit", ['transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
+                                                        <i class="ri-pencil-fill text-base"></i>
+                                                    </a>
+                                                    <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
+                                                        <i class="ri-delete-bin-line text-base"></i>
+                                                    </label>
+                                                    <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
+                                                        <i class="ri-draft-line text-base"></i>
+                                                    </label>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -275,6 +287,54 @@
                 </div>
             </div>
             {{-- Akhir Modal Edit --}}
+
+            {{-- Awal Tabel Upah Gamis --}}
+            <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                    <h6 class="font-bold dark:text-white">Upah Gamis</h6>
+                </div>
+                <div class="flex-auto px-0 pb-2 pt-0">
+                    <div class="overflow-x-auto p-0 px-6 pb-6">
+                        <table id="myTable1" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
+                            <thead class="align-bottom">
+                                <tr>
+                                    <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Gamis
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Upah
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Tanggal
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($monitoring as $item)
+                                    <tr>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->nama_gamis }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                Rp{{ number_format($item->upah_gamis, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Tabel Upah Gamis --}}
         </div>
     </div>
 @endsection

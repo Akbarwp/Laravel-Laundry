@@ -49,11 +49,16 @@ class Transaksi extends Model
 
     public function pegawai()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'pegawai_id');
     }
 
     public function gamis()
     {
         return $this->belongsTo(DetailGamis::class);
+    }
+
+    public function cabang()
+    {
+        return $this->belongsTo(Cabang::class);
     }
 }

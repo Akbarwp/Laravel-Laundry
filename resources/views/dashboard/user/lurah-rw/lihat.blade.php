@@ -15,6 +15,14 @@
                         </div>
                         <input type="text" name="role" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->roles[0]->name }}" readonly />
                     </label>
+                    @if ($user->roles[0]->name == 'rw')
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold dark:text-slate-100">Nomor RW</span>
+                            </div>
+                            <input type="text" name="nomor_rw" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->nomor_rw }}" readonly />
+                        </label>
+                    @endif
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold dark:text-slate-100">Username</span>

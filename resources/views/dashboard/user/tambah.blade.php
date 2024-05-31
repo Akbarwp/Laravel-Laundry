@@ -4,12 +4,12 @@
     <script>
         $(document).ready(function() {
             $("select[name='role']").change(function() {
-                if ($("select[name='role']").find(":selected").text() == 'lurah' || $("select[name='role']").find(":selected").text() == 'rw') {
-                    $("select[name='cabang_id']").prop('selectedIndex', 0);
-                    $("select[name='cabang_id']").attr('disabled', true);
-                } else {
-                    $("select[name='cabang_id']").attr('disabled', false);
-                }
+                // if ($("select[name='role']").find(":selected").text() == 'lurah' || $("select[name='role']").find(":selected").text() == 'rw') {
+                //     $("select[name='cabang_id']").prop('selectedIndex', 0);
+                //     $("select[name='cabang_id']").attr('disabled', true);
+                // } else {
+                //     $("select[name='cabang_id']").attr('disabled', false);
+                // }
 
                 if ($("select[name='role']").find(":selected").text() == 'gamis') {
                     $("#form_gamis").append(`
@@ -17,7 +17,7 @@
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">
                                     Kartu Keluarga Gamis |
-                                    <a href="{{ route('gamis') }}" class="link link-primary">Sudah membuat KK Gamis?</a>
+                                    <a href="{{ route('gamis') }}" class="link link-primary dark:link-accent">Sudah membuat KK Gamis?</a>
                                 </span>
                             </div>
                             <select name="gamis_id" class="select select-bordered" required>

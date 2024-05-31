@@ -27,7 +27,6 @@ class RWController extends Controller
     {
         $title = "Lurah & RW Management";
         $userRole = auth()->user()->roles[0]->name;
-        $role = Role::get();
 
         $lurah = Lurah::join('users as u', 'lurah.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('lurah.created_at', 'asc')->get()->except(auth()->id());
         $rw = RW::join('users as u', 'rw.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('rw.created_at', 'asc')->get();
@@ -35,7 +34,7 @@ class RWController extends Controller
         $lurahTrash = User::join('lurah as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
         $rwTrash = User::join('rw as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
 
-        return view('dashboard.user.lurah-rw.index', compact('title', 'role', 'lurah', 'rw', 'lurahTrash', 'rwTrash'));
+        return view('dashboard.user.lurah-rw.index', compact('title', 'lurah', 'rw', 'lurahTrash', 'rwTrash'));
     }
 
     public function view(Request $request)
@@ -84,20 +83,39 @@ class RWController extends Controller
         ]);
         $validatedUser = $validatorUser->validated();
 
-        $validatorProfile = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'jenis_kelamin' => 'required|string|max:1|in:L,P',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'telepon' => 'required|string|max:20',
-            'alamat' => 'required|string',
-            'mulai_kerja' => 'nullable|date',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-            'date' => ':attribute harus berupa tanggal.',
-        ]);
+        if ($request->role == 'rw') {
+            $validatorProfile = Validator::make($request->all(), [
+                'nomor_rw' => 'required|integer',
+                'nama' => 'required|string|max:255',
+                'jenis_kelamin' => 'required|string|max:1|in:L,P',
+                'tempat_lahir' => 'required|string|max:255',
+                'tanggal_lahir' => 'required|date',
+                'telepon' => 'required|string|max:20',
+                'alamat' => 'required|string',
+                'mulai_kerja' => 'nullable|date',
+            ],
+            [
+                'required' => ':attribute harus diisi.',
+                'max' => ':attribute tidak boleh lebih dari :max karakter.',
+                'date' => ':attribute harus berupa tanggal.',
+            ]);
+
+        } else {
+            $validatorProfile = Validator::make($request->all(), [
+                'nama' => 'required|string|max:255',
+                'jenis_kelamin' => 'required|string|max:1|in:L,P',
+                'tempat_lahir' => 'required|string|max:255',
+                'tanggal_lahir' => 'required|date',
+                'telepon' => 'required|string|max:20',
+                'alamat' => 'required|string',
+                'mulai_kerja' => 'nullable|date',
+            ],
+            [
+                'required' => ':attribute harus diisi.',
+                'max' => ':attribute tidak boleh lebih dari :max karakter.',
+                'date' => ':attribute harus berupa tanggal.',
+            ]);
+        }
         $validatedProfile = $validatorProfile->validated();
 
         $user = User::create($validatedUser);
@@ -160,21 +178,41 @@ class RWController extends Controller
         $validatedUser = $validatorUser->validated();
         $validatedUser['slug'] = str()->slug($validatedUser['username']);
 
-        $validatorProfile = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'jenis_kelamin' => 'required|string|max:1|in:L,P',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'telepon' => 'required|string|max:20',
-            'alamat' => 'required|string',
-            'mulai_kerja' => 'nullable|date',
-            'selesai_kerja' => 'nullable|date',
-        ],
-        [
-            'required' => ':attribute harus diisi.',
-            'max' => ':attribute tidak boleh lebih dari :max karakter.',
-            'date' => ':attribute harus berupa tanggal.',
-        ]);
+        if ($request->role == 'rw') {
+            $validatorProfile = Validator::make($request->all(), [
+                'nomor_rw' => 'required|integer',
+                'nama' => 'required|string|max:255',
+                'jenis_kelamin' => 'required|string|max:1|in:L,P',
+                'tempat_lahir' => 'required|string|max:255',
+                'tanggal_lahir' => 'required|date',
+                'telepon' => 'required|string|max:20',
+                'alamat' => 'required|string',
+                'mulai_kerja' => 'nullable|date',
+                'selesai_kerja' => 'nullable|date',
+            ],
+            [
+                'required' => ':attribute harus diisi.',
+                'max' => ':attribute tidak boleh lebih dari :max karakter.',
+                'date' => ':attribute harus berupa tanggal.',
+            ]);
+
+        } else {
+            $validatorProfile = Validator::make($request->all(), [
+                'nama' => 'required|string|max:255',
+                'jenis_kelamin' => 'required|string|max:1|in:L,P',
+                'tempat_lahir' => 'required|string|max:255',
+                'tanggal_lahir' => 'required|date',
+                'telepon' => 'required|string|max:20',
+                'alamat' => 'required|string',
+                'mulai_kerja' => 'nullable|date',
+                'selesai_kerja' => 'nullable|date',
+            ],
+            [
+                'required' => ':attribute harus diisi.',
+                'max' => ':attribute tidak boleh lebih dari :max karakter.',
+                'date' => ':attribute harus berupa tanggal.',
+            ]);
+        }
         $validatedProfile = $validatorProfile->validated();
 
         $userUpdate = User::where('id', $user->id)->update($validatedUser);

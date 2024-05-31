@@ -2,6 +2,28 @@
 
 @section("js")
     <script>
+        $(document).ready(function () {
+            $("select[name='role']").change(function() {
+                if ($("select[name='role']").find(":selected").text() == 'rw') {
+                    $("#form_rw").append(`
+                        <label id="form_nomor_rw" class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold dark:text-slate-100">Nomor RW</span>
+                            </div>
+                            <input type="number" min="1" step="1" name="nomor_rw" placeholder="Nomor RW" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ old("nomor_rw") }}" required />
+                            @error("nomor_rw")
+                                <div class="label">
+                                    <span class="label-text-alt text-error text-sm">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </label>
+                    `);
+                } else {
+                    $("#form_nomor_rw").remove();
+                }
+            });
+        });
+
         @if (session()->has("success"))
             Swal.fire({
                 title: 'Berhasil',
@@ -63,6 +85,9 @@
                                 </div>
                             @enderror
                         </label>
+
+                        <div id="form_rw"></div>
+
                         <label class="form-control w-full">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">Username</span>

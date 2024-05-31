@@ -23,6 +23,7 @@ class RWSeeder extends Seeder
         ]);
         $rw->assignRole($roleRW);
         RW::create([
+            'nomor_rw' => '1',
             'nama' => 'RW 1',
             'jenis_kelamin' => 'L',
             'tempat_lahir' => 'Surabaya',
@@ -39,6 +40,7 @@ class RWSeeder extends Seeder
         ]);
         $rw2->assignRole($roleRW);
         RW::create([
+            'nomor_rw' => '2',
             'nama' => 'RW 2',
             'jenis_kelamin' => 'P',
             'tempat_lahir' => 'Surabaya',

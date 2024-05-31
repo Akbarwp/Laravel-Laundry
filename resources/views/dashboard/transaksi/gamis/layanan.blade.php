@@ -25,17 +25,9 @@
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <div class="mb-3">
                         <h6 class="font-bold dark:text-white">Detail Transaksi</h6>
-                        <h6 class="font-bold dark:text-white">Cabang:
-                            <span class="text-blue-500">
-                                {{ $cabang->nama }}
-                                @if ($cabang->deleted_at)
-                                    <span class="text-error">(Non Aktif)</span>
-                                @endif
-                            </span>
-                        </h6>
                     </div>
                     <div>
-                        <a href="{{ route("transaksi.lurah.view", ['cabang' => $cabang->slug, 'transaksi' => $transaksi->id]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 dark:border-white bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 dark:text-white shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                        <a href="{{ route("transaksi-gamis.view", ['transaksi' => $transaksi->id]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 dark:border-white bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 dark:text-white shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
                             <i class="ri-arrow-left-line"></i>
                             Kembali
                         </a>

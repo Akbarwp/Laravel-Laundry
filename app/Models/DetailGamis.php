@@ -36,4 +36,9 @@ class DetailGamis extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function monitoringGamis()
+    {
+        return $this->hasMany(MonitoringGamis::class);
+    }
 }

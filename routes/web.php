@@ -8,8 +8,10 @@ use App\Http\Controllers\GamisController;
 use App\Http\Controllers\HargaJenisLayananController;
 use App\Http\Controllers\JenisLayananController;
 use App\Http\Controllers\JenisPakaianController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LayananCabangController;
 use App\Http\Controllers\LayananPrioritasController;
+use App\Http\Controllers\MonitoringGamisController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\Auth\ProfileController as ProfileController2;
@@ -268,6 +270,56 @@ Route::group([
         Route::get('/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.edit.status');
         Route::post('/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.update.status');
         Route::post('/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.delete');
+    });
+
+    Route::group([
+        'prefix' => 'monitoring-program-gamis',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [MonitoringGamisController::class, 'index'])->name('monitoring');
+        Route::get('/ubah-status', [MonitoringGamisController::class, 'editStatus'])->name('monitoring.edit.status');
+        Route::post('/ubah-status', [MonitoringGamisController::class, 'updateStatus'])->name('monitoring.update.status');
+        Route::post('/perbarui-data-monitoring', [MonitoringGamisController::class, 'perbaruiDataMonitoring'])->name('monitoring.update.data');
+        Route::post('/reset-data-monitoring', [MonitoringGamisController::class, 'resetDataMonitoring'])->name('monitoring.reset.data');
+    });
+
+    Route::group([
+        'prefix' => 'monitoring-gamis',
+        'middleware' => ['role:rw'],
+    ], function() {
+
+        Route::get('/', [MonitoringGamisController::class, 'indexRw'])->name('monitoring.rw');
+        Route::post('/pdf', [MonitoringGamisController::class, 'pdfMonitoringGamisRw'])->name('monitoring.rw.pdf');
+    });
+
+    Route::group([
+        'prefix' => 'transaksi-gamis',
+        'middleware' => ['role:gamis'],
+    ], function() {
+
+        Route::get('/', [TransaksiController::class, 'transaksiGamisHarian'])->name('transaksi-gamis');
+        Route::get('/semua', [TransaksiController::class, 'transaksiGamisSemua'])->name('transaksi-gamis.semua');
+        Route::get('/lihat/{transaksi:id}', [TransaksiController::class, 'viewDetailTransaksiGamis'])->name('transaksi-gamis.view');
+        Route::get('/lihat/{transaksi:id}/layanan', [DetailLayananTransaksiController::class, 'viewDetailLayananGamis'])->name('transaksi-gamis.view.layanan');
+    });
+
+    Route::group([
+        'prefix' => 'laporan',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/pendapatan-laundry', [LaporanController::class, 'laporanPendapatanLaundry'])->name('laporan.pendapatan.laundry');
+        Route::post('/pendapatan-laundry/pdf', [LaporanController::class, 'pdfLaporanPendapatanLaundry'])->name('laporan.pendapatan.laundry.pdf');
+
+        Route::get('/pendapatan-gamis', [LaporanController::class, 'laporanPendapatanGamis'])->name('laporan.pendapatan.gamis');
+        Route::post('/pendapatan-gamis/pdf', [LaporanController::class, 'pdfLaporanPendapatanGamis'])->name('laporan.pendapatan.gamis.pdf');
+
+        Route::get('/pelanggan', [LaporanController::class, 'laporanPelanggan'])->name('laporan.pelanggan');
+        Route::post('/pelanggan/pdf', [LaporanController::class, 'pdfLaporanPelanggan'])->name('laporan.pelanggan.pdf');
+
+        Route::get('/gamis', [LaporanController::class, 'laporanGamis'])->name('laporan.gamis');
+        Route::post('/gamis/pdf', [LaporanController::class, 'pdfLaporanGamis'])->name('laporan.gamis.pdf');
     });
 });
 

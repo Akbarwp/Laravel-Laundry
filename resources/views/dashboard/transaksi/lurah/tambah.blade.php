@@ -314,7 +314,7 @@
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">
                                         Pelanggan |
-                                        <a href="{{ route('pelanggan') }}" class="link link-primary">Sudah membuat daftar pelanggan?</a>
+                                        <a href="{{ route('pelanggan') }}" class="link link-primary dark:link-accent">Sudah membuat daftar pelanggan?</a>
                                     </span>
                                 </div>
                                 <select name="pelanggan_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>

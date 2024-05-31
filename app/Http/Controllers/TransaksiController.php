@@ -15,6 +15,7 @@ use App\Models\Transaksi;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -26,16 +27,37 @@ class TransaksiController extends Controller
         $userRole = auth()->user()->roles[0]->name;
 
         if ($userRole == 'lurah') {
-            $cabang = Cabang::orderBy('created_at', 'asc')->get();
+            $cabang = Cabang::withTrashed()->orderBy('created_at', 'asc')->get();
             return view('dashboard.transaksi.lurah.index', compact('title', 'cabang'));
 
         } else {
-            $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
+            $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
             $isJadwal = false;
             $status = StatusTransaksi::cases();
 
-            $transaksi = Transaksi::where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->get();
-            return view('dashboard.transaksi.index', compact('title', 'cabang', 'transaksi', 'isJadwal', 'status'));
+            $transaksi = Transaksi::query()
+                ->with(['pegawai' => function($query) {
+                    $query->withTrashed();
+                }])
+                ->where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->get();
+
+            $monitoring = Transaksi::query()
+                ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+                ->where('transaksi.cabang_id', $cabang->id)
+                ->where('jl.for_gamis', true)
+                ->where('transaksi.status', 'Selesai')
+                ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+                ->orderBy('transaksi.waktu', 'asc')
+                ->orderBy('transaksi.gamis_id', 'asc')
+                ->get();
+
+            return view('dashboard.transaksi.index', compact('title', 'cabang', 'transaksi', 'monitoring', 'isJadwal', 'status'));
         }
     }
 
@@ -51,7 +73,10 @@ class TransaksiController extends Controller
         }
 
         $userCabang = auth()->user()->cabang_id;
-        $cabang = Cabang::where('id', $userCabang)->first();
+        $cabang = Cabang::withTrashed()->where('id', $userCabang)->first();
+        if ($cabang->deleted_at) {
+            return to_route('transaksi');
+        }
         $isJadwal = false;
         $status = StatusTransaksi::cases();
 
@@ -77,13 +102,34 @@ class TransaksiController extends Controller
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
-        $cabang = Cabang::where('slug', $request->cabang)->first();
-        if ($cabang == null || $cabang->deleted_at) {
+        $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
+        if ($cabang == null) {
             abort(404, 'CABANG TIDAK DITEMUKAN ATAU SUDAH DIHAPUS.');
         }
 
-        $transaksi = Transaksi::where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->get();
-        return view('dashboard.transaksi.lurah.cabang', compact('title', 'cabang', 'transaksi', 'isJadwal', 'status'));
+        $transaksi = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->get();
+
+        $monitoring = Transaksi::query()
+                ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+                ->where('transaksi.cabang_id', $cabang->id)
+                ->where('jl.for_gamis', true)
+                ->where('transaksi.status', 'Selesai')
+                ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+                ->orderBy('transaksi.waktu', 'asc')
+                ->orderBy('transaksi.gamis_id', 'asc')
+                ->get();
+
+        return view('dashboard.transaksi.lurah.cabang', compact('title', 'cabang', 'transaksi', 'monitoring', 'isJadwal', 'status'));
     }
 
     public function indexCabangJadwal(Request $request)
@@ -120,14 +166,27 @@ class TransaksiController extends Controller
         $isJadwal = $request->isJadwal;
 
         if ($userRole == 'lurah') {
-            $cabang = Cabang::where('slug', $request->cabang)->first();
-            $transaksi = Transaksi::where('id', $request->transaksi)->first();
+            $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
+            $transaksi = Transaksi::query()
+                ->with(['pegawai' => function($query) {
+                    $query->withTrashed();
+                }])
+                ->where('id', $request->transaksi)->where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->first();
+
             $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+
+            $userRole = [User::withTrashed()->where('id', $transaksi->pegawai_id)->first()];
+
             return view('dashboard.transaksi.lurah.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isJadwal'));
 
         } else {
-            $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
-            $transaksi = Transaksi::where('id', $request->transaksi)->first();
+            $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
+            $transaksi = Transaksi::query()
+                ->with(['pegawai' => function($query) {
+                    $query->withTrashed();
+                }])
+                ->where('id', $request->transaksi)->first();
+
             $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
             return view('dashboard.transaksi.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isJadwal'));
         }
@@ -140,7 +199,10 @@ class TransaksiController extends Controller
         $isJadwal = $request->isJadwal;
 
         if ($userRole == 'lurah') {
-            $cabang = Cabang::where('slug', $request->cabang)->first();
+            $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
+            if ($cabang->deleted_at) {
+                abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
+            }
             $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
@@ -151,7 +213,10 @@ class TransaksiController extends Controller
             return view('dashboard.transaksi.lurah.tambah', compact('title', 'cabang', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'isJadwal'));
 
         } else {
-            $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
+            $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
+            if ($cabang->deleted_at) {
+                abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
+            }
             $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
@@ -301,7 +366,10 @@ class TransaksiController extends Controller
         $status = StatusTransaksi::cases();
 
         if ($userRole == 'lurah') {
-            $cabang = Cabang::where('slug', $request->cabang)->first();
+            $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
+            if ($cabang->deleted_at) {
+                abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
+            }
             $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
@@ -317,7 +385,10 @@ class TransaksiController extends Controller
             return view('dashboard.transaksi.lurah.ubah', compact('title', 'cabang', 'status', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'transaksi', 'layanan', 'hargaLayanan', 'isJadwal'));
 
         } else {
-            $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
+            $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
+            if ($cabang->deleted_at) {
+                abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
+            }
             $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
@@ -655,5 +726,118 @@ class TransaksiController extends Controller
             $totalBayar = $biayaLayanan + $biayaPrioritas;
             return [$biayaLayanan, $biayaPrioritas, $totalBayar];
         }
+    }
+
+    public function transaksiGamisHarian()
+    {
+        $title = "Transaksi Gamis Harian";
+        $userRole = auth()->user()->roles[0]->name;
+        $isHarian = true;
+
+        if ($userRole != 'gamis') {
+            abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
+        }
+
+        $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
+        if ($cabang == null) {
+            abort(404, 'CABANG TIDAK DITEMUKAN ATAU SUDAH DIHAPUS.');
+        }
+
+        $transaksi = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+            ->where('dg.user_id', auth()->user()->id)
+            ->where('transaksi.cabang_id', $cabang->id)
+            ->where(DB::raw('DATE(transaksi.waktu)'), Carbon::now()->format('Y-m-d'))
+            ->select('transaksi.*')
+            ->orderBy('waktu', 'asc')->get();
+
+        $monitoring = Transaksi::query()
+            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+            ->where('transaksi.cabang_id', $cabang->id)
+            ->where('jl.for_gamis', true)
+            ->where('transaksi.status', 'Selesai')
+            ->where('dg.user_id', auth()->user()->id)
+            ->where(DB::raw('DATE(transaksi.waktu)'), Carbon::now()->format('Y-m-d'))
+            ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+            ->orderBy('transaksi.waktu', 'asc')
+            ->orderBy('transaksi.gamis_id', 'asc')
+            ->get();
+
+        return view('dashboard.transaksi.gamis.index', compact('title', 'cabang', 'transaksi', 'monitoring', 'isHarian'));
+    }
+
+    public function transaksiGamisSemua()
+    {
+        $title = "Transaksi Gamis Harian";
+        $userRole = auth()->user()->roles[0]->name;
+        $isHarian = false;
+
+        if ($userRole != 'gamis') {
+            abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
+        }
+
+        $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
+        if ($cabang == null) {
+            abort(404, 'CABANG TIDAK DITEMUKAN ATAU SUDAH DIHAPUS.');
+        }
+
+        $transaksi = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+            ->where('dg.user_id', auth()->user()->id)
+            ->where('transaksi.cabang_id', $cabang->id)
+            ->select('transaksi.*')
+            ->orderBy('waktu', 'asc')->get();
+
+        $monitoring = Transaksi::query()
+                ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+                ->where('transaksi.cabang_id', $cabang->id)
+                ->where('jl.for_gamis', true)
+                ->where('transaksi.status', 'Selesai')
+                ->where('dg.user_id', auth()->user()->id)
+                ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+                ->orderBy('transaksi.waktu', 'asc')
+                ->orderBy('transaksi.gamis_id', 'asc')
+                ->get();
+
+        return view('dashboard.transaksi.gamis.index', compact('title', 'cabang', 'transaksi', 'monitoring', 'isHarian'));
+    }
+
+    public function viewDetailTransaksiGamis(Request $request)
+    {
+        $title = "Transaksi Layanan";
+        $userRole = auth()->user()->roles[0]->name;
+        $isHarian = $request->isHarian;
+
+        $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
+        $transaksi = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+            ->where('dg.user_id', auth()->user()->id)
+            ->where('transaksi.id', $request->transaksi)
+            ->select('transaksi.*')
+            ->first();
+
+        $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+        return view('dashboard.transaksi.gamis.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isHarian'));
     }
 }

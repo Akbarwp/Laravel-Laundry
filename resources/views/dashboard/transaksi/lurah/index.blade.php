@@ -53,7 +53,11 @@
                                     <tr>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->nama }}
+                                                @if ($item->deleted_at)
+                                                    {{ $item->nama }} <span class="text-error">(Non Aktif)</span>
+                                                @else
+                                                    {{ $item->nama }}
+                                                @endif
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
@@ -72,10 +76,12 @@
                                                     <i class="ri-shopping-bag-4-line text-base"></i>
                                                     Daftar Transaksi
                                                 </a>
-                                                <a href="{{ route("transaksi.lurah.cabang.jadwal", $item->slug) }}" class="btn btn-outline btn-secondary btn-sm mb-1">
-                                                    <i class="ri-todo-line text-base"></i>
-                                                    Daftar Jadwal
-                                                </a>
+                                                @if (!$item->deleted_at)
+                                                    <a href="{{ route("transaksi.lurah.cabang.jadwal", $item->slug) }}" class="btn btn-outline btn-secondary btn-sm mb-1">
+                                                        <i class="ri-todo-line text-base"></i>
+                                                        Daftar Jadwal
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

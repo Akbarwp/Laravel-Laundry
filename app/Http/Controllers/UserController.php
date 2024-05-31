@@ -27,19 +27,15 @@ class UserController extends Controller
         $role = Role::get();
 
         if ($userRole == 'lurah') {
-            $lurah = Lurah::join('users as u', 'lurah.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('lurah.created_at', 'asc')->get()->except(auth()->id());
-            $rw = RW::join('users as u', 'rw.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('rw.created_at', 'asc')->get();
             $manajer = ManajerLaundry::join('users as u', 'manajer_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('manajer_laundry.created_at', 'asc')->get();
             $pegawai = PegawaiLaundry::join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('pegawai_laundry.created_at', 'asc')->get();
             $gamis = DetailGamis::join('users as u', 'detail_gamis.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('detail_gamis.created_at', 'asc')->get();
 
-            $lurahTrash = User::join('lurah as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
-            $rwTrash = User::join('rw as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
             $manajerTrash = User::join('manajer_laundry as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
             $pegawaiTrash = User::join('pegawai_laundry as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
             $gamisTrash = User::join('detail_gamis as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
 
-            return view('dashboard.user.index', compact('title', 'cabang', 'role', 'lurah', 'rw', 'manajer', 'pegawai', 'gamis', 'lurahTrash', 'rwTrash', 'manajerTrash', 'pegawaiTrash', 'gamisTrash'));
+            return view('dashboard.user.index', compact('title', 'cabang', 'role', 'manajer', 'pegawai', 'gamis', 'manajerTrash', 'pegawaiTrash', 'gamisTrash'));
 
         } elseif ($userRole == 'manajer_laundry') {
             $cabangId = auth()->user()->cabang_id;
@@ -95,7 +91,7 @@ class UserController extends Controller
         $isCabang = [false];
 
         if ($userRole == 'lurah') {
-            $role = Role::get();
+            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
             $cabang = Cabang::where('deleted_at', null)->get();
         } else if ($userRole == 'manajer_laundry') {
             $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'manajer_laundry')->where('name', '!=', 'rw')->get();
@@ -162,12 +158,6 @@ class UserController extends Controller
         $validatedProfile['user_id'] = $user->id;
 
         switch ($request->role) {
-            case 'lurah':
-                $profile = Lurah::create($validatedProfile);
-                break;
-            case 'rw':
-                $profile = RW::create($validatedProfile);
-                break;
             case 'manajer_laundry':
                 $profile = ManajerLaundry::create($validatedProfile);
                 break;
@@ -198,7 +188,7 @@ class UserController extends Controller
         }
 
         if ($userRole == 'lurah') {
-            $role = Role::get();
+            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
             $cabang = Cabang::where('deleted_at', null)->get();
         } else if ($userRole == 'manajer_laundry') {
             $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'manajer_laundry')->where('name', '!=', 'rw')->get();
@@ -288,20 +278,24 @@ class UserController extends Controller
         $validatedProfile['user_id'] = $user->id;
 
         switch ($request->role) {
-            case 'lurah':
-                $profileUpdate = Lurah::where('user_id', $user->id)->update($validatedProfile);
-                break;
-            case 'rw':
-                $profileUpdate = RW::where('user_id', $user->id)->update($validatedProfile);
-                break;
             case 'manajer_laundry':
+                if (DetailGamis::where('user_id', $user->id)->first()) {
+                    DetailGamis::where('user_id', $user->id)->delete();
+                }
                 $profileUpdate = ManajerLaundry::where('user_id', $user->id)->update($validatedProfile);
                 break;
             case 'pegawai_laundry':
+                if (DetailGamis::where('user_id', $user->id)->first()) {
+                    DetailGamis::where('user_id', $user->id)->delete();
+                }
                 $profileUpdate = PegawaiLaundry::where('user_id', $user->id)->update($validatedProfile);
                 break;
             case 'gamis':
-                $profileUpdate = DetailGamis::where('user_id', $user->id)->update($validatedProfile);
+                if (!DetailGamis::where('user_id', $user->id)->first()) {
+                    $profileUpdate = DetailGamis::create($validatedProfile);
+                } else {
+                    $profileUpdate = DetailGamis::where('user_id', $user->id)->update($validatedProfile);
+                }
                 break;
         }
 

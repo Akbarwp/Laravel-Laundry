@@ -25,31 +25,17 @@
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <div class="mb-3">
                         <h6 class="font-bold dark:text-white">{{ $title }}</h6>
-                        <h6 class="font-bold dark:text-white">Cabang:
-                            <span class="text-blue-500">
-                                {{ $cabang->nama }}
-                                @if ($cabang->deleted_at)
-                                    <span class="text-error">(Non Aktif)</span>
-                                @endif
-                            </span>
-                        </h6>
                     </div>
                     <div>
-                        @if ($isJadwal)
-                            <a href="{{ route("transaksi.lurah.cabang.jadwal", $cabang->slug) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 dark:border-white bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 dark:text-white shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                        @if ($isHarian)
+                            <a href="{{ route("transaksi-gamis") }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 dark:border-white bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 dark:text-white shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
                                 <i class="ri-arrow-left-line"></i>
                                 Kembali
                             </a>
                         @else
-                            <a href="{{ route("transaksi.lurah.cabang", $cabang->slug) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 dark:border-white bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 dark:text-white shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                            <a href="{{ route("transaksi-gamis.semua") }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 dark:border-white bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 dark:text-white shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
                                 <i class="ri-arrow-left-line"></i>
                                 Kembali
-                            </a>
-                        @endif
-                        @if (!$cabang->deleted_at)
-                            <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                <i class="ri-pencil-fill"></i>
-                                Ubah
                             </a>
                         @endif
                     </div>
@@ -238,7 +224,7 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <div>
-                                                <a href="{{ route("transaksi.lurah.view.layanan", ['cabang' => $cabang->slug, 'transaksi' => $item->transaksi_id, 'detailTransaksi' => $item->id]) }}" class="btn btn-outline btn-info btn-sm">
+                                                <a href="{{ route("transaksi-gamis.view.layanan", ['transaksi' => $item->transaksi_id, 'detailTransaksi' => $item->id]) }}" class="btn btn-outline btn-info btn-sm">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </a>
                                             </div>

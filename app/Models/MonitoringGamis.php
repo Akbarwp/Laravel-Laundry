@@ -21,7 +21,7 @@ class MonitoringGamis extends Model
         'detail_gamis_id',
     ];
 
-    public function transaksi()
+    public function gamis()
     {
         return $this->belongsTo(DetailGamis::class);
     }

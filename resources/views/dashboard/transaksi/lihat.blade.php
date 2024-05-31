@@ -38,10 +38,12 @@
                                 Kembali
                             </a>
                         @endif
-                        <a href="{{ route("transaksi.edit", ['transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                            <i class="ri-pencil-fill"></i>
-                            Ubah
-                        </a>
+                        @if (!$cabang->deleted_at)
+                            <a href="{{ route("transaksi.edit", ['transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-pencil-fill"></i>
+                                Ubah
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <div class="flex-auto px-6 pb-6 pt-0">
@@ -129,15 +131,12 @@
                                 <span class="label-text font-semibold dark:text-slate-100">Pegawai</span>
                             </div>
                             <input type="text" name="pegawai_id" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly
-                                @php
-                                    $userRole = $transaksi->pegawai->roles[0]->name;
-                                @endphp
-                                @if ($userRole == 'manajer_laundry')
-                                    value="{{ $transaksi->pegawai->manajer->first()->nama }}"
-                                @elseif ($userRole == 'pegawai_laundry')
-                                    value="{{ $transaksi->pegawai->pegawai->first()->nama }}"
-                                @elseif ($userRole == 'lurah')
-                                    value="{{ $transaksi->pegawai->lurah->first()->nama }}"
+                                @if ($transaksi->pegawai->roles[0]->name == 'manajer_laundry')
+                                    value="{{ $transaksi->pegawai->manajer[0]->nama }}"
+                                @elseif ($transaksi->pegawai->roles[0]->name == 'pegawai_laundry')
+                                    value="{{ $transaksi->pegawai->pegawai[0]->nama }}"
+                                @elseif ($transaksi->pegawai->roles[0]->name == 'lurah')
+                                    value="{{ $transaksi->pegawai->lurah[0]->nama }}"
                                 @endif
                             />
                         </label>

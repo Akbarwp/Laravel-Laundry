@@ -14,6 +14,7 @@ class RW extends Model
     public $incrementing = "true";
     public $timestamps = "true";
     protected $fillable = [
+        'nomor_rw',
         'nama',
         'foto',
         'jenis_kelamin',
