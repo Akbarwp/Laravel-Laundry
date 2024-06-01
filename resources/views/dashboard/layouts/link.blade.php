@@ -10,7 +10,7 @@
 {{-- DataTables --}}
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css" />
-{{-- <link rel="stylesheet" href="{{ asset("css/datatable.css") }}"> --> untuk styling datatable --}}
+<link rel="stylesheet" href="{{ asset("css/datatable.css") }}">
 
 {{-- <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.7.1/css/searchBuilder.dataTables.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.5.2/css/dataTables.dateTime.min.css" />
