@@ -125,8 +125,11 @@
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Total Transaksi
                                     </th>
-                                    <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Total Pengeluaran
+                                    </th>
+                                    <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Jenis Pembayaran
                                     </th>
                                     @role('lurah')
                                         <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
@@ -161,6 +164,11 @@
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                 Rp{{ number_format($item->total_pengeluaran, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->jenis_pembayaran }}
                                             </p>
                                         </td>
                                         @role('lurah')

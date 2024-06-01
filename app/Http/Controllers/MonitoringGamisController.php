@@ -240,7 +240,6 @@ class MonitoringGamisController extends Controller
                     ]);
                 }
             }
-
         } else {
             $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
             $gamis = User::query()
@@ -283,35 +282,35 @@ class MonitoringGamisController extends Controller
                     ->orderBy('transaksi.waktu', 'asc')
                     ->get();
 
-                    if ($monitoring->first()) {
-                        foreach ($monitoring as $itemMonitoring) {
-                            if ($itemMonitoring->upah_gamis >= $umr->upah) {
-                                MonitoringGamis::create([
-                                    'upah' => $itemMonitoring->upah_gamis,
-                                    'status' => "Lulus",
-                                    'bulan' => $itemMonitoring->bulan,
-                                    'tahun' => $itemMonitoring->tahun,
-                                    'detail_gamis_id' => $itemGamis->id,
-                                ]);
-                            } else {
-                                MonitoringGamis::create([
-                                    'upah' => $itemMonitoring->upah_gamis,
-                                    'status' => "Gamis",
-                                    'bulan' => $itemMonitoring->bulan,
-                                    'tahun' => $itemMonitoring->tahun,
-                                    'detail_gamis_id' => $itemGamis->id,
-                                ]);
-                            }
+                if ($monitoring->first()) {
+                    foreach ($monitoring as $itemMonitoring) {
+                        if ($itemMonitoring->upah_gamis >= $umr->upah) {
+                            MonitoringGamis::create([
+                                'upah' => $itemMonitoring->upah_gamis,
+                                'status' => "Lulus",
+                                'bulan' => $itemMonitoring->bulan,
+                                'tahun' => $itemMonitoring->tahun,
+                                'detail_gamis_id' => $itemGamis->id,
+                            ]);
+                        } else {
+                            MonitoringGamis::create([
+                                'upah' => $itemMonitoring->upah_gamis,
+                                'status' => "Gamis",
+                                'bulan' => $itemMonitoring->bulan,
+                                'tahun' => $itemMonitoring->tahun,
+                                'detail_gamis_id' => $itemGamis->id,
+                            ]);
                         }
-                    } else {
-                        MonitoringGamis::create([
-                            'upah' => 0,
-                            'status' => "Gamis",
-                            'bulan' => Carbon::now()->format('m'),
-                            'tahun' => Carbon::now()->format('Y'),
-                            'detail_gamis_id' => $itemGamis->id,
-                        ]);
                     }
+                } else {
+                    MonitoringGamis::create([
+                        'upah' => 0,
+                        'status' => "Gamis",
+                        'bulan' => Carbon::now()->format('m'),
+                        'tahun' => Carbon::now()->format('Y'),
+                        'detail_gamis_id' => $itemGamis->id,
+                    ]);
+                }
             }
 
             return to_route('monitoring')->with('success', 'Perbarui Data Berhasil Dilakukan');
@@ -357,12 +356,28 @@ class MonitoringGamisController extends Controller
             ->join('gamis as g', 'g.id', '=', 'dg.gamis_id')
             ->join('users as u', 'u.id', '=', 'dg.user_id')
             ->where('g.rw', $rw->nomor_rw)
-            ->where('bulan', '>=', Carbon::parse($tanggalAwal)->format('m'))
-            ->where('tahun', '>=', Carbon::parse($tanggalAwal)->format('Y'))
-            ->where('bulan', '<=', Carbon::parse($tanggalAkhir)->format('m'))
-            ->where('tahun', '<=', Carbon::parse($tanggalAkhir)->format('Y'))
-            ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'g.rw as nomor_rw')
-            ->orderBy('monitoring_gamis.detail_gamis_id', 'asc')->orderBy('monitoring_gamis.bulan', 'asc')->orderBy('monitoring_gamis.tahun', 'asc')->get();
+            ->where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
+                $query->where(function ($subQuery) use ($tanggalAwal) {
+                    $subQuery->where('tahun', '>', Carbon::parse($tanggalAwal)->format('Y'))
+                        ->orWhere(function ($nestedQuery) use ($tanggalAwal) {
+                            $nestedQuery->where('tahun', '=', Carbon::parse($tanggalAwal)->format('Y'))
+                                ->where('bulan', '>=', Carbon::parse($tanggalAwal)->format('m'));
+                        });
+                })->where(function ($subQuery) use ($tanggalAkhir) {
+                    $subQuery->where('tahun', '<', Carbon::parse($tanggalAkhir)->format('Y'))
+                        ->orWhere(function ($nestedQuery) use ($tanggalAkhir) {
+                            $nestedQuery->where('tahun', '=', Carbon::parse($tanggalAkhir)->format('Y'))
+                                ->where('bulan', '<=', Carbon::parse($tanggalAkhir)->format('m'));
+                        });
+                });
+            })
+            ->select('monitoring_gamis.*', 'dg.nama as nama_gamis', 'g.rw as nomor_rw')
+            ->orderBy('monitoring_gamis.tahun', 'asc')
+            ->orderBy('monitoring_gamis.bulan', 'asc')
+            ->orderBy('monitoring_gamis.detail_gamis_id', 'asc')
+            ->get();
+
+        // dd($tes);
 
         return view('dashboard.monitoring.rw', compact('title', 'monitoring', 'rw'));
     }
@@ -385,12 +400,26 @@ class MonitoringGamisController extends Controller
             ->join('gamis as g', 'g.id', '=', 'dg.gamis_id')
             ->join('users as u', 'u.id', '=', 'dg.user_id')
             ->where('g.rw', $rw->nomor_rw)
-            ->where('bulan', '>=', Carbon::parse($tanggalAwal)->format('m'))
-            ->where('tahun', '>=', Carbon::parse($tanggalAwal)->format('Y'))
-            ->where('bulan', '<=', Carbon::parse($tanggalAkhir)->format('m'))
-            ->where('tahun', '<=', Carbon::parse($tanggalAkhir)->format('Y'))
+            ->where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
+                $query->where(function ($subQuery) use ($tanggalAwal) {
+                    $subQuery->where('tahun', '>', Carbon::parse($tanggalAwal)->format('Y'))
+                        ->orWhere(function ($nestedQuery) use ($tanggalAwal) {
+                            $nestedQuery->where('tahun', '=', Carbon::parse($tanggalAwal)->format('Y'))
+                                ->where('bulan', '>=', Carbon::parse($tanggalAwal)->format('m'));
+                        });
+                })->where(function ($subQuery) use ($tanggalAkhir) {
+                    $subQuery->where('tahun', '<', Carbon::parse($tanggalAkhir)->format('Y'))
+                        ->orWhere(function ($nestedQuery) use ($tanggalAkhir) {
+                            $nestedQuery->where('tahun', '=', Carbon::parse($tanggalAkhir)->format('Y'))
+                                ->where('bulan', '<=', Carbon::parse($tanggalAkhir)->format('m'));
+                        });
+                });
+            })
             ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'g.rw as nomor_rw')
-            ->orderBy('monitoring_gamis.detail_gamis_id', 'asc')->orderBy('monitoring_gamis.bulan', 'asc')->orderBy('monitoring_gamis.tahun', 'asc')->get();
+            ->orderBy('monitoring_gamis.tahun', 'asc')
+            ->orderBy('monitoring_gamis.bulan', 'asc')
+            ->orderBy('monitoring_gamis.detail_gamis_id', 'asc')
+            ->get();
 
         $view = view()->share($title, $monitoring);
         $pdf = Pdf::loadView('dashboard.laporan.pdf.monitoring-gamis-rw', [
@@ -402,7 +431,7 @@ class MonitoringGamisController extends Controller
             'rw' => $rw,
             'footer' => $title
         ])
-        ->setPaper('a4', 'landscape');
+            ->setPaper('a4', 'landscape');
         // return $pdf->download();
         return $pdf->stream();
     }

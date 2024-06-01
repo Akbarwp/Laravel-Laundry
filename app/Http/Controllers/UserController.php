@@ -281,18 +281,38 @@ class UserController extends Controller
             case 'manajer_laundry':
                 if (DetailGamis::where('user_id', $user->id)->first()) {
                     DetailGamis::where('user_id', $user->id)->delete();
+                    $profileUpdate = ManajerLaundry::create($validatedProfile);
+
+                } elseif (PegawaiLaundry::where('user_id', $user->id)->first()) {
+                    PegawaiLaundry::where('user_id', $user->id)->delete();
+                    $profileUpdate = ManajerLaundry::create($validatedProfile);
+
+                } else {
+                    $profileUpdate = ManajerLaundry::where('user_id', $user->id)->update($validatedProfile);
                 }
-                $profileUpdate = ManajerLaundry::where('user_id', $user->id)->update($validatedProfile);
                 break;
             case 'pegawai_laundry':
                 if (DetailGamis::where('user_id', $user->id)->first()) {
                     DetailGamis::where('user_id', $user->id)->delete();
+                    $profileUpdate = PegawaiLaundry::create($validatedProfile);
+
+                } elseif (ManajerLaundry::where('user_id', $user->id)->first()) {
+                    ManajerLaundry::where('user_id', $user->id)->delete();
+                    $profileUpdate = PegawaiLaundry::create($validatedProfile);
+
+                } else {
+                    $profileUpdate = PegawaiLaundry::where('user_id', $user->id)->update($validatedProfile);
                 }
-                $profileUpdate = PegawaiLaundry::where('user_id', $user->id)->update($validatedProfile);
                 break;
             case 'gamis':
-                if (!DetailGamis::where('user_id', $user->id)->first()) {
+                if (PegawaiLaundry::where('user_id', $user->id)->first()) {
+                    PegawaiLaundry::where('user_id', $user->id)->delete();
                     $profileUpdate = DetailGamis::create($validatedProfile);
+
+                } elseif (ManajerLaundry::where('user_id', $user->id)->first()) {
+                    ManajerLaundry::where('user_id', $user->id)->delete();
+                    $profileUpdate = DetailGamis::create($validatedProfile);
+
                 } else {
                     $profileUpdate = DetailGamis::where('user_id', $user->id)->update($validatedProfile);
                 }
