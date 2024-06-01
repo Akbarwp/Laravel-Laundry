@@ -8,6 +8,7 @@ use App\Http\Controllers\GamisController;
 use App\Http\Controllers\HargaJenisLayananController;
 use App\Http\Controllers\JenisLayananController;
 use App\Http\Controllers\JenisPakaianController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LayananCabangController;
 use App\Http\Controllers\LayananPrioritasController;
@@ -21,9 +22,9 @@ use App\Http\Controllers\UMRController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Route::get('/dashboard2', function () {
 //     return view('dashboard');
@@ -34,6 +35,9 @@ Route::get('/', function () {
 //     Route::patch('/profile', [ProfileController2::class, 'update'])->name('profile.update');
 //     Route::delete('/profile', [ProfileController2::class, 'destroy'])->name('profile.destroy');
 // });
+
+Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
+Route::get('/nota', [LandingPageController::class, 'cekTransaksi'])->name('landing-page.nota');
 
 Route::group(['middleware' => 'guest'], function() {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
