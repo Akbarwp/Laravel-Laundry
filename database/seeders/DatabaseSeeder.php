@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             UMRSeeder::class,
 
             //? Data Akun
+            RoleSeeder::class,
             LurahSeeder::class,
             RWSeeder::class,
             ManajerSeeder::class,

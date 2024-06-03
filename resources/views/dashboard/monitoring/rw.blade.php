@@ -34,26 +34,13 @@
                         <form action="{{ route('monitoring.rw.pdf') }}" method="post" enctype="multipart/form-data" target="_blank">
                             @csrf
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                                @role('lurah')
-                                    <label class="form-control w-full lg:w-1/3">
-                                        <div class="label">
-                                            <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
-                                        </div>
-                                        <select name="cabang_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
-                                            <option disabled selected>Pilih Cabang!</option>
-                                            @foreach ($cabang as $item)
-                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </label>
-                                @endrole
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full lg:w-1/2">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Awal</span>
                                     </div>
                                     <input type="month" name="tanggalAwal" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ \Carbon\Carbon::now()->format('Y-') . \Carbon\Carbon::now()->format('m') }}" />
                                 </label>
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full lg:w-1/2">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Akhir</span>
                                     </div>

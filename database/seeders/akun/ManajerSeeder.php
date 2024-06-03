@@ -18,7 +18,7 @@ class ManajerSeeder extends Seeder
     {
         $cabang = Cabang::where('id', 1)->first();
         $cabang2 = Cabang::where('id', 2)->onlyTrashed()->first();
-        $roleManajer = Role::create(['name' => 'manajer_laundry']);
+        $roleManajer = 'manajer_laundry';
 
         //? Cabang 1
         $manajer_laundry = User::factory()->create([

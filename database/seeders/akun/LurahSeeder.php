@@ -14,7 +14,7 @@ class LurahSeeder extends Seeder
      */
     public function run(): void
     {
-        $roleLurah = Role::create(['name' => 'lurah']);
+        $roleLurah = 'lurah';
 
         $lurah = User::factory()->create([
             'username' => 'Lurah',

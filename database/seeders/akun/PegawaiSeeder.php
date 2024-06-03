@@ -18,7 +18,7 @@ class PegawaiSeeder extends Seeder
     {
         $cabang = Cabang::where('id', 1)->first();
         $cabang2 = Cabang::where('id', 2)->onlyTrashed()->first();
-        $rolePegawai = Role::create(['name' => 'pegawai_laundry']);
+        $rolePegawai = 'pegawai_laundry';
 
         //? Cabang 1
         $pegawai_laundry = User::factory()->create([

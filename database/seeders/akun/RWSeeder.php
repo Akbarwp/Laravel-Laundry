@@ -15,7 +15,7 @@ class RWSeeder extends Seeder
      */
     public function run(): void
     {
-        $roleRW = Role::create(['name' => 'rw']);
+        $roleRW = 'rw';
 
         $rw = User::factory()->create([
             'username' => 'RW',

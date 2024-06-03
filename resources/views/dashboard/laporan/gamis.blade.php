@@ -176,7 +176,7 @@
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Total Transaksi</span>
                                     </div>
-                                    <input type="text" name="total_transaksi" value="Rp{{ number_format($transaksi->sum('total_transaksi'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
+                                    <input type="text" name="total_transaksi" value="{{ $transaksi->sum('total_transaksi') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
                                 </label>
                             </div>
                         </div>

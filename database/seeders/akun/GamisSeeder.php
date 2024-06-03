@@ -19,7 +19,7 @@ class GamisSeeder extends Seeder
     {
         $cabang = Cabang::where('id', 1)->first();
         $cabang2 = Cabang::where('id', 2)->onlyTrashed()->first();
-        $roleGamis = Role::create(['name' => 'gamis']);
+        $roleGamis = 'gamis';
 
         $keluargaGamis = Gamis::create([
             'kartu_keluarga' => '1234567890123456',

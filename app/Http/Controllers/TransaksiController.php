@@ -777,7 +777,7 @@ class TransaksiController extends Controller
 
     public function transaksiGamisSemua()
     {
-        $title = "Transaksi Gamis Harian";
+        $title = "Transaksi Gamis";
         $userRole = auth()->user()->roles[0]->name;
         $isHarian = false;
 

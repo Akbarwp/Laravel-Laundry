@@ -40,9 +40,6 @@
                 <div class="border-b-solid mb-0 flex items-center justify-start rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <div class="mb-3">
                         <h6 class="font-bold dark:text-white">{{ $title }}</h6>
-                        <h6 class="font-bold dark:text-white">Tanggal:
-                            <span class="text-blue-500">{{ \Carbon\Carbon::now()->format('d F Y') }}</span>
-                        </h6>
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">
