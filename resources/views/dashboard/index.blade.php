@@ -303,7 +303,7 @@
             <!-- row 2 -->
             <div class="-mx-3 mb-3 flex flex-wrap">
                 <!-- Transaksi: Status Baru -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -327,7 +327,7 @@
                 </div>
 
                 <!-- Transaksi: Status Proses -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -351,14 +351,14 @@
                 </div>
 
                 <!-- Transaksi: Status Siap Diambil -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
                                 <div class="w-2/3 max-w-full flex-none px-3">
                                     <div>
                                         <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Transaksi:</p>
-                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-primary">Siap Diambil</p>
+                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-primary">Siap Ambil</p>
                                         <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
                                             {{ $transaksiSiapDiambil }}
                                         </h5>
@@ -375,14 +375,14 @@
                 </div>
 
                 <!-- Transaksi: Status Pengantaran -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
                                 <div class="w-2/3 max-w-full flex-none px-3">
                                     <div>
                                         <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Transaksi:</p>
-                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-secondary">Pengantaran</p>
+                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-secondary">Antar</p>
                                         <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
                                             {{ $transaksiPengantaran }}
                                         </h5>
@@ -399,7 +399,7 @@
                 </div>
 
                 <!-- Transaksi: Status Selesai -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -423,7 +423,7 @@
                 </div>
 
                 <!-- Transaksi: Status Batal -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                {{-- <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -444,7 +444,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             {{-- Awal Tabel Jadwal Layanan --}}
@@ -676,7 +676,7 @@
             <!-- row 2 -->
             <div class="-mx-3 mb-3 flex flex-wrap">
                 <!-- Transaksi: Status Baru -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -700,7 +700,7 @@
                 </div>
 
                 <!-- Transaksi: Status Proses -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -724,14 +724,14 @@
                 </div>
 
                 <!-- Transaksi: Status Siap Diambil -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
                                 <div class="w-2/3 max-w-full flex-none px-3">
                                     <div>
                                         <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Transaksi:</p>
-                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-primary">Siap Diambil</p>
+                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-primary">Siap Ambil</p>
                                         <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
                                             {{ $transaksiSiapDiambil }}
                                         </h5>
@@ -748,14 +748,14 @@
                 </div>
 
                 <!-- Transaksi: Status Pengantaran -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
                                 <div class="w-2/3 max-w-full flex-none px-3">
                                     <div>
                                         <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Transaksi:</p>
-                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-secondary">Pengantaran</p>
+                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-secondary">Antar</p>
                                         <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
                                             {{ $transaksiPengantaran }}
                                         </h5>
@@ -772,7 +772,7 @@
                 </div>
 
                 <!-- Transaksi: Status Selesai -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
+                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/5">
                     <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
                         <div class="flex-auto p-4">
                             <div class="-mx-3 flex flex-row">
@@ -782,30 +782,6 @@
                                         <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-success">Selesai</p>
                                         <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
                                             {{ $transaksiSelesai }}
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="basis-1/3 px-3 text-right">
-                                    <div class="rounded-circle inline-block h-12 w-12 bg-gradient-to-tl from-lime-500 to-teal-500 text-center">
-                                        <i class="ri-shopping-bag-4-line relative top-3 text-2xl leading-none text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Transaksi: Status Batal -->
-                <div class="mb-6 w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/6">
-                    <div class="dark:bg-slate-850 dark:shadow-dark-xl relative flex min-w-0 flex-col break-words rounded-2xl bg-white bg-clip-border shadow-xl">
-                        <div class="flex-auto p-4">
-                            <div class="-mx-3 flex flex-row">
-                                <div class="w-2/3 max-w-full flex-none px-3">
-                                    <div>
-                                        <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">Transaksi:</p>
-                                        <p class="font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60 text-error">Batal</p>
-                                        <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
-                                            {{ $transaksiBatal }}
                                         </h5>
                                     </div>
                                 </div>

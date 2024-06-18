@@ -18,6 +18,5 @@ class Pelanggan extends Model
         'jenis_kelamin',
         'telepon',
         'alamat',
-        'cabang_id',
     ];
 }

@@ -1,9 +1,5 @@
 @extends("dashboard.layouts.main")
 
-@section("css")
-    <link rel="stylesheet" href="{{ asset("css/datatable.css") }}">
-@endsection
-
 @section("js")
     <script>
         $(document).ready(function() {

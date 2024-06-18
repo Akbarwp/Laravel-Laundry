@@ -1,9 +1,5 @@
 @extends("dashboard.layouts.main")
 
-@section("css")
-    <link rel="stylesheet" href="{{ asset("css/datatable.css") }}">
-@endsection
-
 @section("js")
     <script>
         $(document).ready(function() {
@@ -125,11 +121,8 @@
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Total Transaksi
                                     </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Total Pengeluaran
-                                    </th>
                                     <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Jenis Pembayaran
+                                        Total Pengeluaran
                                     </th>
                                     @role('lurah')
                                         <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
@@ -166,11 +159,6 @@
                                                 Rp{{ number_format($item->total_pengeluaran, 2, ',', '.') }}
                                             </p>
                                         </td>
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->jenis_pembayaran }}
-                                            </p>
-                                        </td>
                                         @role('lurah')
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                 <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
@@ -192,11 +180,11 @@
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Total Transaksi</span>
                                     </div>
-                                    <input type="text" name="total_transaksi" value="Rp{{ number_format($transaksi->sum('total_transaksi'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
+                                    <input type="text" name="total_transaksi" value="{{ $transaksi->sum('total_transaksi') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
                                 </label>
                                 <label class="form-control w-full lg:w-1/2">
                                     <div class="label">
-                                        <span class="label-text font-semibold dark:text-slate-100 text-lg">Total Pengeluaran</span>
+                                        <span class="label-text font-semibold dark:text-slate-100 text-lg">Total Pengeluaran Pelanggan</span>
                                     </div>
                                     <input type="text" name="total_pengeluaran" value="Rp{{ number_format($transaksi->sum('total_pengeluaran'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
                                 </label>

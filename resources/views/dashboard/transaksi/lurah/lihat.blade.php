@@ -213,7 +213,7 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->total_pakaian }} {{ $item->jenis_satuan }}
+                                                {{ $item->total_pakaian }} {{ $item->detailLayananTransaksi[0]->hargaJenisLayanan->jenis_satuan }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">

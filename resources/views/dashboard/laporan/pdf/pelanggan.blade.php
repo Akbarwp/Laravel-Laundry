@@ -13,7 +13,6 @@
                 <th>Tahun</th>
                 <th>Total Transaksi</th>
                 <th>Total Pengeluaran</th>
-                <th>Jenis Pembayaran</th>
                 @role('lurah')
                     <th>Cabang</th>
                 @endrole
@@ -47,11 +46,6 @@
                             Rp{{ number_format($item->total_pengeluaran, 2, ',', '.') }}
                         </p>
                     </td>
-                    <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                        <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                            {{ $item->jenis_pembayaran }}
-                        </p>
-                    </td>
                     @role('lurah')
                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
@@ -62,13 +56,13 @@
                 </tr>
             @endforeach
             <tr>
-                <td colspan="6" style="font-weight: 500">Cabang: {{ $nama_cabang ? $nama_cabang->nama : 'Semua Cabang' }}</td>
+                <td colspan="5" style="font-weight: 500">Cabang: {{ $nama_cabang ? $nama_cabang->nama : 'Semua Cabang' }}</td>
             </tr>
             <tr>
-                <td colspan="6" style="font-weight: 500">Total Pemasukkan: Rp{{ number_format($transaksi->sum('total_bayar_akhir'), 2, ',', '.') }}</td>
+                <td colspan="5" style="font-weight: 500">Total Transaksi: {{ $transaksi->sum('total_transaksi') }}</td>
             </tr>
             <tr>
-                <td colspan="6" style="font-weight: 500">Total Pendapatan Laundry: Rp{{ number_format($transaksi->sum('pendapatan_laundry'), 2, ',', '.') }}</td>
+                <td colspan="5" style="font-weight: 500">Total Pengeluaran Pelanggan: Rp{{ number_format($transaksi->sum('total_pengeluaran'), 2, ',', '.') }}</td>
             </tr>
         </tbody>
     </table>

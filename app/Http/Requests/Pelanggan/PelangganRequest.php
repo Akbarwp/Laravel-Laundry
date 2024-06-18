@@ -21,16 +21,11 @@ class PelangganRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userRole = auth()->user()->roles[0]->name;
-        if ($userRole != 'lurah') {
-            $this->request->add(['cabang_id' => auth()->user()->cabang_id]);
-        }
         return [
             'nama' => 'required|string|max:255',
             'jenis_kelamin' => 'required|string|max:1|in:L,P',
             'telepon' => 'required|string|max:20',
             'alamat' => 'nullable|string',
-            'cabang_id' => 'required',
         ];
     }
 

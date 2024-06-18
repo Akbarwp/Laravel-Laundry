@@ -23,6 +23,8 @@ class DetailGamis extends Model
         'alamat',
         'mulai_kerja',
         'selesai_kerja',
+        'nama_pemasukkan',
+        'pemasukkan',
         'user_id',
         'gamis_id',
     ];

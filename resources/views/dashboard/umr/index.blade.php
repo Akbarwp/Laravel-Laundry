@@ -1,9 +1,5 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -217,7 +213,9 @@
                             @csrf
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Regional</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Regional'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="regional" placeholder="Regional" class="input input-bordered w-full text-blue-700" value="{{ old('regional') }}" required />
                                 @error('regional')
@@ -228,7 +226,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Upah</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Upah'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="upah" placeholder="Upah" class="input input-bordered w-full text-blue-700" value="{{ old('upah') }}" required />
                                 @error('upah')
@@ -239,7 +239,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Tahun</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Tahun'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" name="tahun" placeholder="Tahun" class="input input-bordered w-full text-blue-700" value="{{ old('tahun') }}" required />
                                 @error('tahun')
@@ -250,7 +252,9 @@
                             </label>
                             <div class="mt-3 w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Is_Used?</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Is_Used?'" />
+                                    </span>
                                 </div>
                                 <div class="form-control">
                                     <label class="label cursor-pointer">
@@ -337,7 +341,9 @@
                             <input type="text" name="id" hidden>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Regional</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Regional'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
                                 <input type="text" name="regional" placeholder="Regional" class="input input-bordered w-full text-blue-700" required />
@@ -349,7 +355,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Upah</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Upah'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="upah" placeholder="Upah" class="input input-bordered w-full text-blue-700" required />
@@ -361,7 +369,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Tahun</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Tahun'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit3"></span>
                                 </div>
                                 <input type="number" min="0" name="tahun" placeholder="Tahun" class="input input-bordered w-full text-blue-700" required />
@@ -373,7 +383,9 @@
                             </label>
                             <div class="mt-3 w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Is_Used?</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Is_Used?'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit4"></span>
                                 </div>
                                 <div class="form-control">

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\layanan;
 
+use App\Enums\JenisSatuanLayanan;
 use Carbon\Carbon;
 use App\Models\Cabang;
 use App\Models\JenisLayanan;
@@ -31,21 +32,21 @@ class HargaJenisLayananSeeder extends Seeder
         //? Seeder --> make Harga Jenis Layanan Kaos
         HargaJenisLayanan::create([
             'harga' => 1000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananCuci->id,
             'jenis_pakaian_id' => $jenisPakaianKaos->id,
             'cabang_id' => $cabang->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 1500,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananSetrika->id,
             'jenis_pakaian_id' => $jenisPakaianKaos->id,
             'cabang_id' => $cabang->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 1500,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananAntar->id,
             'jenis_pakaian_id' => $jenisPakaianKaos->id,
             'cabang_id' => $cabang->id,
@@ -54,21 +55,21 @@ class HargaJenisLayananSeeder extends Seeder
         //? Seeder --> make Harga Jenis Layanan Kemeja
         HargaJenisLayanan::create([
             'harga' => 1500,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananCuci->id,
             'jenis_pakaian_id' => $jenisPakaianKemeja->id,
             'cabang_id' => $cabang->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 2000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananSetrika->id,
             'jenis_pakaian_id' => $jenisPakaianKemeja->id,
             'cabang_id' => $cabang->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 2000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananAntar->id,
             'jenis_pakaian_id' => $jenisPakaianKemeja->id,
             'cabang_id' => $cabang->id,
@@ -78,21 +79,21 @@ class HargaJenisLayananSeeder extends Seeder
         //? Seeder --> make Harga Jenis Layanan Jeans
         HargaJenisLayanan::create([
             'harga' => 2000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananCuci->id,
             'jenis_pakaian_id' => $jenisPakaianJeans->id,
             'cabang_id' => $cabang->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 2500,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananSetrika->id,
             'jenis_pakaian_id' => $jenisPakaianJeans->id,
             'cabang_id' => $cabang->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 2500,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananAntar->id,
             'jenis_pakaian_id' => $jenisPakaianJeans->id,
             'cabang_id' => $cabang->id,
@@ -109,21 +110,21 @@ class HargaJenisLayananSeeder extends Seeder
         //? Seeder --> make Harga Jenis Layanan Kemeja
         HargaJenisLayanan::create([
             'harga' => 1000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananCuci2->id,
             'jenis_pakaian_id' => $jenisPakaianKemeja2->id,
             'cabang_id' => $cabang2->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 1000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananCuci2->id,
             'jenis_pakaian_id' => $jenisLayananSetrika2->id,
             'cabang_id' => $cabang2->id,
         ]);
         HargaJenisLayanan::create([
             'harga' => 1000,
-            'jenis_satuan' => 'kg',
+            'jenis_satuan' => JenisSatuanLayanan::KG,
             'jenis_layanan_id' => $jenisLayananCuci2->id,
             'jenis_pakaian_id' => $jenisLayananAntar2->id,
             'cabang_id' => $cabang2->id,

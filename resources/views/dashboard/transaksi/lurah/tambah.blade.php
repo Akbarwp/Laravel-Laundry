@@ -96,6 +96,8 @@
                 let totalBayar = $("input[name='total_bayar_akhir']").val();
                 $("input[name='kembalian']").val(this.value-totalBayar);
             });
+
+            $(".pelanggan_id").select2();
         });
 
         @if (session()->has("success"))
@@ -313,11 +315,13 @@
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">
-                                        Pelanggan |
+                                        <span class="label-text font-semibold dark:text-slate-100">
+                                            <x-label-input-required :value="'Pelanggan |'" />
+                                        </span>
                                         <a href="{{ route('pelanggan') }}" class="link link-primary dark:link-accent">Sudah membuat daftar pelanggan?</a>
                                     </span>
                                 </div>
-                                <select name="pelanggan_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
+                                <select name="pelanggan_id" class="pelanggan_id select select-bordered text-base text-blue-700 dark:bg-slate-100" style="width: 100%; height: 100%;" required>
                                     <option disabled selected>Pilih Pelanggan!</option>
                                     @foreach ($pelanggan as $item)
                                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -349,9 +353,11 @@
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Total Biaya Layanan</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Total Biaya Layanan'" />
+                                    </span>
                                 </div>
-                                <input type="number" min="0" name="total_biaya_layanan" placeholder="Total Biaya Layanan" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly required />
+                                <input type="number" min="0" name="total_biaya_layanan" placeholder="Total Biaya Layanan" class="input input-bordered w-full text-blue-700 bg-slate-300" readonly required />
                                 @error("total_biaya_layanan")
                                     <div class="label">
                                         <span class="label-text-alt text-sm text-error">{{ $message }}</span>
@@ -360,9 +366,11 @@
                             </label>
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Total Biaya Prioritas</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Total Biaya Prioritas'" />
+                                    </span>
                                 </div>
-                                <input type="number" min="0" value="0" name="total_biaya_prioritas" placeholder="Total Biaya Prioritas" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly required />
+                                <input type="number" min="0" value="0" name="total_biaya_prioritas" placeholder="Total Biaya Prioritas" class="input input-bordered w-full text-blue-700 bg-slate-300" readonly required />
                                 @error("total_biaya_prioritas")
                                     <div class="label">
                                         <span class="label-text-alt text-sm text-error">{{ $message }}</span>
@@ -372,9 +380,11 @@
                         </div>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Total Bayar</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Total Bayar'" />
+                                </span>
                             </div>
-                            <input type="number" min="0" name="total_bayar_akhir" placeholder="Total Bayar" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly required />
+                            <input type="number" min="0" name="total_bayar_akhir" placeholder="Total Bayar" class="input input-bordered w-full text-blue-700 bg-slate-300" readonly required />
                             @error("total_bayar_akhir")
                                 <div class="label">
                                     <span class="label-text-alt text-sm text-error">{{ $message }}</span>
@@ -383,7 +393,9 @@
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Jenis Pembayaran</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Jenis Pembayaran'" />
+                                </span>
                             </div>
                             <input type="text" name="jenis_pembayaran" placeholder="Jenis Pembayaran" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" required />
                             @error("jenis_pembayaran")
@@ -395,7 +407,9 @@
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Bayar</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Bayar'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" name="bayar" placeholder="Bayar" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" required />
                                 @error("bayar")
@@ -406,7 +420,9 @@
                             </label>
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Kembalian</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Kembalian'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="kembalian" placeholder="Kembalian" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly required />
                                 @error("kembalian")
@@ -423,7 +439,9 @@
                             </div>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Layanan Prioritas</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Layanan Prioritas'" />
+                                    </span>
                                 </div>
                                 <select name="layanan_prioritas_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                     @foreach ($layananPrioritas as $item)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabang;
+use App\Models\DetailGamis;
 use App\Models\MonitoringGamis;
 use App\Models\Transaksi;
 use App\Models\UMR;
@@ -11,6 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MonitoringGamisController extends Controller
 {
@@ -27,6 +29,12 @@ class MonitoringGamisController extends Controller
                 ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
                 ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'c.nama as nama_cabang', 'c.deleted_at as cabang_deleted_at')
                 ->orderBy('c.id', 'asc')->orderBy('monitoring_gamis.detail_gamis_id', 'asc')->orderBy('monitoring_gamis.bulan', 'asc')->orderBy('monitoring_gamis.tahun', 'asc')->get();
+            $gamis = DetailGamis::query()
+                ->join('users as u', 'u.id', '=', 'detail_gamis.user_id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->select('detail_gamis.*', 'c.nama as nama_cabang', 'c.deleted_at as cabang_deleted_at')
+                ->get();
+
         } else {
             $monitoring = MonitoringGamis::query()
                 ->join('detail_gamis as dg', 'dg.id', '=', 'monitoring_gamis.detail_gamis_id')
@@ -35,9 +43,15 @@ class MonitoringGamisController extends Controller
                 ->where('u.cabang_id', auth()->user()->cabang_id)
                 ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'c.nama as nama_cabang')
                 ->orderBy('c.id', 'asc')->orderBy('monitoring_gamis.detail_gamis_id', 'asc')->orderBy('monitoring_gamis.bulan', 'asc')->orderBy('monitoring_gamis.tahun', 'asc')->get();
+            $gamis = DetailGamis::query()
+                ->join('users as u', 'u.id', '=', 'detail_gamis.user_id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->where('u.cabang_id', auth()->user()->cabang_id)
+                ->select('detail_gamis.*', 'c.nama as nama_cabang', 'c.deleted_at as cabang_deleted_at')
+                ->get();
         }
 
-        return view('dashboard.monitoring.index', compact('title', 'monitoring', 'umr'));
+        return view('dashboard.monitoring.index', compact('title', 'monitoring', 'umr', 'gamis'));
     }
 
     public function perbaruiDataMonitoring()
@@ -78,7 +92,7 @@ class MonitoringGamisController extends Controller
                 if ($monitoring) {
                     if ($monitoring->upah_gamis >= $umr->upah) {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis,
+                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
                             'status' => "Lulus",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -86,7 +100,7 @@ class MonitoringGamisController extends Controller
                         ]);
                     } else {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis,
+                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
                             'status' => "Gamis",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -95,7 +109,7 @@ class MonitoringGamisController extends Controller
                     }
                 } else {
                     MonitoringGamis::create([
-                        'upah' => 0,
+                        'upah' => 0 + $item->pemasukkan,
                         'status' => "Gamis",
                         'bulan' => Carbon::now()->format('m'),
                         'tahun' => Carbon::now()->format('Y'),
@@ -150,7 +164,7 @@ class MonitoringGamisController extends Controller
                 if ($monitoring) {
                     if ($monitoring->upah_gamis >= $umr->upah) {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis,
+                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
                             'status' => "Lulus",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -158,7 +172,7 @@ class MonitoringGamisController extends Controller
                         ]);
                     } else {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis,
+                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
                             'status' => "Gamis",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -167,7 +181,7 @@ class MonitoringGamisController extends Controller
                     }
                 } else {
                     MonitoringGamis::create([
-                        'upah' => 0,
+                        'upah' => 0 + $item->pemasukkan,
                         'status' => "Gamis",
                         'bulan' => Carbon::now()->format('m'),
                         'tahun' => Carbon::now()->format('Y'),
@@ -214,7 +228,7 @@ class MonitoringGamisController extends Controller
                     foreach ($monitoring as $itemMonitoring) {
                         if ($itemMonitoring->upah_gamis >= $umr->upah) {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis,
+                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
                                 'status' => "Lulus",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -222,7 +236,7 @@ class MonitoringGamisController extends Controller
                             ]);
                         } else {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis,
+                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
                                 'status' => "Gamis",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -232,7 +246,7 @@ class MonitoringGamisController extends Controller
                     }
                 } else {
                     MonitoringGamis::create([
-                        'upah' => 0,
+                        'upah' => 0 + $itemGamis->pemasukkan,
                         'status' => "Gamis",
                         'bulan' => Carbon::now()->format('m'),
                         'tahun' => Carbon::now()->format('Y'),
@@ -286,7 +300,7 @@ class MonitoringGamisController extends Controller
                     foreach ($monitoring as $itemMonitoring) {
                         if ($itemMonitoring->upah_gamis >= $umr->upah) {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis,
+                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
                                 'status' => "Lulus",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -294,7 +308,7 @@ class MonitoringGamisController extends Controller
                             ]);
                         } else {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis,
+                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
                                 'status' => "Gamis",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -304,7 +318,7 @@ class MonitoringGamisController extends Controller
                     }
                 } else {
                     MonitoringGamis::create([
-                        'upah' => 0,
+                        'upah' => 0 + $itemGamis->pemasukkan,
                         'status' => "Gamis",
                         'bulan' => Carbon::now()->format('m'),
                         'tahun' => Carbon::now()->format('Y'),
@@ -317,19 +331,34 @@ class MonitoringGamisController extends Controller
         }
     }
 
-    public function editStatus(Request $request)
+    public function editPemasukkan(Request $request)
     {
-        $monitoring = MonitoringGamis::where('id', $request->monitoring_id)->first(['id', 'status']);
-        return $monitoring;
+        $gamis = DetailGamis::find($request->id, ['id', 'nama_pemasukkan', 'pemasukkan']);
+        return $gamis;
     }
 
-    public function updateStatus(Request $request)
+    public function updatePemasukkan(Request $request)
     {
-        $monitoring = MonitoringGamis::where('id', $request->id)->update(['status' => $request->status]);
-        if ($monitoring) {
-            return to_route('monitoring')->with('success', 'Status Berhasil Diperbarui');
+        $validator = Validator::make($request->all(), [
+            'nama_pemasukkan' => 'required|string|max:255',
+            'pemasukkan' => 'required|decimal:0,2',
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'max' => ':attribute tidak boleh lebih dari :max karakter.',
+            'decimal' => ':attribute tidak boleh lebih dari :max nol dibelakang koma.',
+        ]);
+        $validated = $validator->validated();
+
+        $perbarui = DetailGamis::where('id', $request->id)->update([
+            'nama_pemasukkan' => $validated['nama_pemasukkan'],
+            'pemasukkan' => $validated['pemasukkan'],
+        ]);
+
+        if ($perbarui) {
+            return to_route('monitoring')->with('success', 'Gamis Berhasil Diperbarui');
         } else {
-            return to_route('monitoring')->with('error', 'Status Gagal Diperbarui');
+            return to_route('monitoring')->with('error', 'Gamis Gagal Diperbarui');
         }
     }
 
@@ -371,13 +400,11 @@ class MonitoringGamisController extends Controller
                         });
                 });
             })
-            ->select('monitoring_gamis.*', 'dg.nama as nama_gamis', 'g.rw as nomor_rw')
+            ->select('monitoring_gamis.*', 'dg.nama as nama_gamis', 'dg.pemasukkan as pemasukkan_gamis', 'g.rw as nomor_rw')
             ->orderBy('monitoring_gamis.tahun', 'asc')
             ->orderBy('monitoring_gamis.bulan', 'asc')
             ->orderBy('monitoring_gamis.detail_gamis_id', 'asc')
             ->get();
-
-        // dd($tes);
 
         return view('dashboard.monitoring.rw', compact('title', 'monitoring', 'rw'));
     }
@@ -434,5 +461,32 @@ class MonitoringGamisController extends Controller
             ->setPaper('a4', 'landscape');
         // return $pdf->download();
         return $pdf->stream();
+    }
+
+    public function riwayatPendapatan(Request $request)
+    {
+        $title = "Riwayat Pendapatan Gamis";
+        $umr = UMR::where('is_used', true)->first();
+        $gamis = $request->gamis;
+        $tahun = $request->tahun ? $request->tahun : Carbon::now()->format('Y');
+
+        $monitoring = MonitoringGamis::query()
+            ->join('detail_gamis as dg', 'dg.id', '=', 'monitoring_gamis.detail_gamis_id')
+            ->join('users as u', 'u.id', '=', 'dg.user_id')
+            ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+            ->where('monitoring_gamis.detail_gamis_id', $gamis)
+            ->where('monitoring_gamis.tahun', $tahun)
+            ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'c.nama as nama_cabang', 'c.deleted_at as cabang_deleted_at', 'c.id as cabang_id')
+            ->orderBy('c.id', 'asc')->orderBy('monitoring_gamis.detail_gamis_id', 'asc')->orderBy('monitoring_gamis.bulan', 'asc')->orderBy('monitoring_gamis.tahun', 'asc')->get()->keyBy('bulan');
+
+        $riwayatMonitoringGamis = [];
+        for ($bulan = 1; $bulan <= 12; $bulan++) {
+            $riwayatMonitoringGamis[$bulan] = [
+                'bulan' => $bulan,
+                'hasil' => isset($monitoring[$bulan]) ? $monitoring[$bulan]->upah : 0,
+            ];
+        }
+
+        return view('dashboard.monitoring.riwayat', compact('title', 'umr', 'monitoring', 'riwayatMonitoringGamis', 'gamis'));
     }
 }

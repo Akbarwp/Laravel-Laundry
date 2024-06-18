@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\JenisSatuanLayanan;
 use App\Models\Cabang;
 use App\Models\HargaJenisLayanan;
 use App\Models\JenisLayanan;
@@ -41,9 +42,10 @@ class LayananCabangController extends Controller
             ->where('harga_jenis_layanan.cabang_id', $cabang->id)
             ->select('harga_jenis_layanan.*', 'jl.nama as nama_layanan', 'jp.nama as nama_pakaian')
             ->orderBy('jenis_pakaian_id', 'asc')->orderBy('jenis_layanan_id', 'asc')->get();
+        $jenisSatuanLayanan = JenisSatuanLayanan::cases();
         $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->orderBy('created_at', 'asc')->get();
 
-        return view('dashboard.layanan-cabang.cabang', compact('title', 'cabang', 'jenisLayanan', 'jenisPakaian', 'hargaJenisLayanan', 'layananPrioritas'));
+        return view('dashboard.layanan-cabang.cabang', compact('title', 'cabang', 'jenisLayanan', 'jenisPakaian', 'hargaJenisLayanan', 'layananPrioritas', 'jenisSatuanLayanan'));
     }
 
     public function indexCabangTrash(Request $request)

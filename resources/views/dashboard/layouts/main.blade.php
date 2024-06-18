@@ -35,7 +35,7 @@
 
         <div class="mx-auto w-full bg-gray-50 px-6 py-6 dark:bg-slate-900">
             @yield('container')
-            @include('dashboard.layouts.footer')
+            {{-- @include('dashboard.layouts.footer') --}}
         </div>
     </main>
 

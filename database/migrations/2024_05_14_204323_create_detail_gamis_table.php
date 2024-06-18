@@ -22,6 +22,8 @@ return new class extends Migration
             $table->text('alamat');
             $table->date('mulai_kerja')->nullable();
             $table->date('selesai_kerja')->nullable();
+            $table->string('nama_pemasukkan')->default('-');
+            $table->double('pemasukkan')->default(0);
             $table->foreignId('gamis_id')->constrained('gamis', 'id');
             $table->foreignId('user_id')->constrained('users', 'id');
             $table->timestamps();

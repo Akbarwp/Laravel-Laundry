@@ -1,9 +1,5 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -188,7 +184,9 @@
                             @csrf
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nomor Kartu Keluarga</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nomor Kartu Keluarga'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="kartu_keluarga" placeholder="Nomor Kartu Keluarga" class="input input-bordered w-full text-blue-700" value="{{ old('kartu_keluarga') }}" required />
                                 @error('kartu_keluarga')
@@ -199,7 +197,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">RT</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'RT'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="1" step="1" name="rt" placeholder="RT" class="input input-bordered w-full text-blue-700" value="{{ old('rt') }}" required />
                                 @error('rt')
@@ -210,7 +210,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">RW</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'RW'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="1" step="1" name="rw" placeholder="RW" class="input input-bordered w-full text-blue-700" value="{{ old('rw') }}" required />
                                 @error('rw')
@@ -297,7 +299,9 @@
                             <input type="text" name="id" hidden>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nomor Kartu Keluarga</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nomor Kartu Keluarga'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
                                 <input type="text" name="kartu_keluarga" placeholder="Nomor Kartu Keluarga" class="input input-bordered w-full text-blue-700" required />
@@ -309,7 +313,10 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">RT</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'RT'" />
+                                    </span>
+                                    <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <input type="number" min="1" step="1" name="rt" placeholder="RT" class="input input-bordered w-full text-blue-700" required />
                                 @error('rt')
@@ -320,7 +327,10 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">RW</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'RW'" />
+                                    </span>
+                                    <span class="label-text-alt" id="loading_edit3"></span>
                                 </div>
                                 <input type="number" min="1" step="1" name="rw" placeholder="RW" class="input input-bordered w-full text-blue-700" required />
                                 @error('rw')
@@ -332,6 +342,7 @@
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold">Alamat</span>
+                                    <span class="label-text-alt" id="loading_edit4"></span>
                                 </div>
                                 <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-base text-blue-500"></textarea>
                                 @error('alamat')

@@ -221,7 +221,7 @@
 
                 @role(["lurah", "manajer_laundry"])
                     <li class="mt-0.5 w-full">
-                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["monitoring"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("monitoring") }}">
+                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["monitoring", "monitoring.gamis.riwayat"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("monitoring") }}">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="ri-bar-chart-box-line relative top-0 text-lg leading-normal text-blue-500"></i>
                             </div>

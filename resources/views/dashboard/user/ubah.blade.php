@@ -9,7 +9,9 @@
                         <label id="form_kk_gamis" class="form-control w-full">
                             <div class="label">
                                 <span class="label-text font-semibold dark:text-slate-100">
-                                    Kartu Keluarga Gamis |
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Kartu Keluarga Gamis | '" />
+                                    </span>
                                     <a href="{{ route('gamis') }}" class="link link-primary dark:link-accent">Sudah membuat KK Gamis?</a>
                                 </span>
                             </div>
@@ -43,7 +45,9 @@
                     <label id="form_kk_gamis" class="form-control w-full">
                         <div class="label">
                             <span class="label-text font-semibold dark:text-slate-100">
-                                Kartu Keluarga Gamis |
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Kartu Keluarga Gamis | '" />
+                                    </span>
                                 <a href="{{ route('gamis') }}" class="link link-primary dark:link-accent">Sudah membuat KK Gamis?</a>
                             </span>
                         </div>
@@ -118,7 +122,9 @@
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Role</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Role'" />
+                                    </span>
                                 </div>
                                 <select name="role" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                     <option disabled selected>Pilih Role!</option>
@@ -134,7 +140,9 @@
                             </label>
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Cabang</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Cabang'" />
+                                    </span>
                                 </div>
                                 <select name="cabang_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
                                     <option disabled selected>Pilih Cabang!</option>
@@ -149,9 +157,14 @@
                                 @enderror
                             </label>
                         </div>
+
+                        <div id="form_gamis"></div>
+
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Username</span>
+                                <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Username'" />
+                                </span>
                             </div>
                             <input type="text" name="username" placeholder="Username" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->username }}" required />
                             @error("username")
@@ -162,7 +175,9 @@
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Email</span>
+                                <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Email'" />
+                                </span>
                             </div>
                             <input type="email" name="email" placeholder="Email" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->email }}" required />
                             @error("email")
@@ -174,7 +189,9 @@
 
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Nama</span>
+                                <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Nama'" />
+                                </span>
                             </div>
                             <input type="text" name="nama" placeholder="Nama Lengkap" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->nama }}" required />
                             @error("nama")
@@ -185,7 +202,9 @@
                         </label>
                         <div class="mt-3 w-full max-w-md">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Jenis Kelamin</span>
+                                <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Jenis Kelamin'" />
+                                </span>
                             </div>
                             <div class="rounded-lg border border-slate-300 px-3 py-2">
                                 <div class="form-control">
@@ -210,7 +229,9 @@
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Tempat Lahir</span>
+                                    <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Tempat Lahir'" />
+                                </span>
                                 </div>
                                 <input type="text" name="tempat_lahir" placeholder="Tempat Lahir" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->tempat_lahir }}" required />
                                 @error("tempat_lahir")
@@ -221,7 +242,9 @@
                             </label>
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Tanggal Lahir</span>
+                                    <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Tanggal Lahir'" />
+                                </span>
                                 </div>
                                 <input type="date" name="tanggal_lahir" placeholder="Tanggal Lahir" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->tanggal_lahir }}" required />
                                 @error("tanggal_lahir")
@@ -233,7 +256,9 @@
                         </div>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Telepon</span>
+                                <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Telepon'" />
+                                </span>
                             </div>
                             <input type="text" name="telepon" placeholder="Telepon" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->telepon }}" required />
                             @error("telepon")
@@ -244,7 +269,9 @@
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold">Alamat</span>
+                                <span class="label-text font-semibold">
+                                    <x-label-input-required :value="'Alamat'" />
+                                </span>
                             </div>
                             <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-base text-blue-700" required>{{ $profile->alamat }}</textarea>
                             @error("alamat")
@@ -275,8 +302,6 @@
                                 </div>
                             @enderror
                         </label>
-
-                        <div id="form_gamis"></div>
 
                         <div class="mt-5 flex flex-wrap justify-center gap-2">
                             <button type="submit" class="btn btn-warning w-full max-w-md text-slate-700">Perbarui</button>

@@ -1,9 +1,5 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -67,7 +63,6 @@
             $("#loading_edit2").html(loading);
             $("#loading_edit3").html(loading);
             $("#loading_edit4").html(loading);
-            $("#loading_edit5").html(loading);
 
             $.ajax({
                 type: "get",
@@ -86,7 +81,6 @@
                     $("input[name='nama']").val(items[1]);
                     $("input[name='telepon']").val(items[3]);
                     $("textarea[name='alamat']").val(items[4]);
-                    $("input[name='cabang_id']").val(items[8]);
 
                     if (items[2] == "L") {
                         $("input[name='jenis_kelamin'][value='L']").prop("checked", true);
@@ -102,7 +96,6 @@
                     $("#loading_edit2").html(loading);
                     $("#loading_edit3").html(loading);
                     $("#loading_edit4").html(loading);
-                    $("#loading_edit5").html(loading);
                 }
             });
         }
@@ -114,7 +107,6 @@
             $("#loading_edit2").html(loading);
             $("#loading_edit3").html(loading);
             $("#loading_edit4").html(loading);
-            $("#loading_edit5").html(loading);
 
             $.ajax({
                 type: "get",
@@ -143,15 +135,12 @@
                         $("input[name='jenis_kelamin'][value='P']").prop("checked", true);
                     }
 
-                    $("option[value='" + items[5] + "']").prop("selected", true);
-
                     // Loading effect end
                     loading = "";
                     $("#loading_edit1").html(loading);
                     $("#loading_edit2").html(loading);
                     $("#loading_edit3").html(loading);
                     $("#loading_edit4").html(loading);
-                    $("#loading_edit5").html(loading);
                 }
             });
         }
@@ -218,27 +207,11 @@
                     <div>
                         <form action="{{ route('pelanggan.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @role('lurah')
-                                <label class="form-control w-full">
-                                    <div class="label">
-                                        <span class="label-text font-semibold">Cabang</span>
-                                    </div>
-                                    <select name="cabang_id" class="select select-bordered w-full text-blue-700" required>
-                                        <option disabled selected>Pilih Cabang!</option>
-                                        @foreach ($cabang as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('cabang_id')
-                                        <div class="label">
-                                            <span class="label-text-alt text-error text-sm">{{ $message }}</span>
-                                        </div>
-                                    @enderror
-                                </label>
-                            @endrole
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" value="{{ old('nama') }}" required />
                                 @error('nama')
@@ -249,7 +222,9 @@
                             </label>
                             <div class="mt-3 w-full max-w-md">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Jenis Kelamin</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Jenis Kelamin'" />
+                                    </span>
                                 </div>
                                 <div class="rounded-lg border border-slate-300 px-3 py-2">
                                     <div class="form-control">
@@ -273,7 +248,9 @@
                             </div>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Telepon</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Telepon'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="telepon" placeholder="Telepon" class="input input-bordered w-full text-blue-700" value="{{ old('telepon') }}" required />
                                 @error('telepon')
@@ -311,15 +288,6 @@
                         </label>
                     </div>
                     <div>
-                        @role('lurah')
-                            <label class="form-control w-full">
-                                <div class="label">
-                                    <span class="label-text font-semibold">Cabang</span>
-                                    <span class="label-text-alt" id="loading_edit5"></span>
-                                </div>
-                                <input type="text" name="cabang_id" class="input input-bordered w-full text-blue-700" readonly />
-                            </label>
-                        @endrole
                         <label class="form-control w-full">
                             <div class="label">
                                 <span class="label-text font-semibold">Nama</span>
@@ -380,27 +348,11 @@
                         <form action="{{ route('pelanggan.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="text" name="id" hidden>
-                            @role('lurah')
-                                <label class="form-control w-full">
-                                    <div class="label">
-                                        <span class="label-text font-semibold">Cabang</span>
-                                        <span class="label-text-alt" id="loading_edit5"></span>
-                                    </div>
-                                    <select name="cabang_id" class="select select-bordered w-full text-blue-700" required>
-                                        @foreach ($cabang as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('cabang_id')
-                                        <div class="label">
-                                            <span class="label-text-alt text-error text-sm">{{ $message }}</span>
-                                        </div>
-                                    @enderror
-                                </label>
-                            @endrole
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" required />
@@ -412,7 +364,9 @@
                             </label>
                             <div class="mt-3 w-full max-w-md">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Jenis Kelamin</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Jenis Kelamin'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <div class="rounded-lg border border-slate-300 px-3 py-2">
@@ -437,7 +391,9 @@
                             </div>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Telepon</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Telepon'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="telepon" placeholder="Telepon" class="input input-bordered w-full text-blue-700" required />
                                 @error('telepon')
@@ -464,67 +420,6 @@
             </div>
             {{-- Akhir Modal Edit --}}
 
-            {{-- Awal Tabel Cabang --}}
-            @role("lurah")
-                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
-                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                        <h6 class="font-bold dark:text-white">Daftar Cabang</h6>
-                    </div>
-                    <div class="flex-auto px-0 pb-2 pt-0">
-                        <div class="overflow-x-auto p-0 px-6 pb-6">
-                            <table id="myTable1" class="nowrap stripe mb-0" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                            Nama
-                                        </th>
-                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                            Lokasi
-                                        </th>
-                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                            Created_at
-                                        </th>
-                                        <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                            Aksi
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($cabang as $item)
-                                        <tr>
-                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    {{ $item->nama }}
-                                                </p>
-                                            </td>
-                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    {{ $item->lokasi }}
-                                                </p>
-                                            </td>
-                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    {{ Carbon\Carbon::parse($item->created_at)->translatedFormat("d F Y") }}
-                                                </p>
-                                            </td>
-                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                <div>
-                                                    <a href="{{ route("pelanggan.cabang", $item->slug) }}" class="btn btn-outline btn-info btn-sm mb-1">
-                                                        <i class="ri-id-card-line text-base"></i>
-                                                        Daftar Pelanggan
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            @endrole
-            {{-- Akhir Tabel Cabang --}}
-
             {{-- Awal Tabel Pelanggan --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
@@ -550,11 +445,6 @@
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Telepon
                                     </th>
-                                    @role('lurah')
-                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                            Cabang
-                                        </th>
-                                    @endrole
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Created_at
                                     </th>
@@ -581,17 +471,6 @@
                                                 {{ $item->telepon }}
                                             </p>
                                         </td>
-                                        @role('lurah')
-                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    @if ($item->cabang_deleted_at)
-                                                        {{ $item->nama_cabang }} <span class="text-error">(non aktif)</span>
-                                                    @else
-                                                        {{ $item->nama_cabang }}
-                                                    @endif
-                                                </p>
-                                            </td>
-                                        @endrole
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                 {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}

@@ -1,9 +1,5 @@
 @extends("dashboard.layouts.main")
 
-@section("css")
-    <link rel="stylesheet" href="{{ asset("css/datatable.css") }}">
-@endsection
-
 @section("js")
     <script>
         $(document).ready(function() {
@@ -244,6 +240,9 @@
                                                         <i class="ri-draft-line text-base"></i>
                                                     </label>
                                                 @endif
+                                                <a href="{{ route("transaksi.cetak-struk", ['transaksi' => $item->id]) }}" target="_blank" class="btn btn-outline btn-ghost dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white dark:hover:text-slate-700 btn-sm tooltip" data-tip="Cetak Struk">
+                                                    <i class="ri-receipt-line text-base"></i>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

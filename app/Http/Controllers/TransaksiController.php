@@ -203,7 +203,7 @@ class TransaksiController extends Controller
             if ($cabang->deleted_at) {
                 abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
             }
-            $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
+            $pelanggan = Pelanggan::get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
                 ->where('users.cabang_id', $cabang->id)
@@ -217,7 +217,7 @@ class TransaksiController extends Controller
             if ($cabang->deleted_at) {
                 abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
             }
-            $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
+            $pelanggan = Pelanggan::get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
                 ->where('users.cabang_id', $cabang->id)
@@ -270,7 +270,6 @@ class TransaksiController extends Controller
             foreach ($request->jenis_pakaian_id as $item => $value) {
                 $detailTransaksi = DetailTransaksi::create([
                     'total_pakaian' => $request->total_pakaian[$item],
-                    'jenis_satuan' => 'kg',
                     'harga_layanan_akhir' => $request->harga_jenis_layanan_id[$item],
                     'total_biaya_layanan' => $request->total_pakaian[$item] * $request->harga_jenis_layanan_id[$item],
                     'total_biaya_prioritas' => $request->total_pakaian[$item] * $layananPrioritas->harga,
@@ -332,7 +331,6 @@ class TransaksiController extends Controller
             foreach ($request->jenis_pakaian_id as $item => $value) {
                 $detailTransaksi = DetailTransaksi::create([
                     'total_pakaian' => $request->total_pakaian[$item],
-                    'jenis_satuan' => 'kg',
                     'harga_layanan_akhir' => $request->harga_jenis_layanan_id[$item],
                     'total_biaya_layanan' => $request->total_pakaian[$item] * $request->harga_jenis_layanan_id[$item],
                     'total_biaya_prioritas' => $request->total_pakaian[$item] * $layananPrioritas->harga,
@@ -370,7 +368,7 @@ class TransaksiController extends Controller
             if ($cabang->deleted_at) {
                 abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
             }
-            $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
+            $pelanggan = Pelanggan::get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
                 ->where('users.cabang_id', $cabang->id)
@@ -389,7 +387,7 @@ class TransaksiController extends Controller
             if ($cabang->deleted_at) {
                 abort(404, 'FITUR TIDAK DAPAT DIGUNAKAN.');
             }
-            $pelanggan = Pelanggan::where('cabang_id', $cabang->id)->get();
+            $pelanggan = Pelanggan::get();
             $gamis = User::query()
                 ->join('detail_gamis as dg', 'users.id', '=', 'dg.user_id')
                 ->where('users.cabang_id', $cabang->id)
@@ -397,6 +395,10 @@ class TransaksiController extends Controller
             $pakaian = JenisPakaian::where('cabang_id', $cabang->id)->get();
             $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->get();
             $transaksi = Transaksi::where('cabang_id', $cabang->id)->where('id', $request->transaksi)->first();
+
+            if ($transaksi->status == 'Selesai' && $userRole == 'pegawai_laundry') {
+                abort(403, 'Transaksi Ini Tidak Dapat Diubah');
+            }
 
             $hargaLayanan = HargaJenisLayanan::where('cabang_id', $cabang->id)->get();
             $layanan = JenisLayanan::where('cabang_id', $cabang->id)->get();
@@ -449,7 +451,6 @@ class TransaksiController extends Controller
             foreach ($request->jenis_pakaian_id as $item => $value) {
                 $detailTransaksi = DetailTransaksi::create([
                     'total_pakaian' => $request->total_pakaian[$item],
-                    'jenis_satuan' => 'kg',
                     'harga_layanan_akhir' => $request->harga_jenis_layanan_id[$item],
                     'total_biaya_layanan' => $request->total_pakaian[$item] * $request->harga_jenis_layanan_id[$item],
                     'total_biaya_prioritas' => $request->total_pakaian[$item] * $layananPrioritas->harga,
@@ -513,7 +514,6 @@ class TransaksiController extends Controller
             foreach ($request->jenis_pakaian_id as $item => $value) {
                 $detailTransaksi = DetailTransaksi::create([
                     'total_pakaian' => $request->total_pakaian[$item],
-                    'jenis_satuan' => 'kg',
                     'harga_layanan_akhir' => $request->harga_jenis_layanan_id[$item],
                     'total_biaya_layanan' => $request->total_pakaian[$item] * $request->harga_jenis_layanan_id[$item],
                     'total_biaya_prioritas' => $request->total_pakaian[$item] * $layananPrioritas->harga,
@@ -726,6 +726,29 @@ class TransaksiController extends Controller
             $totalBayar = $biayaLayanan + $biayaPrioritas;
             return [$biayaLayanan, $biayaPrioritas, $totalBayar];
         }
+    }
+
+    public function cetakStrukTransaksi(Request $request)
+    {
+        $title = "Cetak Struk";
+        $transaksi = Transaksi::query()
+                ->with(['pegawai' => function($query) {
+                    $query->withTrashed();
+                }])
+                ->where('id', $request->transaksi)->first();
+        $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+        $cabang = Cabang::where('id', $transaksi->cabang_id)->first();
+
+        // $pdf = Pdf::loadView('dashboard.transaksi.struk.index', [
+        //     'judul' => $title,
+        //     'transaksi' => $transaksi,
+        //     'detailTransaksi' => $detailTransaksi,
+        //     'footer' => $title
+        // ])
+        // ->setPaper('a4', 'potrait');
+        // return $pdf->stream();
+
+        return view('dashboard.transaksi.struk.index', compact('title', 'transaksi', 'detailTransaksi', 'cabang'));
     }
 
     public function transaksiGamisHarian()

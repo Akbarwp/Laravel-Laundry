@@ -147,7 +147,7 @@ class LaporanController extends Controller
                         });
                 });
             })
-            ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'c.nama as nama_cabang', 'c.id as cabang_id')
+            ->select('monitoring_gamis.*', 'dg.nama as  nama_gamis', 'dg.pemasukkan as  pemasukkan_gamis', 'c.nama as nama_cabang', 'c.id as cabang_id')
             ->orderBy('monitoring_gamis.tahun', 'asc')
             ->orderBy('monitoring_gamis.bulan', 'asc')
             ->orderBy('c.id', 'asc')
@@ -251,7 +251,7 @@ class LaporanController extends Controller
             }])
             ->join('cabang as c', 'c.id', '=', 'transaksi.cabang_id')
             ->join('pelanggan as p', 'p.id', '=', 'transaksi.pelanggan_id')
-            ->select('transaksi.pelanggan_id', 'p.nama as nama_pelanggan', DB::raw("COUNT(transaksi.id) as total_transaksi"), DB::raw("SUM(transaksi.total_bayar_akhir) as total_pengeluaran"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"), 'c.id as cabang_id', 'c.nama as nama_cabang', 'transaksi.jenis_pembayaran')
+            ->select('transaksi.pelanggan_id', 'p.nama as nama_pelanggan', DB::raw("COUNT(transaksi.id) as total_transaksi"), DB::raw("SUM(transaksi.total_bayar_akhir) as total_pengeluaran"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"), 'c.id as cabang_id', 'c.nama as nama_cabang')
             ->where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
                 $query->where(function ($subQuery) use ($tanggalAwal) {
                     $subQuery->where(DB::raw("YEAR(transaksi.waktu)"), '>', Carbon::parse($tanggalAwal)->format('Y'))
@@ -268,7 +268,7 @@ class LaporanController extends Controller
                 });
             })
             ->where('transaksi.status', 'Selesai')
-            ->groupBy('transaksi.pelanggan_id', 'p.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"), 'c.id', 'c.nama', 'transaksi.jenis_pembayaran')
+            ->groupBy('transaksi.pelanggan_id', 'p.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"), 'c.id', 'c.nama')
             ->orderBy('transaksi.waktu', 'asc')
             ->get();
 
@@ -305,7 +305,7 @@ class LaporanController extends Controller
             }])
             ->join('cabang as c', 'c.id', '=', 'transaksi.cabang_id')
             ->join('pelanggan as p', 'p.id', '=', 'transaksi.pelanggan_id')
-            ->select('transaksi.pelanggan_id', 'p.nama as nama_pelanggan', DB::raw("COUNT(transaksi.id) as total_transaksi"), DB::raw("SUM(transaksi.total_bayar_akhir) as total_pengeluaran"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"), 'c.id as cabang_id', 'c.nama as nama_cabang', 'transaksi.jenis_pembayaran')
+            ->select('transaksi.pelanggan_id', 'p.nama as nama_pelanggan', DB::raw("COUNT(transaksi.id) as total_transaksi"), DB::raw("SUM(transaksi.total_bayar_akhir) as total_pengeluaran"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"), 'c.id as cabang_id', 'c.nama as nama_cabang')
             ->where(function ($query) use ($tanggalAwal, $tanggalAkhir) {
                 $query->where(function ($subQuery) use ($tanggalAwal) {
                     $subQuery->where(DB::raw("YEAR(transaksi.waktu)"), '>', Carbon::parse($tanggalAwal)->format('Y'))
@@ -322,7 +322,7 @@ class LaporanController extends Controller
                 });
             })
             ->where('transaksi.status', 'Selesai')
-            ->groupBy('transaksi.pelanggan_id', 'p.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"), 'c.id', 'c.nama', 'transaksi.jenis_pembayaran')
+            ->groupBy('transaksi.pelanggan_id', 'p.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"), 'c.id', 'c.nama')
             ->orderBy('transaksi.waktu', 'asc')
             ->get();
 

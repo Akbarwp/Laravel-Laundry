@@ -1,9 +1,5 @@
 @extends("dashboard.layouts.main")
 
-@section("css")
-    <link rel="stylesheet" href="{{ asset("css/datatable.css") }}">
-@endsection
-
 @section("js")
     <script>
         $(document).ready(function() {
@@ -220,15 +216,21 @@
                                                 <a href="{{ route("transaksi.view", ['transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-info btn-sm">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </a>
-                                                <a href="{{ route("transaksi.edit", ['transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
-                                                    <i class="ri-pencil-fill text-base"></i>
-                                                </a>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
-                                                    <i class="ri-delete-bin-line text-base"></i>
-                                                </label>
-                                                <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
-                                                    <i class="ri-draft-line text-base"></i>
-                                                </label>
+                                                @if ($item->status == 'Selesai' && auth()->user()->roles[0]->name == 'pegawai_laundry')
+                                                @else
+                                                    <a href="{{ route("transaksi.edit", ['transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
+                                                        <i class="ri-pencil-fill text-base"></i>
+                                                    </a>
+                                                    <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
+                                                        <i class="ri-delete-bin-line text-base"></i>
+                                                    </label>
+                                                    <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
+                                                        <i class="ri-draft-line text-base"></i>
+                                                    </label>
+                                                    <a href="{{ route("transaksi.cetak-struk", ['transaksi' => $item->id]) }}" target="_blank" class="btn btn-outline btn-ghost dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white dark:hover:text-slate-700 btn-sm tooltip" data-tip="Cetak Struk">
+                                                        <i class="ri-receipt-line text-base"></i>
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

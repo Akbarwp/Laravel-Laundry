@@ -1,9 +1,5 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -281,7 +277,9 @@
                             @csrf
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" value="{{ old('nama') }}" required />
                                 @error('nama')
@@ -292,7 +290,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Lokasi</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Lokasi'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="lokasi" placeholder="Lokasi" class="input input-bordered w-full text-blue-700" value="{{ old('lokasi') }}" required />
                                 @error('lokasi')
@@ -372,7 +372,9 @@
                             <input type="text" name="id" hidden>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama" class="input input-bordered w-full text-blue-700" required />
@@ -384,7 +386,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Lokasi</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Lokasi'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit2"></span>
                                 </div>
                                 <input type="text" name="lokasi" placeholder="Lokasi" class="input input-bordered w-full text-blue-700" required />

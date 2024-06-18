@@ -8,7 +8,9 @@
                     $("#form_rw").append(`
                         <label id="form_nomor_rw" class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Nomor RW</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Nomor RW'" />
+                                </span>
                             </div>
                             <input type="number" min="1" step="1" name="nomor_rw" placeholder="Nomor RW" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ old("nomor_rw") }}" required />
                             @error("nomor_rw")
@@ -27,7 +29,9 @@
                 $("#form_rw").append(`
                     <label id="form_nomor_rw" class="form-control w-full">
                         <div class="label">
-                            <span class="label-text font-semibold dark:text-slate-100">Nomor RW</span>
+                            <span class="label-text font-semibold dark:text-slate-100">
+                                <x-label-input-required :value="'Nomor RW'" />
+                            </span>
                         </div>
                         <input type="number" min="1" step="1" name="nomor_rw" placeholder="Nomor RW" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->nomor_rw }}" required />
                         @error("nomor_rw")
@@ -87,7 +91,9 @@
                         @csrf
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Role</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Role'" />
+                                </span>
                             </div>
                             <select name="role" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                 <option disabled selected>Pilih Role!</option>
@@ -106,7 +112,9 @@
 
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Username</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Username'" />
+                                </span>
                             </div>
                             <input type="text" name="username" placeholder="Username" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->username }}" required />
                             @error("username")
@@ -117,7 +125,9 @@
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Email</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Email'" />
+                                </span>
                             </div>
                             <input type="email" name="email" placeholder="Email" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $user->email }}" required />
                             @error("email")
@@ -129,7 +139,9 @@
 
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Nama</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Nama'" />
+                                </span>
                             </div>
                             <input type="text" name="nama" placeholder="Nama Lengkap" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->nama }}" required />
                             @error("nama")
@@ -140,7 +152,9 @@
                         </label>
                         <div class="mt-3 w-full max-w-md">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Jenis Kelamin</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Jenis Kelamin'" />
+                                </span>
                             </div>
                             <div class="rounded-lg border border-slate-300 px-3 py-2">
                                 <div class="form-control">
@@ -165,7 +179,9 @@
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Tempat Lahir</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Tempat Lahir'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="tempat_lahir" placeholder="Tempat Lahir" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->tempat_lahir }}" required />
                                 @error("tempat_lahir")
@@ -176,7 +192,9 @@
                             </label>
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Tanggal Lahir</span>
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Tanggal Lahir'" />
+                                    </span>
                                 </div>
                                 <input type="date" name="tanggal_lahir" placeholder="Tanggal Lahir" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->tanggal_lahir }}" required />
                                 @error("tanggal_lahir")
@@ -188,7 +206,9 @@
                         </div>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">Telepon</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Telepon'" />
+                                </span>
                             </div>
                             <input type="text" name="telepon" placeholder="Telepon" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $profile->telepon }}" required />
                             @error("telepon")
@@ -199,7 +219,9 @@
                         </label>
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text font-semibold">Alamat</span>
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Alamat'" />
+                                </span>
                             </div>
                             <textarea name="alamat" placeholder="Alamat" class="textarea textarea-bordered w-full text-base text-blue-700" required>{{ $profile->alamat }}</textarea>
                             @error("alamat")

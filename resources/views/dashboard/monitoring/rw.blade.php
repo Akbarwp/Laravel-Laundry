@@ -1,9 +1,5 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -157,9 +153,9 @@
                             </div>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100 text-lg">Total Pendapatan Gamis</span>
+                                    <span class="label-text font-semibold dark:text-slate-100 text-lg">Total Pendapatan Gamis di Laundry</span>
                                 </div>
-                                <input type="text" name="total_pendapatan_laundry" value="Rp{{ number_format($monitoring->sum('upah'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
+                                <input type="text" name="total_pendapatan_laundry" value="Rp{{ number_format($monitoring->sum('upah') - $monitoring->sum('pemasukkan_gamis'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
                             </label>
                         </div>
                     </div>

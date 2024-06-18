@@ -39,10 +39,13 @@
                             </a>
                         @endif
                         @if (!$cabang->deleted_at)
-                            <a href="{{ route("transaksi.edit", ['transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                <i class="ri-pencil-fill"></i>
-                                Ubah
-                            </a>
+                            @if ($transaksi->status == 'Selesai' && auth()->user()->roles[0]->name == 'pegawai_laundry')
+                            @else
+                                <a href="{{ route("transaksi.edit", ['transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                    <i class="ri-pencil-fill"></i>
+                                    Ubah
+                                </a>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -205,7 +208,7 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->total_pakaian }} {{ $item->jenis_satuan }}
+                                                {{ $item->total_pakaian }} {{ $item->detailLayananTransaksi[0]->hargaJenisLayanan->jenis_satuan }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">

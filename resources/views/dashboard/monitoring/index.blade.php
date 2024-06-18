@@ -1,13 +1,19 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
             $('#myTable').DataTable({
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr',
+                    },
+                },
+                order: [],
+                pagingType: 'full_numbers',
+            });
+            $('#myTable1').DataTable({
                 responsive: {
                     details: {
                         type: 'column',
@@ -149,17 +155,18 @@
             });
         }
 
-        function edit_status_button(monitoring_id) {
+        function edit_button(id) {
             // Loading effect start
             let loading = `<span class="loading loading-dots loading-md text-purple-600"></span>`;
             $("#loading_edit1").html(loading);
+            $("#loading_edit2").html(loading);
 
             $.ajax({
                 type: "get",
-                url: "{{ route('monitoring.edit.status') }}",
+                url: "{{ route('monitoring.edit.pemasukkan') }}",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "monitoring_id": monitoring_id
+                    "id": id
                 },
                 success: function(data) {
                     // console.log(data);
@@ -169,11 +176,13 @@
                     });
 
                     $("input[name='id']").val(items[0]);
-                    $("input[name='status'][value='"+items[1]+"']").prop("checked", true);
+                    $("input[name='nama_pemasukkan']").val(items[1]);
+                    $("input[name='pemasukkan']").val(items[2]);
 
                     // Loading effect end
                     loading = "";
-                    $("#loading_edit1").html(loading)
+                    $("#loading_edit1").html(loading);
+                    $("#loading_edit2").html(loading);
                 }
             });
         }
@@ -183,49 +192,133 @@
 @section('container')
     <div class="-mx-3 flex flex-wrap">
         <div class="w-full max-w-full flex-none px-3">
-            {{-- Awal Modal Edit Status --}}
-            <input type="checkbox" id="edit_status_button" class="modal-toggle" />
+            {{-- Awal Modal Edit --}}
+            <input type="checkbox" id="edit_button" class="modal-toggle" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
                     <div class="mb-3 flex justify-between">
-                        <h3 class="text-lg font-bold">Ubah Status Transaksi</h3>
-                        <label for="edit_status_button" class="cursor-pointer">
+                        <h3 class="text-lg font-bold">Ubah Pemasukkan Gamis</h3>
+                        <label for="edit_button" class="cursor-pointer">
                             <i class="ri-close-large-fill"></i>
                         </label>
                     </div>
                     <div>
-                        <form action="{{ route('monitoring.update.status') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('monitoring.update.pemasukkan') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="text" name="id" hidden>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Status</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama Pemasukkan'" />
+                                    </span>
                                     <span class="label-text-alt" id="loading_edit1"></span>
                                 </div>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer">
-                                        <span class="label-text">Gamis</span>
-                                        <input type="radio" value="Gamis" name="status" class="radio radio-primary" required />
-                                    </label>
-                                </div>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer">
-                                        <span class="label-text">Lulus</span>
-                                        <input type="radio" value="Lulus" name="status" class="radio radio-primary" required />
-                                    </label>
-                                </div>
-                                @error("status")
+                                <input type="text" name="nama_pemasukkan" placeholder="Nama Pemasukkan" class="input input-bordered w-full text-blue-700" required />
+                                @error('nama_pemasukkan')
                                     <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
                                     </div>
                                 @enderror
                             </label>
-                            <button type="submit" class="btn btn-warning mt-3 w-full text-slate-700">Perbarui Status</button>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Pemasukkan'" />
+                                    </span>
+                                    <span class="label-text-alt" id="loading_edit2"></span>
+                                </div>
+                                <input type="number" min="0" step="0.01" name="pemasukkan" placeholder="Pemasukkan" class="input input-bordered w-full text-blue-700" required />
+                                @error('pemasukkan')
+                                    <div class="label">
+                                        <span class="label-text-alt text-error text-sm">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <button type="submit" class="btn btn-warning mt-3 w-full text-slate-700">Perbarui</button>
                         </form>
                     </div>
                 </div>
             </div>
-            {{-- Akhir Modal Edit Status --}}
+            {{-- Akhir Modal Edit --}}
+
+            {{-- Awal Tabel Gamis --}}
+            <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                    <div>
+                        <h6 class="font-bold dark:text-white">Gamis</h6>
+                    </div>
+                </div>
+                <div class="flex-auto px-0 pb-2 pt-0">
+                    <div class="overflow-x-auto p-0 px-6 pb-6">
+                        <table id="myTable1" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
+                            <thead class="align-bottom">
+                                <tr>
+                                    <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Gamis
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Nama Pemasukkan
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Pemasukkan
+                                    </th>
+                                    @role('lurah')
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Cabang
+                                        </th>
+                                    @endrole
+                                    <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($gamis as $item)
+                                    <tr>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->nama }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->nama_pemasukkan }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                Rp{{ number_format($item->pemasukkan, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        @role('lurah')
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    @if ($item->cabang_deleted_at)
+                                                        {{ $item->nama_cabang }} <span class="text-error">(non aktif)</span>
+                                                    @else
+                                                        {{ $item->nama_cabang }}
+                                                    @endif
+                                                </p>
+                                            </td>
+                                        @endrole
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <div>
+                                                <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
+                                                    <i class="ri-pencil-fill text-base"></i>
+                                                </label>
+                                                <a href="{{ route("monitoring.gamis.riwayat", ['gamis' => $item->id]) }}" for="edit_button" class="btn btn-outline btn-primary btn-sm tooltip" data-tip="Riwayat Pendapatan">
+                                                    <i class="ri-history-fill text-base"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Tabel Gamis --}}
 
             {{-- Awal Tabel Monitoring Gamis --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
@@ -262,7 +355,7 @@
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Bulan
                                     </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                    <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Tahun
                                     </th>
                                     @role('lurah')
@@ -270,9 +363,6 @@
                                             Cabang
                                         </th>
                                     @endrole
-                                    <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Aksi
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -318,13 +408,6 @@
                                                 </p>
                                             </td>
                                         @endrole
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <div>
-                                                <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
-                                                    <i class="ri-draft-line text-base"></i>
-                                                </label>
-                                            </div>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

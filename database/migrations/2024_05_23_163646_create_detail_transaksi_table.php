@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('detail_transaksi', function (Blueprint $table) {
             $table->id();
             $table->integer('total_pakaian');
-            $table->string('jenis_satuan');
             $table->double('harga_layanan_akhir');
             $table->double('total_biaya_layanan');
             $table->double('total_biaya_prioritas');

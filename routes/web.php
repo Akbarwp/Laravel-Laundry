@@ -274,6 +274,8 @@ Route::group([
         Route::get('/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.edit.status');
         Route::post('/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.update.status');
         Route::post('/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.delete');
+
+        Route::get('/cetak-struk/{transaksi:id}', [TransaksiController::class, 'cetakStrukTransaksi'])->name('transaksi.cetak-struk');
     });
 
     Route::group([
@@ -282,10 +284,12 @@ Route::group([
     ], function() {
 
         Route::get('/', [MonitoringGamisController::class, 'index'])->name('monitoring');
-        Route::get('/ubah-status', [MonitoringGamisController::class, 'editStatus'])->name('monitoring.edit.status');
-        Route::post('/ubah-status', [MonitoringGamisController::class, 'updateStatus'])->name('monitoring.update.status');
         Route::post('/perbarui-data-monitoring', [MonitoringGamisController::class, 'perbaruiDataMonitoring'])->name('monitoring.update.data');
         Route::post('/reset-data-monitoring', [MonitoringGamisController::class, 'resetDataMonitoring'])->name('monitoring.reset.data');
+
+        Route::get('/ubah-pemasukkan', [MonitoringGamisController::class, 'editPemasukkan'])->name('monitoring.edit.pemasukkan');
+        Route::post('/ubah-pemasukkan', [MonitoringGamisController::class, 'updatePemasukkan'])->name('monitoring.update.pemasukkan');
+        Route::get('/riwayat-pendapatan/{gamis:id}', [MonitoringGamisController::class, 'riwayatPendapatan'])->name('monitoring.gamis.riwayat');
     });
 
     Route::group([

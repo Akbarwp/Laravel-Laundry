@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('jenis_kelamin', 1);
             $table->string('telepon');
             $table->text('alamat')->nullable();
-            $table->foreignId('cabang_id')->constrained('cabang', 'id');
             $table->timestamps();
         });
     }

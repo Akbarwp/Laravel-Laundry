@@ -1,9 +1,5 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
-@endsection
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -288,7 +284,9 @@
                             @csrf
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama Layanan Prioritas</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama Layanan Prioritas'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama Layanan Prioritas" class="input input-bordered w-full text-blue-700" value="{{ old('nama') }}" required />
                                 @error('nama')
@@ -310,7 +308,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Harga</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Harga'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" value="{{ old('harga') }}" required />
                                 @error('harga')
@@ -321,7 +321,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nilai Prioritas</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nilai Prioritas'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" step="1" name="prioritas" placeholder="Nilai Prioritas" class="input input-bordered w-full text-blue-700" value="{{ old('prioritas') }}" required />
                                 @error('prioritas')
@@ -397,7 +399,9 @@
                             <input type="text" name="id" hidden>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nama Layanan Prioritas</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nama Layanan Prioritas'" />
+                                    </span>
                                 </div>
                                 <input type="text" name="nama" placeholder="Nama Layanan Prioritas" class="input input-bordered w-full text-blue-700" required />
                                 @error('nama')
@@ -419,7 +423,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Harga</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Harga'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" required />
                                 @error('harga')
@@ -430,7 +436,9 @@
                             </label>
                             <label class="form-control w-full">
                                 <div class="label">
-                                    <span class="label-text font-semibold">Nilai Prioritas</span>
+                                    <span class="label-text font-semibold">
+                                        <x-label-input-required :value="'Nilai Prioritas'" />
+                                    </span>
                                 </div>
                                 <input type="number" min="0" step="1" name="prioritas" placeholder="Nilai Prioritas" class="input input-bordered w-full text-blue-700" required />
                                 @error('prioritas')

@@ -16,37 +16,14 @@ class PelangganController extends Controller
 
         if ($userRole == 'lurah') {
             $cabang = Cabang::orderBy('created_at', 'asc')->get();
-            $pelanggan = Pelanggan::query()
-                ->join('cabang as c', 'pelanggan.cabang_id', '=', 'c.id')
-                ->select('pelanggan.*', 'c.nama as nama_cabang', 'c.deleted_at as cabang_deleted_at')
-                ->orderBy('pelanggan.cabang_id', 'asc')
-                ->orderBy('pelanggan.created_at', 'asc')
-                ->get();
+            $pelanggan = Pelanggan::orderBy('created_at', 'asc')->get();
         } else {
             $userCabang = auth()->user()->cabang_id;
             $cabang = Cabang::where('id', $userCabang)->orderBy('created_at', 'asc')->get();
-            $pelanggan = Pelanggan::where('cabang_id', $userCabang)->orderBy('created_at', 'asc')->get();
+            $pelanggan = Pelanggan::orderBy('created_at', 'asc')->get();
         }
 
         return view('dashboard.pelanggan.index', compact('title', 'pelanggan', 'cabang'));
-    }
-
-    public function indexCabang(Request $request)
-    {
-        $title = "Pelanggan";
-        $cabang = Cabang::where('slug', $request->cabang)->orderBy('created_at', 'asc')->first();
-        if ($cabang == null || $cabang->deleted_at) {
-            abort(404, 'CABANG TIDAK DITEMUKAN ATAU SUDAH DIHAPUS.');
-        }
-
-        $pelanggan = Pelanggan::query()
-            ->join('cabang as c', 'pelanggan.cabang_id', '=', 'c.id')
-            ->where('pelanggan.cabang_id', $cabang->id)
-            ->select('pelanggan.*', 'c.nama as nama_cabang')
-            ->orderBy('pelanggan.cabang_id', 'asc')
-            ->orderBy('created_at', 'asc')
-            ->get();
-        return view('dashboard.pelanggan.cabang', compact('title', 'pelanggan', 'cabang'));
     }
 
     public function store(PelangganRequest $request)
@@ -62,11 +39,7 @@ class PelangganController extends Controller
 
     public function show(Request $request)
     {
-        $pelanggan = Pelanggan::query()
-            ->join('cabang as c', 'pelanggan.cabang_id', '=', 'c.id')
-            ->where('pelanggan.id', $request->id)
-            ->select('pelanggan.*', 'c.nama as nama_cabang')
-            ->first();
+        $pelanggan = Pelanggan::where('pelanggan.id', $request->id)->first();
         return $pelanggan;
     }
 

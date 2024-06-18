@@ -1,9 +1,5 @@
 @extends("dashboard.layouts.main")
 
-@section("css")
-    <link rel="stylesheet" href="{{ asset("css/datatable.css") }}">
-@endsection
-
 @section("js")
     <script>
         $(document).ready(function() {
@@ -84,7 +80,7 @@
                                             <div>
                                                 <a href="{{ route("layanan-cabang.cabang", $item->slug) }}" class="btn btn-outline btn-info btn-sm mb-1">
                                                     <i class="ri-id-card-line text-base"></i>
-                                                    Detail User
+                                                    Detail Layanan
                                                 </a>
                                             </div>
                                         </td>
