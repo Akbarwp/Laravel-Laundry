@@ -72,20 +72,20 @@
                     "id": id
                 },
                 success: function(data) {
-                    // console.log(data);
+                    console.log(data);
                     let items = [];
                     $.each(data, function(key, val) {
                         items.push(val);
                     });
 
                     $("input[name='nama']").val(items[1]);
-                    $("input[name='telepon']").val(items[3]);
-                    $("textarea[name='alamat']").val(items[4]);
+                    $("input[name='telepon']").val(items[4]);
+                    $("textarea[name='alamat']").val(items[5]);
 
-                    if (items[2] == "L") {
+                    if (items[3] == "L") {
                         $("input[name='jenis_kelamin'][value='L']").prop("checked", true);
                         $("input[name='jenis_kelamin'][value='P']").prop("checked", false);
-                    } else if (items[2] == "P") {
+                    } else if (items[3] == "P") {
                         $("input[name='jenis_kelamin'][value='L']").prop("checked", false);
                         $("input[name='jenis_kelamin'][value='P']").prop("checked", true);
                     }
@@ -124,13 +124,13 @@
 
                     $("input[name='id']").val(items[0]);
                     $("input[name='nama']").val(items[1]);
-                    $("input[name='telepon']").val(items[3]);
-                    $("textarea[name='alamat']").val(items[4]);
+                    $("input[name='telepon']").val(items[4]);
+                    $("textarea[name='alamat']").val(items[5]);
 
-                    if (items[2] == "L") {
+                    if (items[3] == "L") {
                         $("input[name='jenis_kelamin'][value='L']").prop("checked", true);
                         $("input[name='jenis_kelamin'][value='P']").prop("checked", false);
-                    } else if (items[2] == "P") {
+                    } else if (items[3] == "P") {
                         $("input[name='jenis_kelamin'][value='L']").prop("checked", false);
                         $("input[name='jenis_kelamin'][value='P']").prop("checked", true);
                     }
@@ -420,6 +420,29 @@
             </div>
             {{-- Akhir Modal Edit --}}
 
+            {{-- Awal Modal Impor --}}
+            <input type="checkbox" id="impor_modal" class="modal-toggle" />
+            <div class="modal" role="dialog">
+                <div class="modal-box">
+                    <div class="mb-3 flex justify-between">
+                        <h3 class="text-lg font-bold">Impor Data</h3>
+                        <label for="impor_modal" class="cursor-pointer">
+                            <i class="ri-close-large-fill"></i>
+                        </label>
+                    </div>
+                    <div>
+                        <form action="{{ route('pelanggan.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <label class="form-control w-full">
+                                <input type="file" name="impor" placeholder="Impor Data" class="file-input file-input-bordered w-full text-blue-700" required />
+                            </label>
+                            <button type="submit" class="btn btn-success mt-3 w-full text-white">Impor</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Modal Impor --}}
+
             {{-- Awal Tabel Pelanggan --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
@@ -429,6 +452,19 @@
                             <i class="ri-add-fill"></i>
                             Tambah
                         </label>
+                        @role(['lurah', 'manajer_laundry'])
+                            <label for="impor_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-upload-2-line"></i>
+                                Impor
+                            </label>
+                            <form action="{{ route('pelanggan.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
+                                @csrf
+                                <button type="submit" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                    <i class="ri-download-2-line"></i>
+                                    Ekspor
+                                </button>
+                            </form>
+                        @endrole
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">

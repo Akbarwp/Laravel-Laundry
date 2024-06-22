@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Layanan\HargaJenisLayananRequest;
+use App\Enums\JenisSatuanLayanan;
+use Carbon\Carbon;
 use App\Models\Cabang;
-use App\Models\HargaJenisLayanan;
 use App\Models\JenisLayanan;
 use App\Models\JenisPakaian;
 use Illuminate\Http\Request;
+use App\Models\HargaJenisLayanan;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\HargaJenisLayananExport;
+use App\Imports\HargaJenisLayananImport;
+use App\Http\Requests\Layanan\HargaJenisLayananRequest;
 
 class HargaJenisLayananController extends Controller
 {
@@ -17,6 +24,7 @@ class HargaJenisLayananController extends Controller
         $userCabang = auth()->user()->cabang_id;
         $userRole = auth()->user()->roles[0]->name;
         $cabang = Cabang::where('id', $userCabang)->withTrashed()->first();
+        $jenisSatuanLayanan = JenisSatuanLayanan::cases();
 
         if ($userRole != 'manajer_laundry') {
             return abort(403);
@@ -38,7 +46,7 @@ class HargaJenisLayananController extends Controller
             ->select('harga_jenis_layanan.*', 'jl.nama as nama_layanan', 'jp.nama as nama_pakaian')
             ->onlyTrashed()->orderBy('harga_jenis_layanan.jenis_pakaian_id', 'asc')->orderBy('harga_jenis_layanan.jenis_layanan_id', 'asc')->get();
 
-        return view('dashboard.harga-jenis-layanan.index', compact('title', 'hargaJenisLayanan', 'hargaJenisLayananTrash', 'jenisLayanan', 'jenisPakaian', 'cabang'));
+        return view('dashboard.harga-jenis-layanan.index', compact('title', 'hargaJenisLayanan', 'hargaJenisLayananTrash', 'jenisLayanan', 'jenisPakaian', 'cabang', 'jenisSatuanLayanan'));
     }
 
     public function store(HargaJenisLayananRequest $request)
@@ -181,5 +189,30 @@ class HargaJenisLayananController extends Controller
         } else {
             abort(400, 'Harga Jenis Layanan Gagal Dihapus');
         }
+    }
+
+    public function import(Request $request)
+    {
+        $userRole = auth()->user()->roles[0]->name;
+        try {
+            Excel::import(new HargaJenisLayananImport, $request->file('impor'));
+            if ($userRole == 'lurah') {
+                return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Harga Jenis Layanan Berhasil Ditambahkan');
+            } else if ($userRole == 'manajer_laundry') {
+                return to_route('harga-jenis-layanan')->with('success', 'Harga Jenis Layanan Berhasil Ditambahkan');
+            }
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            if ($userRole == 'lurah') {
+                return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Harga Jenis Layanan Gagal Ditambahkan');
+            } else if ($userRole == 'manajer_laundry') {
+                return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Gagal Ditambahkan');
+            }
+        }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new HargaJenisLayananExport($request->cabang), 'Data Harga Jenis Layanan '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

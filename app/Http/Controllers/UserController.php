@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
+use App\Imports\UserImport;
 use App\Models\Cabang;
 use App\Models\DetailGamis;
 use App\Models\Gamis;
@@ -10,12 +12,15 @@ use App\Models\ManajerLaundry;
 use App\Models\PegawaiLaundry;
 use App\Models\RW;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -505,5 +510,21 @@ class UserController extends Controller
         $isCabang = [true, $cabang[0]->nama, $cabang[0]->id];
 
         return view('dashboard.user.tambah', compact('title', 'cabang', 'role', 'kkGamis', 'isCabang'));
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new UserImport, $request->file('impor'));
+            return to_route('user')->with('success', 'User Berhasil Ditambahkan');
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            return to_route('user')->with('error', 'User Gagal Ditambahkan');
+        }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new UserExport($request->cabang), 'Data Pegawai '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

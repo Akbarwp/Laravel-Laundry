@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Gamis\GamisRequest;
+use App\Imports\GamisImport;
 use App\Models\DetailGamis;
 use App\Models\Gamis;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GamisController extends Controller
 {
@@ -74,5 +77,16 @@ class GamisController extends Controller
         $detailGamis = DetailGamis::where('id', $request->id)->orderBy('created_at', 'asc')->first();
         $detailGamis['tanggal_lahir'] = Carbon::parse($detailGamis['tanggal_lahir'])->format('d F Y');
         return $detailGamis;
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new GamisImport, $request->file('impor'));
+            return to_route('gamis')->with('success', 'Gamis Berhasil Ditambahkan');
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            return to_route('gamis')->with('error', 'Gamis Gagal Ditambahkan');
+        }
     }
 }

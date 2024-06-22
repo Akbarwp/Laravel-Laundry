@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Layanan\LayananPrioritasRequest;
+use Carbon\Carbon;
 use App\Models\Cabang;
-use App\Models\LayananPrioritas;
 use Illuminate\Http\Request;
+use App\Models\LayananPrioritas;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LayananPrioritasExport;
+use App\Imports\LayananPrioritasImport;
+use App\Http\Requests\Layanan\LayananPrioritasRequest;
 
 class LayananPrioritasController extends Controller
 {
@@ -116,5 +122,30 @@ class LayananPrioritasController extends Controller
         } else {
             abort(400, 'Layanan Prioritas Gagal Dihapus');
         }
+    }
+
+    public function import(Request $request)
+    {
+        $userRole = auth()->user()->roles[0]->name;
+        try {
+            Excel::import(new LayananPrioritasImport, $request->file('impor'));
+            if ($userRole == 'lurah') {
+                return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
+            } else if ($userRole == 'manajer_laundry') {
+                return to_route('layanan-prioritas')->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
+            }
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            if ($userRole == 'lurah') {
+                return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Layanan Prioritas Gagal Ditambahkan');
+            } else if ($userRole == 'manajer_laundry') {
+                return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Ditambahkan');
+            }
+        }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new LayananPrioritasExport($request->cabang), 'Data Layanan Prioritas '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

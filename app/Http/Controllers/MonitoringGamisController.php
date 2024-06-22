@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\JenisSatuanLayanan;
 use App\Models\Cabang;
 use App\Models\DetailGamis;
 use App\Models\MonitoringGamis;
@@ -58,6 +59,7 @@ class MonitoringGamisController extends Controller
     {
         $userRole = auth()->user()->roles[0]->name;
         $umr = UMR::where('is_used', true)->first();
+        $jenisSatuanLayanan = JenisSatuanLayanan::cases();
 
         if ($userRole == 'lurah') {
             $gamis = User::query()
@@ -72,27 +74,55 @@ class MonitoringGamisController extends Controller
                 ->delete();
 
             foreach ($gamis as $item) {
-                $monitoring = Transaksi::query()
-                    ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
-                    ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
-                    ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
-                    ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
-                    ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
-                    ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                    ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
-                    ->where('transaksi.gamis_id', $item->id)
-                    ->where('jl.for_gamis', true)
-                    ->where(DB::raw("MONTH(transaksi.waktu)"), Carbon::now()->format('m'))
-                    ->where(DB::raw("YEAR(transaksi.waktu)"), Carbon::now()->format('Y'))
-                    ->where('transaksi.status', 'Selesai')
-                    ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
-                    ->orderBy('transaksi.waktu', 'asc')
-                    ->first();
+                $upahGamis = 0;
+                foreach ($jenisSatuanLayanan as $satuan) {
+                    if ($satuan->value == "Kg") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $item->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where(DB::raw("MONTH(transaksi.waktu)"), Carbon::now()->format('m'))
+                            ->where(DB::raw("YEAR(transaksi.waktu)"), Carbon::now()->format('Y'))
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->first();
+
+                    } elseif ($satuan->value == "Perjalanan") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_perjalanan * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $item->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where(DB::raw("MONTH(transaksi.waktu)"), Carbon::now()->format('m'))
+                            ->where(DB::raw("YEAR(transaksi.waktu)"), Carbon::now()->format('Y'))
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->first();
+                    }
+                    if ($monitoring) {
+                        $upahGamis += $monitoring->upah_gamis;
+                    }
+                }
 
                 if ($monitoring) {
-                    if ($monitoring->upah_gamis >= $umr->upah) {
+                    if ($upahGamis >= $umr->upah) {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
+                            'upah' => $upahGamis + $item->pemasukkan,
                             'status' => "Lulus",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -100,7 +130,7 @@ class MonitoringGamisController extends Controller
                         ]);
                     } else {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
+                            'upah' => $upahGamis + $item->pemasukkan,
                             'status' => "Gamis",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -144,27 +174,55 @@ class MonitoringGamisController extends Controller
             }
 
             foreach ($gamis as $item) {
-                $monitoring = Transaksi::query()
-                    ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
-                    ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
-                    ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
-                    ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
-                    ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
-                    ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                    ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
-                    ->where('transaksi.gamis_id', $item->id)
-                    ->where('jl.for_gamis', true)
-                    ->where(DB::raw("MONTH(transaksi.waktu)"), Carbon::now()->format('m'))
-                    ->where(DB::raw("YEAR(transaksi.waktu)"), Carbon::now()->format('Y'))
-                    ->where('transaksi.status', 'Selesai')
-                    ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
-                    ->orderBy('transaksi.waktu', 'asc')
-                    ->first();
+                $upahGamis = 0;
+                foreach ($jenisSatuanLayanan as $satuan) {
+                    if ($satuan->value == "Kg") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $item->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where(DB::raw("MONTH(transaksi.waktu)"), Carbon::now()->format('m'))
+                            ->where(DB::raw("YEAR(transaksi.waktu)"), Carbon::now()->format('Y'))
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->first();
+
+                    } elseif ($satuan->value == "Perjalanan") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_perjalanan * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $item->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where(DB::raw("MONTH(transaksi.waktu)"), Carbon::now()->format('m'))
+                            ->where(DB::raw("YEAR(transaksi.waktu)"), Carbon::now()->format('Y'))
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->first();
+                    }
+                    if ($monitoring) {
+                        $upahGamis += $monitoring->upah_gamis;
+                    }
+                }
 
                 if ($monitoring) {
-                    if ($monitoring->upah_gamis >= $umr->upah) {
+                    if ($upahGamis >= $umr->upah) {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
+                            'upah' => $upahGamis + $item->pemasukkan,
                             'status' => "Lulus",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -172,7 +230,7 @@ class MonitoringGamisController extends Controller
                         ]);
                     } else {
                         MonitoringGamis::create([
-                            'upah' => $monitoring->upah_gamis + $item->pemasukkan,
+                            'upah' => $upahGamis + $item->pemasukkan,
                             'status' => "Gamis",
                             'bulan' => $monitoring->bulan,
                             'tahun' => $monitoring->tahun,
@@ -198,6 +256,7 @@ class MonitoringGamisController extends Controller
     {
         $userRole = auth()->user()->roles[0]->name;
         $umr = UMR::where('is_used', true)->first();
+        $jenisSatuanLayanan = JenisSatuanLayanan::cases();
 
         if ($userRole == 'lurah') {
             $gamis = User::query()
@@ -209,26 +268,56 @@ class MonitoringGamisController extends Controller
             MonitoringGamis::truncate();
 
             foreach ($gamis as $itemGamis) {
-                $monitoring = Transaksi::query()
-                    ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
-                    ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
-                    ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
-                    ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
-                    ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
-                    ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                    ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
-                    ->where('transaksi.gamis_id', $itemGamis->id)
-                    ->where('jl.for_gamis', true)
-                    ->where('transaksi.status', 'Selesai')
-                    ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
-                    ->orderBy('transaksi.waktu', 'asc')
-                    ->get();
+                $upahGamis = [];
+                foreach ($jenisSatuanLayanan as $satuan) {
+                    if ($satuan->value == "Kg") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $itemGamis->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->get();
+
+                    } elseif ($satuan->value == "Perjalanan") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_perjalanan * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $itemGamis->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->get();
+                    }
+                    foreach ($monitoring as $data) {
+                        $bulan = $data->bulan;
+                        if (!isset($upahGamis[$bulan])) {
+                            $upahGamis[$bulan] = 0;
+                        }
+                        $upahGamis[$data->bulan] += $data->upah_gamis;
+                    }
+                }
 
                 if ($monitoring->first()) {
                     foreach ($monitoring as $itemMonitoring) {
-                        if ($itemMonitoring->upah_gamis >= $umr->upah) {
+                        if ($upahGamis[$itemMonitoring->bulan] >= $umr->upah) {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
+                                'upah' => $upahGamis[$itemMonitoring->bulan] + $itemGamis->pemasukkan,
                                 'status' => "Lulus",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -236,7 +325,7 @@ class MonitoringGamisController extends Controller
                             ]);
                         } else {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
+                                'upah' => $upahGamis[$itemMonitoring->bulan] + $itemGamis->pemasukkan,
                                 'status' => "Gamis",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -267,40 +356,66 @@ class MonitoringGamisController extends Controller
                 ->join('detail_gamis as dg', 'dg.id', '=', 'monitoring_gamis.detail_gamis_id')
                 ->join('users as u', 'u.id', '=', 'dg.user_id')
                 ->where('u.cabang_id', $cabang->id)
-                ->where('bulan', Carbon::now()->format('m'))
-                ->where('tahun', Carbon::now()->format('Y'))
                 ->select('dg.nama as nama_gamis', 'monitoring_gamis.detail_gamis_id as gamis_id')
                 ->get();
 
             foreach ($cabangGamis as $item) {
                 MonitoringGamis::query()
                     ->where('detail_gamis_id', $item->gamis_id)
-                    ->where('bulan', Carbon::now()->format('m'))
-                    ->where('tahun', Carbon::now()->format('Y'))
                     ->delete();
             }
 
             foreach ($gamis as $itemGamis) {
-                $monitoring = Transaksi::query()
-                    ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
-                    ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
-                    ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
-                    ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
-                    ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
-                    ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                    ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
-                    ->where('transaksi.gamis_id', $itemGamis->id)
-                    ->where('jl.for_gamis', true)
-                    ->where('transaksi.status', 'Selesai')
-                    ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
-                    ->orderBy('transaksi.waktu', 'asc')
-                    ->get();
+                $upahGamis = [];
+                foreach ($jenisSatuanLayanan as $satuan) {
+                    if ($satuan->value == "Kg") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $itemGamis->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->get();
+
+                    } elseif ($satuan->value == "Perjalanan") {
+                        $monitoring = Transaksi::query()
+                            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+                            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+                            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+                            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+                            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+                            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+                            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_perjalanan * hjl.harga) as upah_gamis"), DB::raw("MONTH(transaksi.waktu) as bulan"), DB::raw("YEAR(transaksi.waktu) as tahun"))
+                            ->where('transaksi.gamis_id', $itemGamis->id)
+                            ->where('jl.for_gamis', true)
+                            ->where('hjl.jenis_satuan', $satuan->value)
+                            ->where('transaksi.status', 'Selesai')
+                            ->groupBy('dg.nama', DB::raw("MONTH(transaksi.waktu)"), DB::raw("YEAR(transaksi.waktu)"))
+                            ->orderBy('transaksi.waktu', 'asc')
+                            ->get();
+                    }
+                    foreach ($monitoring as $data) {
+                        $bulan = $data->bulan;
+                        if (!isset($upahGamis[$bulan])) {
+                            $upahGamis[$bulan] = 0;
+                        }
+                        $upahGamis[$data->bulan] += $data->upah_gamis;
+                    }
+                }
 
                 if ($monitoring->first()) {
                     foreach ($monitoring as $itemMonitoring) {
-                        if ($itemMonitoring->upah_gamis >= $umr->upah) {
+                        if ($upahGamis[$itemMonitoring->bulan] >= $umr->upah) {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
+                                'upah' => $upahGamis[$itemMonitoring->bulan] + $itemGamis->pemasukkan,
                                 'status' => "Lulus",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,
@@ -308,7 +423,7 @@ class MonitoringGamisController extends Controller
                             ]);
                         } else {
                             MonitoringGamis::create([
-                                'upah' => $itemMonitoring->upah_gamis + $itemGamis->pemasukkan,
+                                'upah' => $upahGamis[$itemMonitoring->bulan] + $itemGamis->pemasukkan,
                                 'status' => "Gamis",
                                 'bulan' => $itemMonitoring->bulan,
                                 'tahun' => $itemMonitoring->tahun,

@@ -2,28 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Pelanggan\PelangganRequest;
+use Carbon\Carbon;
 use App\Models\Cabang;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use App\Exports\PelangganExport;
+use App\Imports\PelangganImport;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\Pelanggan\PelangganRequest;
 
 class PelangganController extends Controller
 {
     public function index()
     {
         $title = "Pelanggan";
-        $userRole = auth()->user()->roles[0]->name;
-
-        if ($userRole == 'lurah') {
-            $cabang = Cabang::orderBy('created_at', 'asc')->get();
-            $pelanggan = Pelanggan::orderBy('created_at', 'asc')->get();
-        } else {
-            $userCabang = auth()->user()->cabang_id;
-            $cabang = Cabang::where('id', $userCabang)->orderBy('created_at', 'asc')->get();
-            $pelanggan = Pelanggan::orderBy('created_at', 'asc')->get();
-        }
-
-        return view('dashboard.pelanggan.index', compact('title', 'pelanggan', 'cabang'));
+        $pelanggan = Pelanggan::orderBy('created_at', 'asc')->get();
+        return view('dashboard.pelanggan.index', compact('title', 'pelanggan'));
     }
 
     public function store(PelangganRequest $request)
@@ -68,5 +64,21 @@ class PelangganController extends Controller
         } else {
             abort(400, 'Pelanggan Gagal Dihapus');
         }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new PelangganImport, $request->file('impor'));
+            return to_route('pelanggan')->with('success', 'Pelanggan Berhasil Ditambahkan');
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            return to_route('pelanggan')->with('error', 'Pelanggan Gagal Ditambahkan');
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new PelangganExport, 'Data Pelanggan '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

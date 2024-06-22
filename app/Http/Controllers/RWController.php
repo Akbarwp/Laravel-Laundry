@@ -6,11 +6,16 @@ use App\Models\RW;
 use App\Models\User;
 use App\Models\Lurah;
 use App\Models\Cabang;
+use App\Exports\User2Export;
+use App\Imports\User2Import;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
@@ -335,5 +340,21 @@ class RWController extends Controller
         } else {
             abort(400, 'User Gagal Dihapus');
         }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            Excel::import(new User2Import, $request->file('impor'));
+            return to_route('rw')->with('success', 'User Berhasil Ditambahkan');
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            return to_route('rw')->with('error', 'User Gagal Ditambahkan');
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new User2Export, 'Data Pegawai Inti '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

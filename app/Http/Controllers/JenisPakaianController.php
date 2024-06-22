@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Layanan\JenisPakaianRequest;
+use Carbon\Carbon;
 use App\Models\Cabang;
-use App\Models\HargaJenisLayanan;
 use App\Models\JenisPakaian;
 use Illuminate\Http\Request;
+use App\Models\HargaJenisLayanan;
+use App\Exports\JenisPakaianExport;
+use App\Imports\JenisPakaianImport;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\Layanan\JenisPakaianRequest;
 
 class JenisPakaianController extends Controller
 {
@@ -131,5 +137,30 @@ class JenisPakaianController extends Controller
         } else {
             abort(400, 'Jenis Pakaian Gagal Dihapus');
         }
+    }
+
+    public function import(Request $request)
+    {
+        $userRole = auth()->user()->roles[0]->name;
+        try {
+            Excel::import(new JenisPakaianImport, $request->file('impor'));
+            if ($userRole == 'lurah') {
+                return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Jenis Pakaian Berhasil Ditambahkan');
+            } else if ($userRole == 'manajer_laundry') {
+                return to_route('jenis-pakaian')->with('success', 'Jenis Pakaian Berhasil Ditambahkan');
+            }
+        } catch(\Exception $ex) {
+            Log::info($ex);
+            if ($userRole == 'lurah') {
+                return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Jenis Pakaian Gagal Ditambahkan');
+            } else if ($userRole == 'manajer_laundry') {
+                return to_route('jenis-pakaian')->with('error', 'Jenis Pakaian Gagal Ditambahkan');
+            }
+        }
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new JenisPakaianExport($request->cabang), 'Data Jenis Pakaian '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

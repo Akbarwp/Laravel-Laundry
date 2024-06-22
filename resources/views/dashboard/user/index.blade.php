@@ -198,12 +198,73 @@
                 }
             })
         }
+
+        function export_button(cabang) {
+            Swal.fire({
+                title: 'Apakah Anda ingin mengunduh data?',
+                html: "<p>Data yang diunduh berupa file Excel</p>",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#6419E6',
+                cancelButtonColor: '#F87272',
+                confirmButtonText: 'Unduh',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ route('user.export') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "cabang": cabang
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Data berhasil diunduh!',
+                                icon: 'success',
+                                confirmButtonColor: '#6419E6',
+                                confirmButtonText: 'OK'
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Data gagal diunduh!',
+                            })
+                        }
+                    });
+                }
+            })
+        }
     </script>
 @endsection
 
 @section("container")
     <div class="-mx-3 flex flex-wrap">
         <div class="w-full max-w-full flex-none px-3">
+            {{-- Awal Modal Impor --}}
+            <input type="checkbox" id="impor_modal" class="modal-toggle" />
+            <div class="modal" role="dialog">
+                <div class="modal-box">
+                    <div class="mb-3 flex justify-between">
+                        <h3 class="text-lg font-bold">Impor Data</h3>
+                        <label for="impor_modal" class="cursor-pointer">
+                            <i class="ri-close-large-fill"></i>
+                        </label>
+                    </div>
+                    <div>
+                        <form action="{{ route('user.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <label class="form-control w-full">
+                                <input type="file" name="impor" placeholder="Impor Data" class="file-input file-input-bordered w-full text-blue-700" required />
+                            </label>
+                            <button type="submit" class="btn btn-success mt-3 w-full text-white">Impor</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Modal Impor --}}
+
             {{-- Awal Tabel Cabang --}}
             @role("lurah")
                 <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
@@ -274,6 +335,20 @@
                             <i class="ri-add-fill"></i>
                             Tambah
                         </a>
+                        <label for="impor_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                            <i class="ri-upload-2-line"></i>
+                            Impor
+                        </label>
+                        <form action="{{ route('user.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
+                            @csrf
+                            <label class="form-control w-full">
+                                <input type="text" name="cabang" value="{{ auth()->user()->cabang ? auth()->user()->cabang->slug : null }}" hidden readonly />
+                            </label>
+                            <button type="submit" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-download-2-line"></i>
+                                Ekspor
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">

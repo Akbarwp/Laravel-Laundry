@@ -107,6 +107,8 @@ Route::group([
         Route::get('/trash/{user:slug}', [RWController::class, 'trash'])->name('rw.trash');
         Route::post('/pulihkan', [RWController::class, 'restore'])->name('rw.restore');
         Route::post('/hapus-permanen', [RWController::class, 'destroy'])->name('rw.destroy');
+        Route::post('/impor', [RWController::class, 'import'])->name('rw.import');
+        Route::get('/ekspor', [RWController::class, 'export'])->name('rw.export');
     });
 
     Route::group([
@@ -128,6 +130,8 @@ Route::group([
         Route::get('/trash/{user:slug}', [UserController::class, 'trash'])->name('user.trash');
         Route::post('/pulihkan', [UserController::class, 'restore'])->name('user.restore');
         Route::post('/hapus-permanen', [UserController::class, 'destroy'])->name('user.destroy');
+        Route::post('/impor', [UserController::class, 'import'])->name('user.import');
+        Route::get('/ekspor', [UserController::class, 'export'])->name('user.export');
     });
 
     Route::group([
@@ -154,6 +158,8 @@ Route::group([
         Route::get('/trash', [JenisLayananController::class, 'trash'])->name('jenis-layanan.trash');
         Route::post('/pulihkan', [JenisLayananController::class, 'restore'])->name('jenis-layanan.restore');
         Route::post('/hapus-permanen', [JenisLayananController::class, 'destroy'])->name('jenis-layanan.destroy');
+        Route::post('/impor', [JenisLayananController::class, 'import'])->name('jenis-layanan.import');
+        Route::get('/ekspor', [JenisLayananController::class, 'export'])->name('jenis-layanan.export');
     });
 
     Route::group([
@@ -170,6 +176,8 @@ Route::group([
         Route::get('/trash', [JenisPakaianController::class, 'trash'])->name('jenis-pakaian.trash');
         Route::post('/pulihkan', [JenisPakaianController::class, 'restore'])->name('jenis-pakaian.restore');
         Route::post('/hapus-permanen', [JenisPakaianController::class, 'destroy'])->name('jenis-pakaian.destroy');
+        Route::post('/impor', [JenisPakaianController::class, 'import'])->name('jenis-pakaian.import');
+        Route::get('/ekspor', [JenisPakaianController::class, 'export'])->name('jenis-pakaian.export');
     });
 
     Route::group([
@@ -186,6 +194,8 @@ Route::group([
         Route::get('/trash', [HargaJenisLayananController::class, 'trash'])->name('harga-jenis-layanan.trash');
         Route::post('/pulihkan', [HargaJenisLayananController::class, 'restore'])->name('harga-jenis-layanan.restore');
         Route::post('/hapus-permanen', [HargaJenisLayananController::class, 'destroy'])->name('harga-jenis-layanan.destroy');
+        Route::post('/impor', [HargaJenisLayananController::class, 'import'])->name('harga-jenis-layanan.import');
+        Route::get('/ekspor', [HargaJenisLayananController::class, 'export'])->name('harga-jenis-layanan.export');
     });
 
     Route::group([
@@ -202,6 +212,8 @@ Route::group([
         Route::get('/trash', [LayananPrioritasController::class, 'trash'])->name('layanan-prioritas.trash');
         Route::post('/pulihkan', [LayananPrioritasController::class, 'restore'])->name('layanan-prioritas.restore');
         Route::post('/hapus-permanen', [LayananPrioritasController::class, 'destroy'])->name('layanan-prioritas.destroy');
+        Route::post('/impor', [LayananPrioritasController::class, 'import'])->name('layanan-prioritas.import');
+        Route::get('/ekspor', [LayananPrioritasController::class, 'export'])->name('layanan-prioritas.export');
     });
 
     Route::group([
@@ -215,7 +227,8 @@ Route::group([
         Route::get('/ubah', [PelangganController::class, 'edit'])->name('pelanggan.edit');
         Route::post('/ubah', [PelangganController::class, 'update'])->name('pelanggan.update');
         Route::post('/hapus', [PelangganController::class, 'delete'])->name('pelanggan.delete');
-        Route::get('/{cabang:slug}', [PelangganController::class, 'indexCabang'])->name('pelanggan.cabang')->middleware('role:lurah');
+        Route::post('/impor', [PelangganController::class, 'import'])->name('pelanggan.import');
+        Route::get('/ekspor', [PelangganController::class, 'export'])->name('pelanggan.export');
     });
 
     Route::group([
@@ -231,6 +244,7 @@ Route::group([
         Route::post('/hapus', [GamisController::class, 'delete'])->name('gamis.delete');
         Route::get('/anggota/{detail_gamis:kartu_keluarga}', [GamisController::class, 'anggota'])->name('gamis.anggota');
         Route::get('/detail-anggota', [GamisController::class, 'detailAnggota'])->name('gamis.anggota.show');
+        Route::post('/impor', [GamisController::class, 'import'])->name('gamis.import');
     });
 
     Route::group([

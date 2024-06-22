@@ -16,6 +16,10 @@ class DetailLayananTransaksiController extends Controller
         $title = "Detail Transaksi Layanan";
         $userRole = auth()->user()->roles[0]->name;
 
+        if (!DetailTransaksi::where('id', $request->detailTransaksi)->orderBy('id', 'asc')->first()) {
+            abort(404);
+        }
+
         if ($userRole == 'lurah') {
             $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
             $transaksi = Transaksi::where('id', $request->transaksi)->first();
