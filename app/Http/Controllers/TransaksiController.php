@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StatusTransaksi;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Cabang;
-use App\Models\DetailLayananTransaksi;
-use App\Models\DetailTransaksi;
-use App\Models\HargaJenisLayanan;
-use App\Models\JenisLayanan;
-use App\Models\JenisPakaian;
-use App\Models\LayananPrioritas;
 use App\Models\Pelanggan;
 use App\Models\Transaksi;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Models\JenisLayanan;
+use App\Models\JenisPakaian;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use App\Enums\JenisPembayaran;
+use App\Enums\StatusTransaksi;
+use App\Models\DetailTransaksi;
+use App\Models\LayananTambahan;
 use Illuminate\Validation\Rule;
+use App\Models\LayananPrioritas;
+use App\Models\HargaJenisLayanan;
+use Illuminate\Support\Facades\DB;
+use App\Models\DetailLayananTransaksi;
+use App\Models\LayananTambahanTransaksi;
+use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
@@ -39,20 +42,40 @@ class TransaksiController extends Controller
                 ->with(['pegawai' => function($query) {
                     $query->withTrashed();
                 }])
-                ->where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->get();
+                ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+                ->where('cabang_id', $cabang->id)
+                ->orderBy('waktu', 'asc')->get();
 
             $monitoring = Transaksi::query()
+                ->with('pelanggan')
                 ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
                 ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
                 ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
                 ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
                 ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
                 ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+                ->select(
+                    'transaksi.id as transaksi_id',
+                    'transaksi.pelanggan_id',
+                    'transaksi.total_bayar_akhir',
+                    'dg.nama as nama_gamis',
+                    DB::raw("DATE(transaksi.waktu) as tanggal"),
+                    DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"),
+                    'transaksi.total_biaya_layanan_tambahan',
+                    'transaksi.konfirmasi_upah_gamis'
+                )
                 ->where('transaksi.cabang_id', $cabang->id)
                 ->where('jl.for_gamis', true)
                 ->where('transaksi.status', 'Selesai')
-                ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+                ->groupBy(
+                    'transaksi.id',
+                    'transaksi.pelanggan_id',
+                    'transaksi.total_bayar_akhir',
+                    'dg.nama',
+                    DB::raw("DATE(transaksi.waktu)"),
+                    'transaksi.total_biaya_layanan_tambahan',
+                    'transaksi.konfirmasi_upah_gamis'
+                )
                 ->orderBy('transaksi.waktu', 'asc')
                 ->orderBy('transaksi.gamis_id', 'asc')
                 ->get();
@@ -81,8 +104,14 @@ class TransaksiController extends Controller
         $status = StatusTransaksi::cases();
 
         $transaksi = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
             ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->where('transaksi.cabang_id', $cabang->id)
+            ->where('transaksi.status', '!=', 'Selesai')
+            ->where('transaksi.status', '!=', 'Batal')
             ->orderBy('lp.prioritas', 'desc')
             ->orderBy('transaksi.waktu', 'asc')
             ->select('transaksi.*')
@@ -111,20 +140,40 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
-            ->where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->get();
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+            ->where('cabang_id', $cabang->id)
+            ->orderBy('waktu', 'asc')->get();
 
         $monitoring = Transaksi::query()
+                ->with('pelanggan')
                 ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
                 ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
                 ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
                 ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
                 ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
                 ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+                ->select(
+                    'transaksi.id as transaksi_id',
+                    'transaksi.pelanggan_id',
+                    'transaksi.total_bayar_akhir',
+                    'dg.nama as nama_gamis',
+                    DB::raw("DATE(transaksi.waktu) as tanggal"),
+                    DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"),
+                    'transaksi.total_biaya_layanan_tambahan',
+                    'transaksi.konfirmasi_upah_gamis'
+                )
                 ->where('transaksi.cabang_id', $cabang->id)
                 ->where('jl.for_gamis', true)
                 ->where('transaksi.status', 'Selesai')
-                ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+                ->groupBy(
+                    'transaksi.id',
+                    'transaksi.pelanggan_id',
+                    'transaksi.total_bayar_akhir',
+                    'dg.nama',
+                    DB::raw("DATE(transaksi.waktu)"),
+                    'transaksi.total_biaya_layanan_tambahan',
+                    'transaksi.konfirmasi_upah_gamis'
+                )
                 ->orderBy('transaksi.waktu', 'asc')
                 ->orderBy('transaksi.gamis_id', 'asc')
                 ->get();
@@ -149,8 +198,14 @@ class TransaksiController extends Controller
         }
 
         $transaksi = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
             ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->where('transaksi.cabang_id', $cabang->id)
+            ->where('transaksi.status', '!=', 'Selesai')
+            ->where('transaksi.status', '!=', 'Batal')
             ->orderBy('lp.prioritas', 'desc')
             ->orderBy('transaksi.waktu', 'asc')
             ->select('transaksi.*')
@@ -174,10 +229,11 @@ class TransaksiController extends Controller
                 ->where('id', $request->transaksi)->where('cabang_id', $cabang->id)->orderBy('waktu', 'asc')->first();
 
             $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+            $layananTambahanTransaksi = LayananTambahanTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
 
             $userRole = [User::withTrashed()->where('id', $transaksi->pegawai_id)->first()];
 
-            return view('dashboard.transaksi.lurah.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isJadwal'));
+            return view('dashboard.transaksi.lurah.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isJadwal', 'layananTambahanTransaksi'));
 
         } else {
             $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
@@ -188,7 +244,8 @@ class TransaksiController extends Controller
                 ->where('id', $request->transaksi)->first();
 
             $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
-            return view('dashboard.transaksi.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isJadwal'));
+            $layananTambahanTransaksi = LayananTambahanTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+            return view('dashboard.transaksi.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isJadwal', 'layananTambahanTransaksi'));
         }
     }
 
@@ -197,6 +254,7 @@ class TransaksiController extends Controller
         $title = "Tambah Transaksi";
         $userRole = auth()->user()->roles[0]->name;
         $isJadwal = $request->isJadwal;
+        $jenisPembayaran = JenisPembayaran::cases();
 
         if ($userRole == 'lurah') {
             $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
@@ -210,7 +268,8 @@ class TransaksiController extends Controller
                 ->get();
             $pakaian = JenisPakaian::where('cabang_id', $cabang->id)->get();
             $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->get();
-            return view('dashboard.transaksi.lurah.tambah', compact('title', 'cabang', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'isJadwal'));
+            $layananTambahan = LayananTambahan::where('cabang_id', $cabang->id)->get();
+            return view('dashboard.transaksi.lurah.tambah', compact('title', 'cabang', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'isJadwal', 'jenisPembayaran', 'layananTambahan'));
 
         } else {
             $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
@@ -224,7 +283,8 @@ class TransaksiController extends Controller
                 ->get();
             $pakaian = JenisPakaian::where('cabang_id', $cabang->id)->get();
             $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->get();
-            return view('dashboard.transaksi.tambah', compact('title', 'cabang', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'isJadwal'));
+            $layananTambahan = LayananTambahan::where('cabang_id', $cabang->id)->get();
+            return view('dashboard.transaksi.tambah', compact('title', 'cabang', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'isJadwal', 'jenisPembayaran', 'layananTambahan'));
         }
     }
 
@@ -239,6 +299,7 @@ class TransaksiController extends Controller
             $validatorTransaksi = Validator::make($request->all(), [
                 'total_biaya_layanan' => 'required|decimal:0,2',
                 'total_biaya_prioritas' => 'required|decimal:0,2',
+                'total_biaya_layanan_tambahan' => 'required|decimal:0,2',
                 'total_bayar_akhir' => 'required|decimal:0,2',
                 'jenis_pembayaran' => 'required|string|max:255',
                 'bayar' => 'required|decimal:0,2',
@@ -287,6 +348,15 @@ class TransaksiController extends Controller
                 }
             }
 
+            if ($request->layanan_tambahan_id) {
+                foreach ($request->layanan_tambahan_id as $item) {
+                    LayananTambahanTransaksi::create([
+                        'layanan_tambahan_id' => $item,
+                        'transaksi_id' => $transaksi->id,
+                    ]);
+                }
+            }
+
             if ($transaksi) {
                 return $transaksi;
             } else {
@@ -300,6 +370,7 @@ class TransaksiController extends Controller
             $validatorTransaksi = Validator::make($request->all(), [
                 'total_biaya_layanan' => 'required|decimal:0,2',
                 'total_biaya_prioritas' => 'required|decimal:0,2',
+                'total_biaya_layanan_tambahan' => 'required|decimal:0,2',
                 'total_bayar_akhir' => 'required|decimal:0,2',
                 'jenis_pembayaran' => 'required|string|max:255',
                 'bayar' => 'required|decimal:0,2',
@@ -344,6 +415,15 @@ class TransaksiController extends Controller
                     DetailLayananTransaksi::create([
                         'harga_jenis_layanan_id' => $hargaLayanan->id,
                         'detail_transaksi_id' => $detailTransaksi->id,
+                    ]);
+                }
+            }
+
+            if ($request->layanan_tambahan_id) {
+                foreach ($request->layanan_tambahan_id as $item) {
+                    LayananTambahanTransaksi::create([
+                        'layanan_tambahan_id' => $item,
+                        'transaksi_id' => $transaksi->id,
                     ]);
                 }
             }
@@ -362,6 +442,7 @@ class TransaksiController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $isJadwal = $request->isJadwal;
         $status = StatusTransaksi::cases();
+        $jenisPembayaran = JenisPembayaran::cases();
 
         if ($userRole == 'lurah') {
             $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
@@ -375,12 +456,13 @@ class TransaksiController extends Controller
                 ->get();
             $pakaian = JenisPakaian::where('cabang_id', $cabang->id)->get();
             $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->get();
+            $layananTambahan = LayananTambahan::where('cabang_id', $cabang->id)->get();
             $transaksi = Transaksi::where('cabang_id', $cabang->id)->where('id', $request->transaksi)->first();
 
             $hargaLayanan = HargaJenisLayanan::where('cabang_id', $cabang->id)->get();
             $layanan = JenisLayanan::where('cabang_id', $cabang->id)->get();
 
-            return view('dashboard.transaksi.lurah.ubah', compact('title', 'cabang', 'status', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'transaksi', 'layanan', 'hargaLayanan', 'isJadwal'));
+            return view('dashboard.transaksi.lurah.ubah', compact('title', 'cabang', 'status', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'transaksi', 'layanan', 'hargaLayanan', 'isJadwal', 'jenisPembayaran', 'layananTambahan'));
 
         } else {
             $cabang = Cabang::withTrashed()->where('id', auth()->user()->cabang_id)->first();
@@ -394,6 +476,7 @@ class TransaksiController extends Controller
                 ->get();
             $pakaian = JenisPakaian::where('cabang_id', $cabang->id)->get();
             $layananPrioritas = LayananPrioritas::where('cabang_id', $cabang->id)->get();
+            $layananTambahan = LayananTambahan::where('cabang_id', $cabang->id)->get();
             $transaksi = Transaksi::where('cabang_id', $cabang->id)->where('id', $request->transaksi)->first();
 
             if ($transaksi->status == 'Selesai' && $userRole == 'pegawai_laundry') {
@@ -403,7 +486,7 @@ class TransaksiController extends Controller
             $hargaLayanan = HargaJenisLayanan::where('cabang_id', $cabang->id)->get();
             $layanan = JenisLayanan::where('cabang_id', $cabang->id)->get();
 
-            return view('dashboard.transaksi.ubah', compact('title', 'cabang', 'status', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'transaksi', 'layanan', 'hargaLayanan', 'isJadwal'));
+            return view('dashboard.transaksi.ubah', compact('title', 'cabang', 'status', 'pelanggan', 'gamis', 'pakaian', 'layananPrioritas', 'transaksi', 'layanan', 'hargaLayanan', 'isJadwal', 'jenisPembayaran', 'layananTambahan'));
         }
     }
 
@@ -419,6 +502,7 @@ class TransaksiController extends Controller
             $validatorTransaksi = Validator::make($request->all(), [
                 'total_biaya_layanan' => 'required|decimal:0,2',
                 'total_biaya_prioritas' => 'required|decimal:0,2',
+                'total_biaya_layanan_tambahan' => 'required|decimal:0,2',
                 'total_bayar_akhir' => 'required|decimal:0,2',
                 'jenis_pembayaran' => 'required|string|max:255',
                 'bayar' => 'required|decimal:0,2',
@@ -436,7 +520,7 @@ class TransaksiController extends Controller
             ]);
 
             $validatedTransaksi = $validatorTransaksi->validated();
-            $validatedTransaksi['pegawai_id'] = auth()->user()->id;
+            // $validatedTransaksi['pegawai_id'] = auth()->user()->id;
 
             $transaksi = Transaksi::where('cabang_id', $cabang->id)->where('id', $getTransaksi->id)->update($validatedTransaksi);
 
@@ -468,6 +552,16 @@ class TransaksiController extends Controller
                 }
             }
 
+            LayananTambahanTransaksi::where('transaksi_id', $getTransaksi->id)->delete();
+            if ($request->layanan_tambahan_id) {
+                foreach ($request->layanan_tambahan_id as $item) {
+                    LayananTambahanTransaksi::create([
+                        'layanan_tambahan_id' => $item,
+                        'transaksi_id' => $getTransaksi->id,
+                    ]);
+                }
+            }
+
             if ($transaksi) {
                 return $transaksi;
             } else {
@@ -482,6 +576,7 @@ class TransaksiController extends Controller
             $validatorTransaksi = Validator::make($request->all(), [
                 'total_biaya_layanan' => 'required|decimal:0,2',
                 'total_biaya_prioritas' => 'required|decimal:0,2',
+                'total_biaya_layanan_tambahan' => 'required|decimal:0,2',
                 'total_bayar_akhir' => 'required|decimal:0,2',
                 'jenis_pembayaran' => 'required|string|max:255',
                 'bayar' => 'required|decimal:0,2',
@@ -499,7 +594,7 @@ class TransaksiController extends Controller
             ]);
 
             $validatedTransaksi = $validatorTransaksi->validated();
-            $validatedTransaksi['pegawai_id'] = auth()->user()->id;
+            // $validatedTransaksi['pegawai_id'] = auth()->user()->id;
 
             $transaksi = Transaksi::where('cabang_id', $cabang->id)->where('id', $getTransaksi->id)->update($validatedTransaksi);
 
@@ -527,6 +622,16 @@ class TransaksiController extends Controller
                     DetailLayananTransaksi::create([
                         'harga_jenis_layanan_id' => $hargaLayanan->id,
                         'detail_transaksi_id' => $detailTransaksi->id,
+                    ]);
+                }
+            }
+
+            LayananTambahanTransaksi::where('transaksi_id', $getTransaksi->id)->delete();
+            if ($request->layanan_tambahan_id) {
+                foreach ($request->layanan_tambahan_id as $item) {
+                    LayananTambahanTransaksi::create([
+                        'layanan_tambahan_id' => $item,
+                        'transaksi_id' => $getTransaksi->id,
                     ]);
                 }
             }
@@ -692,6 +797,36 @@ class TransaksiController extends Controller
         }
     }
 
+    public function ubahLayananTambahan(Request $request)
+    {
+        $userRole = auth()->user()->roles[0]->name;
+
+        if ($userRole == 'lurah') {
+            $cabang = Cabang::where('slug', $request->cabang)->first();
+            $hargaLayananAkhir = 0;
+            foreach ($request->layananTambahanId as $item) {
+                $hargaLayanan = LayananTambahan::query()
+                    ->where('cabang_id', $cabang->id)
+                    ->where('id', $item)
+                    ->first();
+                $hargaLayananAkhir += $hargaLayanan->harga;
+            }
+            return $hargaLayananAkhir;
+
+        } else {
+            $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
+            $hargaLayananAkhir = 0;
+            foreach ($request->layananTambahanId as $item) {
+                $hargaLayanan = LayananTambahan::query()
+                    ->where('cabang_id', $cabang->id)
+                    ->where('id', $item)
+                    ->first();
+                $hargaLayananAkhir += $hargaLayanan->harga;
+            }
+            return $hargaLayananAkhir;
+        }
+    }
+
     public function hitungTotalBayar(Request $request)
     {
         $userRole = auth()->user()->roles[0]->name;
@@ -708,7 +843,7 @@ class TransaksiController extends Controller
                 $biayaLayanan += $value * $totalPakaian[$item];
                 $biayaPrioritas += $layananPrioritas->harga * $totalPakaian[$item];
             }
-            $totalBayar = $biayaLayanan + $biayaPrioritas;
+            $totalBayar = $biayaLayanan + $biayaPrioritas + $request->layananTambahan;
             return [$biayaLayanan, $biayaPrioritas, $totalBayar];
 
         } else {
@@ -723,7 +858,7 @@ class TransaksiController extends Controller
                 $biayaLayanan += $value * $totalPakaian[$item];
                 $biayaPrioritas += $layananPrioritas->harga * $totalPakaian[$item];
             }
-            $totalBayar = $biayaLayanan + $biayaPrioritas;
+            $totalBayar = $biayaLayanan + $biayaPrioritas + $request->layananTambahan;
             return [$biayaLayanan, $biayaPrioritas, $totalBayar];
         }
     }
@@ -737,6 +872,7 @@ class TransaksiController extends Controller
                 }])
                 ->where('id', $request->transaksi)->first();
         $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+        $layananTambahanTransaksi = LayananTambahanTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
         $cabang = Cabang::where('id', $transaksi->cabang_id)->first();
 
         // $pdf = Pdf::loadView('dashboard.transaksi.struk.index', [
@@ -748,7 +884,20 @@ class TransaksiController extends Controller
         // ->setPaper('a4', 'potrait');
         // return $pdf->stream();
 
-        return view('dashboard.transaksi.struk.index', compact('title', 'transaksi', 'detailTransaksi', 'cabang'));
+        return view('dashboard.transaksi.struk.index', compact('title', 'transaksi', 'detailTransaksi', 'cabang', 'layananTambahanTransaksi'));
+    }
+
+    public function konfirmasiUpahButton(Request $request)
+    {
+        if (!$request->konfirmasi) {
+            Transaksi::where('id', $request->transaksi_id)->update([
+                'konfirmasi_upah_gamis' => true
+            ]);
+        } else {
+            Transaksi::where('id', $request->transaksi_id)->update([
+                'konfirmasi_upah_gamis' => false
+            ]);
+        }
     }
 
     public function transaksiGamisHarian()

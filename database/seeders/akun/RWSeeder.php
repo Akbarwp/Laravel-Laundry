@@ -6,7 +6,6 @@ use App\Models\RW;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class RWSeeder extends Seeder
 {

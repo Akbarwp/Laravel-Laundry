@@ -5,7 +5,6 @@ namespace Database\Seeders\akun;
 use App\Models\Lurah;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class LurahSeeder extends Seeder
 {

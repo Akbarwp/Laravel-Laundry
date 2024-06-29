@@ -2,12 +2,12 @@
 
 namespace Database\Seeders\layanan;
 
-use App\Models\Cabang;
-use App\Models\JenisLayanan;
 use Carbon\Carbon;
+use App\Models\Cabang;
+use App\Models\LayananTambahan;
 use Illuminate\Database\Seeder;
 
-class JenisLayananSeeder extends Seeder
+class LayananTambahanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,37 +18,37 @@ class JenisLayananSeeder extends Seeder
         $cabang2 = Cabang::where('id', 2)->onlyTrashed()->first();
 
         //? Cabang 1
-        JenisLayanan::create([
-            'nama' => 'Cuci',
-            'for_gamis' => false,
+        LayananTambahan::create([
+            'nama' => 'Antar',
+            'harga' => 10000,
             'cabang_id' => $cabang->id,
         ]);
-        JenisLayanan::create([
-            'nama' => 'Setrika',
-            'for_gamis' => true,
+        LayananTambahan::create([
+            'nama' => 'Jemput',
+            'harga' => 10000,
             'cabang_id' => $cabang->id,
         ]);
-        JenisLayanan::create([
-            'nama' => 'Parfum',
-            'for_gamis' => true,
+        LayananTambahan::create([
+            'nama' => 'Keamanan Ganda',
+            'harga' => 5000,
             'cabang_id' => $cabang->id,
             'deleted_at' => Carbon::now(),
         ]);
 
         //? Cabang 2
-        JenisLayanan::create([
-            'nama' => 'Cuci',
-            'for_gamis' => false,
+        LayananTambahan::create([
+            'nama' => 'Antar',
+            'harga' => 10000,
             'cabang_id' => $cabang2->id,
         ]);
-        JenisLayanan::create([
-            'nama' => 'Setrika',
-            'for_gamis' => true,
+        LayananTambahan::create([
+            'nama' => 'Jemput',
+            'harga' => 10000,
             'cabang_id' => $cabang2->id,
         ]);
-        JenisLayanan::create([
-            'nama' => 'Parfum',
-            'for_gamis' => true,
+        LayananTambahan::create([
+            'nama' => 'Keamanan Ganda',
+            'harga' => 5000,
             'cabang_id' => $cabang2->id,
             'deleted_at' => Carbon::now(),
         ]);

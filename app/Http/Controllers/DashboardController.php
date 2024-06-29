@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cabang;
 use App\Models\DetailGamis;
-use App\Models\Gamis;
-use App\Models\MonitoringGamis;
 use App\Models\Transaksi;
 use App\Models\UMR;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -30,7 +27,8 @@ class DashboardController extends Controller
             $transaksiBaru = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Baru')->count();
             $transaksiProses = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Proses')->count();
             $transaksiSiapDiambil = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Siap Diambil')->count();
-            $transaksiPengantaran = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Pengantaran')->count();
+            $transaksiPengantaran = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Antar')->count();
+            $transaksiPenjemputan = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Jemput')->count();
             $transaksiSelesai = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Selesai')->count();
             $transaksiBatal = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('status', 'Batal')->count();
 
@@ -79,7 +77,7 @@ class DashboardController extends Controller
                 ];
             }
 
-            return view('dashboard.index', compact('title', 'userRole', 'umr', 'cabang', 'jmlCabang', 'jmlUser', 'jmlGamis', 'transaksiBaru', 'transaksiProses', 'transaksiSiapDiambil', 'transaksiPengantaran', 'transaksiSelesai', 'transaksiBatal', 'jadwalLayanan', 'pendapatanHari', 'pendapatanBulanan', 'pendapatanTahunan'));
+            return view('dashboard.index', compact('title', 'userRole', 'umr', 'cabang', 'jmlCabang', 'jmlUser', 'jmlGamis', 'transaksiBaru', 'transaksiProses', 'transaksiSiapDiambil', 'transaksiPengantaran', 'transaksiPenjemputan', 'transaksiSelesai', 'transaksiBatal', 'jadwalLayanan', 'pendapatanHari', 'pendapatanBulanan', 'pendapatanTahunan'));
 
         } else if ($userRole == 'manajer_laundry' || $userRole == 'pegawai_laundry') {
             $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
@@ -90,7 +88,8 @@ class DashboardController extends Controller
             $transaksiBaru = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Baru')->count();
             $transaksiProses = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Proses')->count();
             $transaksiSiapDiambil = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Siap Diambil')->count();
-            $transaksiPengantaran = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Pengantaran')->count();
+            $transaksiPengantaran = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Antar')->count();
+            $transaksiPenjemputan = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Jemput')->count();
             $transaksiSelesai = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Selesai')->count();
             $transaksiBatal = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('status', 'Batal')->count();
 
@@ -143,7 +142,7 @@ class DashboardController extends Controller
                 ];
             }
 
-            return view('dashboard.index', compact('title', 'userRole', 'umr', 'cabang', 'jmlCabang', 'jmlUser', 'jmlGamis', 'transaksiBaru', 'transaksiProses', 'transaksiSiapDiambil', 'transaksiPengantaran', 'transaksiSelesai', 'transaksiBatal', 'jadwalLayanan', 'pendapatanHari', 'pendapatanBulanan', 'pendapatanTahunan'));
+            return view('dashboard.index', compact('title', 'userRole', 'umr', 'cabang', 'jmlCabang', 'jmlUser', 'jmlGamis', 'transaksiBaru', 'transaksiProses', 'transaksiSiapDiambil', 'transaksiPengantaran', 'transaksiPenjemputan', 'transaksiSelesai', 'transaksiBatal', 'jadwalLayanan', 'pendapatanHari', 'pendapatanBulanan', 'pendapatanTahunan'));
 
         } else if ($userRole == 'gamis') {
             $cabang = Cabang::where('id', auth()->user()->cabang_id)->first();
@@ -152,7 +151,8 @@ class DashboardController extends Controller
             $transaksiBaru = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Baru')->count();
             $transaksiProses = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Proses')->count();
             $transaksiSiapDiambil = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Siap Diambil')->count();
-            $transaksiPengantaran = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Pengantaran')->count();
+            $transaksiPengantaran = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Antar')->count();
+            $transaksiPenjemputan = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Jemput')->count();
             $transaksiSelesai = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Selesai')->count();
             $transaksiBatal = Transaksi::where(DB::raw('DATE(waktu)'), Carbon::now()->format('Y-m-d'))->where('cabang_id', $cabang->id)->where('gamis_id', auth()->user()->gamis[0]->id)->where('status', 'Batal')->count();
 
@@ -207,7 +207,7 @@ class DashboardController extends Controller
                 ];
             }
 
-            return view('dashboard.index', compact('title', 'userRole', 'umr', 'cabang', 'jmlGamis', 'transaksiBaru', 'transaksiProses', 'transaksiSiapDiambil', 'transaksiPengantaran', 'transaksiSelesai', 'transaksiBatal', 'pendapatanBulanan', 'pendapatanTahunan'));
+            return view('dashboard.index', compact('title', 'userRole', 'umr', 'cabang', 'jmlGamis', 'transaksiBaru', 'transaksiProses', 'transaksiSiapDiambil', 'transaksiPengantaran', 'transaksiPenjemputan', 'transaksiSelesai', 'transaksiBatal', 'pendapatanBulanan', 'pendapatanTahunan'));
 
         } else if ($userRole == 'rw') {
             $rw = User::join('rw', 'rw.user_id', '=', 'users.id')->where('users.id', '=', auth()->user()->id)->first();

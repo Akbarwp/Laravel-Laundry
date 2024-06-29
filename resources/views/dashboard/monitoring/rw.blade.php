@@ -61,7 +61,6 @@
                 <div class="flex-auto px-0 pb-2 pt-0">
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <form action="{{ route('monitoring.rw') }}" method="get" enctype="multipart/form-data" class="mb-3">
-                            @csrf
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                                 <label class="form-control w-full lg:w-1/2">
                                     <div class="label">

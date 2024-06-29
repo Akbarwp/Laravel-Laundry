@@ -189,7 +189,6 @@
                 <div class="flex-auto px-0 pb-2 pt-0">
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <form action="{{ route("monitoring.gamis.riwayat", ['gamis' => $gamis]) }}" method="get" enctype="multipart/form-data" class="my-3">
-                            @csrf
                             <label class="form-control w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100 text-lg">Tahun</span>
@@ -197,6 +196,7 @@
                                 <input type="number" min="0" name="tahun" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ \Carbon\Carbon::now()->format('Y') }}" />
                             </label>
                             <button type="submit" class="btn btn-accent btn-sm uppercase mt-3">Filter</button>
+                            <a href="{{ route("monitoring.gamis.riwayat", ['gamis' => $gamis]) }}" class="btn btn-neutral btn-sm uppercase mt-3">Reset</a>
                         </form>
                         <div>
                             <canvas id="chart-riwayat-monitoring-gamis" height="300"></canvas>

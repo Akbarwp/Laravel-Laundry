@@ -33,8 +33,14 @@ class RWController extends Controller
         $title = "Lurah & RW Management";
         $userRole = auth()->user()->roles[0]->name;
 
-        $lurah = Lurah::join('users as u', 'lurah.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('lurah.created_at', 'asc')->get()->except(auth()->id());
-        $rw = RW::join('users as u', 'rw.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('rw.created_at', 'asc')->get();
+        $lurah = Lurah::query()
+            ->join('users as u', 'lurah.user_id', '=', 'u.id')
+            ->where('u.deleted_at', null)
+            ->orderBy('lurah.created_at', 'asc')->get()->except(auth()->id());
+        $rw = RW::query()
+            ->join('users as u', 'rw.user_id', '=', 'u.id')
+            ->where('u.deleted_at', null)
+            ->orderBy('rw.created_at', 'asc')->get();
 
         $lurahTrash = User::join('lurah as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
         $rwTrash = User::join('rw as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();

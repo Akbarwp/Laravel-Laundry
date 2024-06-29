@@ -89,7 +89,10 @@
                 let layananPrioritas = $("select[name='layanan_prioritas_id']").val();
                 // console.log(layananPrioritas);
 
-                totalBiaya(hargaLayanan, totalPakaian, layananPrioritas);
+                let layananTambahan = $("input[name='total_biaya_layanan_tambahan']").val();
+                // console.log(layananTambahan);
+
+                totalBiaya(hargaLayanan, totalPakaian, layananPrioritas, layananTambahan);
             });
 
             $("#deleteLayanan").click(function (e) {
@@ -191,8 +194,22 @@
                 }
             });
         }
+        function ubahLayananTambahan(layananTambahanId, namaIdjenisLayanan, namaIdHargaJenisLayanan) {
+            $.ajax({
+                type: "get",
+                url: "{{ route('transaksi.lurah.cabang.create.ubahLayananTambahan', $cabang->slug) }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "layananTambahanId": layananTambahanId
+                },
+                success: function(data) {
+                    // console.log(data);
+                    $("input[name='total_biaya_layanan_tambahan']").val(data);
+                }
+            });
+        }
 
-        function totalBiaya(hargaLayanan, totalPakaian, layananPrioritas) {
+        function totalBiaya(hargaLayanan, totalPakaian, layananPrioritas, layananTambahan) {
             $.ajax({
                 type: "get",
                 url: "{{ route('transaksi.lurah.cabang.create.hitungTotalBayar', $cabang->slug) }}",
@@ -200,7 +217,8 @@
                     "_token": "{{ csrf_token() }}",
                     "hargaLayanan": hargaLayanan,
                     "totalPakaian": totalPakaian,
-                    "layananPrioritas": layananPrioritas
+                    "layananPrioritas": layananPrioritas,
+                    "layananTambahan": layananTambahan
                 },
                 success: function(data) {
                     $('input[name="total_biaya_layanan"]').val(data[0]);
@@ -250,21 +268,35 @@
                 return $(this).val();
             }).get();
 
+            let gamis_id = "";
+            if ($("select[name='gamis_id']").val() == "null") {
+                gamis_id = null;
+            } else {
+                gamis_id = $("select[name='gamis_id']").val();
+            }
+
+            let layananTambahan = [];
+            layananTambahan = $('select[name="layanan_tambahan_id[]"]').map(function () {
+                return $(this).val();
+            }).get();
+
             $.ajax({
                 type: "post",
                 url: "{{ route('transaksi.lurah.cabang.update', ['cabang' => $cabang->slug, 'transaksi' => $transaksi->id]) }}",
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "pelanggan_id": $("select[name='pelanggan_id']").val(),
-                    "gamis_id": $("select[name='gamis_id']").val(),
+                    "gamis_id": gamis_id,
                     "total_biaya_layanan": $("input[name='total_biaya_layanan']").val(),
                     "total_biaya_prioritas": $("input[name='total_biaya_prioritas']").val(),
+                    "total_biaya_layanan_tambahan": $("input[name='total_biaya_layanan_tambahan']").val(),
                     "total_bayar_akhir": $("input[name='total_bayar_akhir']").val(),
-                    "jenis_pembayaran": $("input[name='jenis_pembayaran']").val(),
+                    "jenis_pembayaran": $("select[name='jenis_pembayaran']").val(),
                     "bayar": $("input[name='bayar']").val(),
                     "kembalian": $("input[name='kembalian']").val(),
                     "status": $("select[name='status']").val(),
                     "layanan_prioritas_id": $("select[name='layanan_prioritas_id']").val(),
+                    "layanan_tambahan_id": layananTambahan,
                     "detail_transaksi_id": detailTransaksi,
                     "jenis_pakaian_id": pakaian,
                     "jenis_layanan_id": layanan,
@@ -382,6 +414,7 @@
                                     <span class="label-text font-semibold dark:text-slate-100">Gamis</span>
                                 </div>
                                 <select name="gamis_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
+                                    <option value="null" selected>Tidak Perlu Gamis</option>
                                     @foreach ($gamis as $item)
                                         <option value="{{ $item->id }}" @if ($item->id == $transaksi->gamis_id) selected @endif>{{ $item->nama }}</option>
                                     @endforeach
@@ -440,7 +473,11 @@
                                     <x-label-input-required :value="'Jenis Pembayaran'" />
                                 </span>
                             </div>
-                            <input type="text" name="jenis_pembayaran" placeholder="Jenis Pembayaran" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $transaksi->jenis_pembayaran }}" required />
+                            <select name="jenis_pembayaran" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
+                                @foreach ($jenisPembayaran as $item)
+                                    <option value="{{ $item->value }}" @if ($item->value == $transaksi->jenis_pembayaran) selected @endif>{{ $item->value }}</option>
+                                @endforeach
+                            </select>
                             @error("jenis_pembayaran")
                                 <div class="label">
                                     <span class="label-text-alt text-sm text-error">{{ $message }}</span>
@@ -497,6 +534,32 @@
                                     </div>
                                 @enderror
                             </label>
+                            <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                                <label class="form-control w-full">
+                                    <div class="label">
+                                        <span class="label-text font-semibold dark:text-slate-100">Layanan Tambahan</span>
+                                    </div>
+                                    <select id="layananTambahan" name="layanan_tambahan_id[]" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" onchange="return ubahLayananTambahan($(this).val());" multiple>
+                                        <option disabled>Pilih Layanan Tambahan!</option>
+
+                                        @foreach ($layananTambahan as $item)
+                                            <option value="{{ $item->id }}"
+                                                @foreach ($transaksi->layananTambahanTransaksi as $layanan)
+                                                    @if ($item->id == $layanan->layanan_tambahan_id)
+                                                        selected
+                                                    @endif
+                                                @endforeach
+                                                >{{ $item->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="form-control w-full">
+                                    <div class="label">
+                                        <span class="label-text font-semibold dark:text-slate-100">Total Biaya Layanan Tambahan</span>
+                                    </div>
+                                    <input type="number" min="0" name="total_biaya_layanan_tambahan" placeholder="Total Biaya Layanan Tambahan" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_biaya_layanan_tambahan }}" readonly required />
+                                </label>
+                            </div>
                             <div class="w-full">
                                 <div class="label">
                                     <span class="label-text font-semibold dark:text-slate-100">Aksi Layanan</span>

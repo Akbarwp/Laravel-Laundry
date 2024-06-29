@@ -18,11 +18,13 @@ return new class extends Migration
             $table->dateTime('waktu');
             $table->double('total_biaya_layanan');
             $table->double('total_biaya_prioritas');
+            $table->double('total_biaya_layanan_tambahan');
             $table->double('total_bayar_akhir');
             $table->string('jenis_pembayaran');
             $table->double('bayar');
             $table->double('kembalian');
             $table->string('status');
+            $table->boolean('konfirmasi_upah_gamis')->default(0);
             $table->foreignId('layanan_prioritas_id')->constrained('layanan_prioritas', 'id');
             $table->foreignId('pelanggan_id')->constrained('pelanggan', 'id');
             $table->foreignId('pegawai_id')->constrained('users', 'id');

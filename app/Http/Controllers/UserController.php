@@ -32,9 +32,26 @@ class UserController extends Controller
         $role = Role::get();
 
         if ($userRole == 'lurah') {
-            $manajer = ManajerLaundry::join('users as u', 'manajer_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('manajer_laundry.created_at', 'asc')->get();
-            $pegawai = PegawaiLaundry::join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('pegawai_laundry.created_at', 'asc')->get();
-            $gamis = DetailGamis::join('users as u', 'detail_gamis.user_id', '=', 'u.id')->where('u.deleted_at', null)->orderBy('detail_gamis.created_at', 'asc')->get();
+            $manajer = ManajerLaundry::query()
+                ->join('users as u', 'manajer_laundry.user_id', '=', 'u.id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->select('manajer_laundry.*', 'u.*', 'c.nama as nama_cabang')
+                ->where('u.deleted_at', null)
+                ->orderBy('manajer_laundry.created_at', 'asc')->get();
+
+            $pegawai = PegawaiLaundry::query()
+                ->join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->select('pegawai_laundry.*', 'u.*', 'c.nama as nama_cabang')
+                ->where('u.deleted_at', null)
+                ->orderBy('pegawai_laundry.created_at', 'asc')->get();
+
+            $gamis = DetailGamis::query()
+                ->join('users as u', 'detail_gamis.user_id', '=', 'u.id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->select('detail_gamis.*', 'u.*', 'c.nama as nama_cabang')
+                ->where('u.deleted_at', null)
+                ->orderBy('detail_gamis.created_at', 'asc')->get();
 
             $manajerTrash = User::join('manajer_laundry as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
             $pegawaiTrash = User::join('pegawai_laundry as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
@@ -44,8 +61,21 @@ class UserController extends Controller
 
         } elseif ($userRole == 'manajer_laundry') {
             $cabangId = auth()->user()->cabang_id;
-            $pegawai = PegawaiLaundry::join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')->where('u.cabang_id', $cabangId)->where('u.deleted_at', null)->orderBy('pegawai_laundry.created_at', 'asc')->get();
-            $gamis = DetailGamis::join('users as u', 'detail_gamis.user_id', '=', 'u.id')->where('u.cabang_id', $cabangId)->where('u.deleted_at', null)->orderBy('detail_gamis.created_at', 'asc')->get();
+            $pegawai = PegawaiLaundry::query()
+                ->join('users as u', 'pegawai_laundry.user_id', '=', 'u.id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->select('pegawai_laundry.*', 'u.*', 'c.nama as nama_cabang')
+                ->where('u.cabang_id', $cabangId)
+                ->where('u.deleted_at', null)
+                ->orderBy('pegawai_laundry.created_at', 'asc')->get();
+
+            $gamis = DetailGamis::query()
+                ->join('users as u', 'detail_gamis.user_id', '=', 'u.id')
+                ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
+                ->select('detail_gamis.*', 'u.*', 'c.nama as nama_cabang')
+                ->where('u.cabang_id', $cabangId)
+                ->where('u.deleted_at', null)
+                ->orderBy('detail_gamis.created_at', 'asc')->get();
 
             $pegawaiTrash = User::join('pegawai_laundry as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->where('users.cabang_id', $cabangId)->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
             $gamisTrash = User::join('detail_gamis as p', 'p.user_id', '=', 'users.id')->join('cabang as c', 'c.id', '=', 'users.cabang_id')->where('users.cabang_id', $cabangId)->select('users.*', 'p.*', 'c.nama as nama_cabang')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();

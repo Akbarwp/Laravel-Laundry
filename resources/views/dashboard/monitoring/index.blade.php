@@ -23,6 +23,357 @@
                 order: [],
                 pagingType: 'full_numbers',
             });
+
+            // chart-pendapatan-gamis
+            if (document.querySelector("#chart-pendapatan-gamis")) {
+                let bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                let hasilBulan = [];
+                @foreach ($hasilPendapatanGamis as $item)
+                    hasilBulan.push({{ $item['hasil'] }});
+                @endforeach
+
+                let ctx1 = document.getElementById("chart-pendapatan-gamis").getContext("2d");
+                let gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+                gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
+                gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
+                gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
+                new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: bulan,
+                        datasets: [{
+                            label: "Rp",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#5e72e4",
+                            backgroundColor: gradientStroke1,
+                            borderWidth: 3,
+                            fill: true,
+                            data: hasilBulan,
+                            maxBarThickness: 6
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                        scales: {
+                            y: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: true,
+                                    drawOnChartArea: true,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    padding: 10,
+                                    color: '#fbfbfb',
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: false,
+                                    drawOnChartArea: false,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    color: '#ccc',
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                        },
+                    },
+                });
+            }
+
+            // chart-gamis-terdaftar
+            if (document.querySelector("#chart-gamis-terdaftar")) {
+                let bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                let hasilBulan = [];
+                @foreach ($hasilJumlahGamis as $item)
+                    hasilBulan.push({{ $item['hasil'] }});
+                @endforeach
+
+                let ctx1 = document.getElementById("chart-gamis-terdaftar").getContext("2d");
+                let gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+                gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
+                gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
+                gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
+                new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: bulan,
+                        datasets: [{
+                            label: "Total",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#5e72e4",
+                            backgroundColor: gradientStroke1,
+                            borderWidth: 3,
+                            fill: true,
+                            data: hasilBulan,
+                            maxBarThickness: 6
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                        scales: {
+                            y: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: true,
+                                    drawOnChartArea: true,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    padding: 10,
+                                    color: '#fbfbfb',
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: false,
+                                    drawOnChartArea: false,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    color: '#ccc',
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                        },
+                    },
+                });
+            }
+
+            // chart-status-gamis
+            if (document.querySelector("#chart-status-lulus")) {
+                let bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                let hasilBulan = [];
+                @foreach ($hasilStatusGamis['Lulus'] as $item)
+                    hasilBulan.push({{ $item['hasil'] }});
+                @endforeach
+
+                let ctx1 = document.getElementById("chart-status-lulus").getContext("2d");
+                let gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+                gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
+                gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
+                gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
+                new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: bulan,
+                        datasets: [{
+                            label: "Total",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#5e72e4",
+                            backgroundColor: gradientStroke1,
+                            borderWidth: 3,
+                            fill: true,
+                            data: hasilBulan,
+                            maxBarThickness: 6
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                        scales: {
+                            y: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: true,
+                                    drawOnChartArea: true,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    padding: 10,
+                                    color: '#fbfbfb',
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: false,
+                                    drawOnChartArea: false,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    color: '#ccc',
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                        },
+                    },
+                });
+            }
+
+            if (document.querySelector("#chart-status-gamis")) {
+                let bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                let hasilBulan = [];
+                @foreach ($hasilStatusGamis['Gamis'] as $item)
+                    hasilBulan.push({{ $item['hasil'] }});
+                @endforeach
+
+                let ctx1 = document.getElementById("chart-status-gamis").getContext("2d");
+                let gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+                gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
+                gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
+                gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
+                new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: bulan,
+                        datasets: [{
+                            label: "Total",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#5e72e4",
+                            backgroundColor: gradientStroke1,
+                            borderWidth: 3,
+                            fill: true,
+                            data: hasilBulan,
+                            maxBarThickness: 6
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index',
+                        },
+                        scales: {
+                            y: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: true,
+                                    drawOnChartArea: true,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    padding: 10,
+                                    color: '#fbfbfb',
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    drawBorder: false,
+                                    display: false,
+                                    drawOnChartArea: false,
+                                    drawTicks: false,
+                                    borderDash: [5, 5]
+                                },
+                                ticks: {
+                                    display: true,
+                                    color: '#ccc',
+                                    padding: 20,
+                                    font: {
+                                        size: 11,
+                                        family: "Open Sans",
+                                        style: 'normal',
+                                        lineHeight: 2
+                                    },
+                                }
+                            },
+                        },
+                    },
+                });
+            }
         });
 
         @if (session()->has('success'))
@@ -320,6 +671,40 @@
             </div>
             {{-- Akhir Tabel Gamis --}}
 
+            {{-- Awal Filter Cabang Tahun --}}
+            <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                <div class="flex-auto px-0 pb-2 pt-0">
+                    <div class="overflow-x-auto p-0 px-6 pb-6">
+                        <form action="{{ route('monitoring') }}" method="get" enctype="multipart/form-data">
+                            <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                                @role('lurah')
+                                    <label class="form-control w-full lg:w-1/2">
+                                        <div class="label">
+                                            <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
+                                        </div>
+                                        <select name="cabang_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
+                                            <option disabled selected>Semua Cabang</option>
+                                            @foreach ($cabang as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </label>
+                                @endrole
+                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/2 @else lg:w-full @endif">
+                                    <div class="label">
+                                        <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Awal</span>
+                                    </div>
+                                    <input type="number" min="0" value="{{ \Carbon\Carbon::now()->format('Y') }}" name="tahun" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" />
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-accent btn-sm uppercase mt-3">Filter</button>
+                            <button type="reset" class="btn btn-neutral btn-sm uppercase mt-3">Reset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Filter Cabang Tahun --}}
+
             {{-- Awal Tabel Monitoring Gamis --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
@@ -416,6 +801,56 @@
                 </div>
             </div>
             {{-- Akhir Tabel Monitoring Gamis --}}
+
+            {{-- Awal Diagram Monitoring Gamis --}}
+            <div class="w-full lg:flex flex-none gap-3">
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Pendapatan Gamis <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-pendapatan-gamis" height="300"></canvas>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Gamis Terdaftar <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-gamis-terdaftar" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:flex flex-none gap-3">
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Gamis Berstatus Lulus <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-status-lulus" height="300"></canvas>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Gamis Berstatus Gamis <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-status-gamis" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Diagram Monitoring Gamis --}}
         </div>
     </div>
 @endsection

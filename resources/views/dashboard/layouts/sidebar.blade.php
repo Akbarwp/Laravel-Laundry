@@ -1,9 +1,9 @@
 <aside class="dark:bg-slate-850 max-w-64 ease-nav-brand z-990 fixed inset-y-0 my-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-xl transition-transform duration-200 dark:shadow-none xl:left-0 xl:ml-6 xl:translate-x-0" aria-expanded="false">
     <div class="h-19">
         <i class="ri-close-large-fill absolute right-0 top-0 cursor-pointer p-4 text-slate-400 opacity-50 dark:text-white xl:hidden" sidenav-close></i>
-        <a class="m-0 block whitespace-nowrap px-8 py-6 text-sm text-slate-700 dark:text-white" href="https://demos.creative-tim.com/argon-dashboard-tailwind/pages/dashboard.html" target="_blank">
-            <img src="{{ asset("img/logo-ct-dark.png") }}" class="ease-nav-brand inline h-full max-h-8 max-w-full transition-all duration-200 dark:hidden" alt="main_logo" />
-            <img src="{{ asset("img/logo-ct.png") }}" class="ease-nav-brand hidden h-full max-h-8 max-w-full transition-all duration-200 dark:inline" alt="main_logo" />
+        <a class="m-0 block whitespace-nowrap px-8 py-6 text-sm text-slate-700 dark:text-white" href="{{ route("dashboard") }}">
+            <img src="{{ asset("img/logo-laundry-simokerto-noback.png") }}" class="ease-nav-brand inline h-full max-h-10 max-w-full transition-all duration-200 dark:hidden" alt="main_logo" />
+            <img src="{{ asset("img/logo-laundry-simokerto-noback.png") }}" class="ease-nav-brand hidden h-full max-h-10 max-w-full transition-all duration-200 dark:inline" alt="main_logo" />
             <span class="ease-nav-brand ml-1 font-semibold transition-all duration-200">Laundry Lurah</span>
         </a>
     </div>
@@ -133,6 +133,15 @@
                                 <i class="ri-customer-service-fill relative top-0 text-lg leading-normal text-blue-500"></i>
                             </div>
                             <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Layanan Prioritas</span>
+                        </a>
+                    </li>
+
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["layanan-tambahan"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("layanan-tambahan") }}">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="ri-hand-heart-line relative top-0 text-lg leading-normal text-blue-500"></i>
+                            </div>
+                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Layanan Tambahan</span>
                         </a>
                     </li>
                 @endrole

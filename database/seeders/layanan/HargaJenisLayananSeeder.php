@@ -23,7 +23,6 @@ class HargaJenisLayananSeeder extends Seeder
         //? Cabang 1
         $jenisLayananCuci = JenisLayanan::where(['nama' => 'Cuci', 'cabang_id' => $cabang->id])->first();
         $jenisLayananSetrika = JenisLayanan::where(['nama' => 'Setrika', 'cabang_id' => $cabang->id])->first();
-        $jenisLayananAntar = JenisLayanan::where(['nama' => 'Antar', 'cabang_id' => $cabang->id])->first();
 
         $jenisPakaianKaos = JenisPakaian::where(['nama' => 'Kaos', 'cabang_id' => $cabang->id])->first();
         $jenisPakaianKemeja = JenisPakaian::where(['nama' => 'Kemeja', 'cabang_id' => $cabang->id])->first();
@@ -44,13 +43,6 @@ class HargaJenisLayananSeeder extends Seeder
             'jenis_pakaian_id' => $jenisPakaianKaos->id,
             'cabang_id' => $cabang->id,
         ]);
-        HargaJenisLayanan::create([
-            'harga' => 1500,
-            'jenis_satuan' => JenisSatuanLayanan::KG,
-            'jenis_layanan_id' => $jenisLayananAntar->id,
-            'jenis_pakaian_id' => $jenisPakaianKaos->id,
-            'cabang_id' => $cabang->id,
-        ]);
 
         //? Seeder --> make Harga Jenis Layanan Kemeja
         HargaJenisLayanan::create([
@@ -66,14 +58,6 @@ class HargaJenisLayananSeeder extends Seeder
             'jenis_layanan_id' => $jenisLayananSetrika->id,
             'jenis_pakaian_id' => $jenisPakaianKemeja->id,
             'cabang_id' => $cabang->id,
-        ]);
-        HargaJenisLayanan::create([
-            'harga' => 2000,
-            'jenis_satuan' => JenisSatuanLayanan::KG,
-            'jenis_layanan_id' => $jenisLayananAntar->id,
-            'jenis_pakaian_id' => $jenisPakaianKemeja->id,
-            'cabang_id' => $cabang->id,
-            'deleted_at' => Carbon::now(),
         ]);
 
         //? Seeder --> make Harga Jenis Layanan Jeans
@@ -91,19 +75,10 @@ class HargaJenisLayananSeeder extends Seeder
             'jenis_pakaian_id' => $jenisPakaianJeans->id,
             'cabang_id' => $cabang->id,
         ]);
-        HargaJenisLayanan::create([
-            'harga' => 2500,
-            'jenis_satuan' => JenisSatuanLayanan::KG,
-            'jenis_layanan_id' => $jenisLayananAntar->id,
-            'jenis_pakaian_id' => $jenisPakaianJeans->id,
-            'cabang_id' => $cabang->id,
-            'deleted_at' => Carbon::now(),
-        ]);
 
         //? Cabang 2
         $jenisLayananCuci2 = JenisLayanan::where(['nama' => 'Cuci', 'cabang_id' => $cabang2->id])->first();
         $jenisLayananSetrika2 = JenisLayanan::where(['nama' => 'Setrika', 'cabang_id' => $cabang2->id])->first();
-        $jenisLayananAntar2 = JenisLayanan::where(['nama' => 'Antar', 'cabang_id' => $cabang2->id])->first();
 
         $jenisPakaianKemeja2 = JenisPakaian::where(['nama' => 'Kemeja', 'cabang_id' => $cabang2->id])->first();
 
@@ -121,14 +96,6 @@ class HargaJenisLayananSeeder extends Seeder
             'jenis_layanan_id' => $jenisLayananCuci2->id,
             'jenis_pakaian_id' => $jenisLayananSetrika2->id,
             'cabang_id' => $cabang2->id,
-        ]);
-        HargaJenisLayanan::create([
-            'harga' => 1000,
-            'jenis_satuan' => JenisSatuanLayanan::KG,
-            'jenis_layanan_id' => $jenisLayananCuci2->id,
-            'jenis_pakaian_id' => $jenisLayananAntar2->id,
-            'cabang_id' => $cabang2->id,
-            'deleted_at' => Carbon::now(),
         ]);
     }
 }

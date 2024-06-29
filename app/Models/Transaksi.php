@@ -20,11 +20,13 @@ class Transaksi extends Model
         'waktu',
         'total_biaya_layanan',
         'total_biaya_prioritas',
+        'total_biaya_layanan_tambahan',
         'total_bayar_akhir',
         'jenis_pembayaran',
         'bayar',
         'kembalian',
         'status',
+        'konfirmasi_upah_gamis',
         'layanan_prioritas_id',
         'pelanggan_id',
         'pegawai_id',
@@ -35,6 +37,11 @@ class Transaksi extends Model
     public function detailTransaksi()
     {
         return $this->hasMany(DetailTransaksi::class);
+    }
+
+    public function layananTambahanTransaksi()
+    {
+        return $this->hasMany(LayananTambahanTransaksi::class);
     }
 
     public function layananPrioritas()

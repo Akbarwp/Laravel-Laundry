@@ -75,7 +75,6 @@
                 <div class="flex-auto px-0 pb-2 pt-0">
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <form action="{{ route('laporan.gamis') }}" method="get" enctype="multipart/form-data" class="mb-3">
-                            @csrf
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                                 @role('lurah')
                                     <label class="form-control w-full lg:w-1/3">
@@ -83,7 +82,7 @@
                                             <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
                                         </div>
                                         <select name="cabang_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
-                                            <option disabled selected>Pilih Cabang!</option>
+                                            <option disabled selected>Semua Cabang</option>
                                             @foreach ($cabang as $item)
                                                 <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                             @endforeach
@@ -104,6 +103,7 @@
                                 </label>
                             </div>
                             <button type="submit" class="btn btn-accent btn-sm uppercase mt-3">Filter</button>
+                            <button type="reset" class="btn btn-neutral btn-sm uppercase mt-3">Reset</button>
                         </form>
 
                         <table id="myTable" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">

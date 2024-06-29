@@ -15,7 +15,7 @@
 <body>
     <header class="clearfix">
         <div id="logo">
-            <img src="{!! asset("img/home-decor-3.jpg") !!}" alt="logo">
+            <img src="{!! asset("img/logo-laundry-simokerto.png") !!}" alt="logo">
         </div>
         <h1>{{ $judulTabel }}</h1>
         <div id="company" class="clearfix">

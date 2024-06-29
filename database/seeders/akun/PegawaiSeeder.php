@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Cabang;
 use App\Models\PegawaiLaundry;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class PegawaiSeeder extends Seeder
 {

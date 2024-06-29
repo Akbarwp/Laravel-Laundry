@@ -126,6 +126,62 @@
                 }
             });
         }
+
+        function konfirmasi_upah_button(transaksi_id, gamis, tanggal, konfirmasi) {
+            let judul;
+            let judulSukses;
+            let judulGagal;
+            if (!konfirmasi) {
+                judul = 'Konfirmasi Pemberian Upah ke '+gamis+' ?';
+                judulSukses = 'Konfirmasi berhasil dilakukan';
+                judulGagal = 'Konfirmasi gagal dilakukan';
+            } else {
+                judul = 'Pembatalan Pemberian Upah ke '+gamis+' ?';
+                judulSukses = 'Pembatalan berhasil dilakukan';
+                judulGagal = 'Pembatalan gagal dilakukan';
+            }
+
+            Swal.fire({
+                title: judul,
+                text: tanggal,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6419E6',
+                cancelButtonColor: '#F87272',
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('transaksi.konfirmasiUpahButton') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "transaksi_id": transaksi_id,
+                            "konfirmasi": konfirmasi
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: judulSukses,
+                                icon: 'success',
+                                confirmButtonColor: '#6419E6',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: judulGagal,
+                            })
+                        }
+                    });
+                }
+            })
+        }
     </script>
 @endsection
 
@@ -290,53 +346,89 @@
             </div>
             {{-- Akhir Modal Edit --}}
 
-            {{-- Awal Tabel Upah Gamis --}}
-            <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
-                <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                    <h6 class="font-bold dark:text-white">Upah Gamis</h6>
-                </div>
-                <div class="flex-auto px-0 pb-2 pt-0">
-                    <div class="overflow-x-auto p-0 px-6 pb-6">
-                        <table id="myTable1" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
-                            <thead class="align-bottom">
-                                <tr>
-                                    <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Gamis
-                                    </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Upah
-                                    </th>
-                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
-                                        Tanggal
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($monitoring as $item)
+            @role('manajer_laundry')
+                {{-- Awal Tabel Upah Gamis --}}
+                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <h6 class="font-bold dark:text-white">Upah Gamis</h6>
+                    </div>
+                    <div class="flex-auto px-0 pb-2 pt-0">
+                        <div class="overflow-x-auto p-0 px-6 pb-6">
+                            <table id="myTable1" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
+                                <thead class="align-bottom">
                                     <tr>
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ $item->nama_gamis }}
-                                            </p>
-                                        </td>
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                Rp{{ number_format($item->upah_gamis, 2, ',', '.') }}
-                                            </p>
-                                        </td>
-                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
-                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
-                                            </p>
-                                        </td>
+                                        <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Gamis
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Upah
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Pelanggan
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Total Bayar
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Tanggal
+                                        </th>
+                                        <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Aksi
+                                        </th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($monitoring as $item)
+                                        <tr>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    {{ $item->nama_gamis }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    Rp{{ number_format($item->upah_gamis + $item->total_biaya_layanan_tambahan, 2, ',', '.') }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    {{ $item->pelanggan->nama }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    Rp{{ number_format($item->total_bayar_akhir, 2, ',', '.') }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <div>
+                                                    @if (!$cabang->deleted_at)
+                                                        @if (!$item->konfirmasi_upah_gamis)
+                                                            <label for="konfirmasi_upah_button" class="btn btn-outline btn-primary btn-sm tooltip" data-tip="Konfirmasi Upah Gamis" onclick="return konfirmasi_upah_button('{{ $item->transaksi_id }}', '{{ $item->nama_gamis }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', {{ $item->konfirmasi_upah_gamis }})">
+                                                                <i class="ri-receipt-line text-base"></i>
+                                                            </label>
+                                                        @else
+                                                            <label for="konfirmasi_upah_button" class="btn btn-outline btn-error btn-sm tooltip" data-tip="Pembatalan Upah Gamis" onclick="return konfirmasi_upah_button('{{ $item->transaksi_id }}', '{{ $item->nama_gamis }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', {{ $item->konfirmasi_upah_gamis }})">
+                                                                <i class="ri-close-line text-base"></i>
+                                                            </label>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {{-- Akhir Tabel Upah Gamis --}}
+                {{-- Akhir Tabel Upah Gamis --}}
+            @endrole
         </div>
     </div>
 @endsection

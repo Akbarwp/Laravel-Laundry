@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title }}</title>
 
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}" />
-    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
 
     @include('dashboard.layouts.link')
     @yield('css')

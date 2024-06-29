@@ -19,7 +19,8 @@
     </style>
 </head>
 
-<body style='font-family:tahoma; font-size:8pt;' onload="javascript:window.print()">
+{{-- <body style='font-family:tahoma; font-size:8pt;' onload="javascript:window.print()"> --}}
+<body style='font-family:tahoma; font-size:8pt;'>
     <center>
         <table style='width:550px; font-size:8pt; font-family:calibri; border-collapse: collapse;' border = '0'>
             <td width='70%' align='left' style='padding-right:80px; vertical-align:top'>
@@ -45,7 +46,7 @@
         </table>
         <table cellspacing='0' style='width:550px; font-size:8pt; font-family:calibri;  border-collapse: collapse; margin-top: 7px;' border='1'>
             <thead>
-                <tr align='center'>
+                <tr align='center' style="font-weight: 800">
                     <td width='10%'>Jenis Pakaian</td>
                     <td width='20%'>Jenis Layanan</td>
                     <td width='13%'>Total Pakaian</td>
@@ -63,6 +64,25 @@
                     </td>
                     <td>{{ $item->total_pakaian }} {{ $item->detailLayananTransaksi[0]->hargaJenisLayanan->jenis_satuan }}</td>
                     <td style='text-align:right'>Rp{{ number_format($item->total_biaya_layanan+$item->total_biaya_prioritas, 2, ',', '.') }}</td>
+                </tr>
+            @endforeach
+
+            <tr>
+                <td colspan="4" style="color: transparent">-</td>
+            </tr>
+
+            <tr align='center' style="font-weight: 800">
+                <td></td>
+                <td>Layanan Tambahan</td>
+                <td colspan="2"></td>
+            </tr>
+
+            @foreach ($layananTambahanTransaksi as $item)
+                <tr>
+                    <td></td>
+                    <td>{{ $item->layananTambahan->nama }}</td>
+                    <td></td>
+                    <td style='text-align:right'>Rp{{ number_format($item->layananTambahan->harga, 2, ',', '.') }}</td>
                 </tr>
             @endforeach
 

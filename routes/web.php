@@ -12,6 +12,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LayananCabangController;
 use App\Http\Controllers\LayananPrioritasController;
+use App\Http\Controllers\LayananTambahanController;
 use App\Http\Controllers\MonitoringGamisController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProfileController;
@@ -163,6 +164,24 @@ Route::group([
     });
 
     Route::group([
+        'prefix' => 'layanan-tambahan',
+        'middleware' => ['role:lurah|manajer_laundry'],
+    ], function() {
+
+        Route::get('/', [LayananTambahanController::class, 'index'])->name('layanan-tambahan');
+        Route::post('/tambah', [LayananTambahanController::class, 'store'])->name('layanan-tambahan.store');
+        Route::get('/lihat', [LayananTambahanController::class, 'show'])->name('layanan-tambahan.show');
+        Route::get('/ubah', [LayananTambahanController::class, 'edit'])->name('layanan-tambahan.edit');
+        Route::post('/ubah', [LayananTambahanController::class, 'update'])->name('layanan-tambahan.update');
+        Route::post('/hapus', [LayananTambahanController::class, 'delete'])->name('layanan-tambahan.delete');
+        Route::get('/trash', [LayananTambahanController::class, 'trash'])->name('layanan-tambahan.trash');
+        Route::post('/pulihkan', [LayananTambahanController::class, 'restore'])->name('layanan-tambahan.restore');
+        Route::post('/hapus-permanen', [LayananTambahanController::class, 'destroy'])->name('layanan-tambahan.destroy');
+        Route::post('/impor', [LayananTambahanController::class, 'import'])->name('layanan-tambahan.import');
+        Route::get('/ekspor', [LayananTambahanController::class, 'export'])->name('layanan-tambahan.export');
+    });
+
+    Route::group([
         'prefix' => 'jenis-pakaian',
         'middleware' => ['role:lurah|manajer_laundry'],
     ], function() {
@@ -266,12 +285,14 @@ Route::group([
             Route::post('/{cabang:slug}/tambah', [TransaksiController::class, 'storeTransaksiCabang'])->name('transaksi.lurah.cabang.store');
             Route::get('/{cabang:slug}/ubah-jenis-pakaian', [TransaksiController::class, 'ubahJenisPakaian'])->name('transaksi.lurah.cabang.create.ubahJenisPakaian');
             Route::get('/{cabang:slug}/ubah-jenis-layanan', [TransaksiController::class, 'ubahJenisLayanan'])->name('transaksi.lurah.cabang.create.ubahJenisLayanan');
+            Route::get('/{cabang:slug}/ubah-layanan-tambahan', [TransaksiController::class, 'ubahLayananTambahan'])->name('transaksi.lurah.cabang.create.ubahLayananTambahan');
             Route::get('/{cabang:slug}/hitung-total-bayar', [TransaksiController::class, 'hitungTotalBayar'])->name('transaksi.lurah.cabang.create.hitungTotalBayar');
             Route::get('/{cabang:slug}/ubah/{transaksi:id}', [TransaksiController::class, 'editTransaksiCabang'])->name('transaksi.lurah.cabang.edit');
             Route::post('/{cabang:slug}/ubah/{transaksi:id}', [TransaksiController::class, 'updateTransaksiCabang'])->name('transaksi.lurah.cabang.update');
             Route::get('/{cabang:slug}/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.lurah.cabang.edit.status');
             Route::post('/{cabang:slug}/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.lurah.cabang.update.status');
             Route::post('/{cabang:slug}/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.lurah.cabang.delete');
+            Route::post('/{cabang:slug}/konfirmasi-upah-gamis', [TransaksiController::class, 'konfirmasiUpahButton'])->name('transaksi.lurah.cabang.konfirmasiUpahButton');
         });
 
         Route::get('/', [TransaksiController::class, 'index'])->name('transaksi');
@@ -282,12 +303,14 @@ Route::group([
         Route::post('/tambah', [TransaksiController::class, 'storeTransaksiCabang'])->name('transaksi.store');
         Route::get('/ubah-jenis-pakaian', [TransaksiController::class, 'ubahJenisPakaian'])->name('transaksi.create.ubahJenisPakaian');
         Route::get('/ubah-jenis-layanan', [TransaksiController::class, 'ubahJenisLayanan'])->name('transaksi.create.ubahJenisLayanan');
+        Route::get('/ubah-layanan-tambahan', [TransaksiController::class, 'ubahLayananTambahan'])->name('transaksi.create.ubahLayananTambahan');
         Route::get('/hitung-total-bayar', [TransaksiController::class, 'hitungTotalBayar'])->name('transaksi.create.hitungTotalBayar');
         Route::get('/ubah/{transaksi:id}', [TransaksiController::class, 'editTransaksiCabang'])->name('transaksi.edit');
         Route::post('/ubah/{transaksi:id}', [TransaksiController::class, 'updateTransaksiCabang'])->name('transaksi.update');
         Route::get('/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.edit.status');
         Route::post('/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.update.status');
         Route::post('/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.delete');
+        Route::post('/konfirmasi-upah-gamis', [TransaksiController::class, 'konfirmasiUpahButton'])->name('transaksi.konfirmasiUpahButton');
 
         Route::get('/cetak-struk/{transaksi:id}', [TransaksiController::class, 'cetakStrukTransaksi'])->name('transaksi.cetak-struk');
     });

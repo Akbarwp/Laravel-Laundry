@@ -25,6 +25,7 @@ class LaporanController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
             ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
             ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
             ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
@@ -72,6 +73,7 @@ class LaporanController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
             ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
             ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
             ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')

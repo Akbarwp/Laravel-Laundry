@@ -43,6 +43,16 @@
                 order: [],
                 pagingType: 'full_numbers',
             });
+            $('#myTable4').DataTable({
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr',
+                    },
+                },
+                order: [],
+                pagingType: 'full_numbers',
+            });
         });
 
         @if (session()->has('success'))
@@ -178,6 +188,128 @@
                     $.ajax({
                         type: "post",
                         url: "{{ route('jenis-layanan.destroy') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id": id,
+                            "cabang_id": cabang_id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Data berhasil dihapus permanen!',
+                                icon: 'success',
+                                confirmButtonColor: '#6419E6',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Data gagal dihapus permanen!',
+                            })
+                        }
+                    });
+                }
+            })
+        }
+
+        // Layanan Tambahan
+        function show_button_layanan_tambahan(id) {
+            // Loading effect start
+            let loading = `<span class="loading loading-dots loading-md text-blue-500"></span>`;
+            $("#loading_edit1").html(loading);
+            $("#loading_edit2").html(loading);
+
+            $.ajax({
+                type: "get",
+                url: "{{ route('layanan-tambahan.show') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": id
+                },
+                success: function(data) {
+                    // console.log(data);
+                    let items = [];
+                    $.each(data, function(key, val) {
+                        items.push(val);
+                    });
+
+                    $("input[name='nama']").val(items[1]);
+                    $("input[name='harga']").val(items[2]);
+
+                    // Loading effect end
+                    loading = "";
+                    $("#loading_edit1").html(loading);
+                    $("#loading_edit2").html(loading);
+                }
+            });
+        }
+
+        function restore_button_layanan_tambahan(id, cabang_id, nama) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                html: "<p>Data akan dipulihkan!</p>" +
+                    "<div class='divider'></div>" +
+                    "<b>Data: " + nama + "</b>",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6419E6',
+                cancelButtonColor: '#F87272',
+                confirmButtonText: 'Pulihkan',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('layanan-tambahan.restore') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id": id,
+                            "cabang_id": cabang_id
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                title: 'Data berhasil dipulihkan!',
+                                icon: 'success',
+                                confirmButtonColor: '#6419E6',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Data gagal dipulihkan!',
+                            })
+                        }
+                    });
+                }
+            })
+        }
+
+        function destroy_button_layanan_tambahan(id, cabang_id, nama) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                html: "<p>Data yang dihapus permanen tidak dapat dipulihkan kembali!</p>" +
+                    "<div class='divider'></div>" +
+                    "<b>Data: " + nama + "</b>",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6419E6',
+                cancelButtonColor: '#F87272',
+                confirmButtonText: 'Hapus Permanen',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('layanan-tambahan.destroy') }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "id": id,
@@ -1085,6 +1217,110 @@
                 </div>
                 {{-- Akhir Tabel Layanan Prioritas Trash --}}
             {{-- Akhir Layanan Prioritas --}}
+
+            {{-- Awal Layanan Tambahan --}}
+                {{-- Awal Modal Show --}}
+                <input type="checkbox" id="show_button_layanan_tambahan" class="modal-toggle" />
+                <div class="modal" role="dialog">
+                    <div class="modal-box">
+                        <div class="mb-3 flex justify-between">
+                            <h3 class="text-lg font-bold">Detail {{ $title }}</h3>
+                            <label for="show_button_layanan_tambahan" class="cursor-pointer">
+                                <i class="ri-close-large-fill"></i>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">Nama Layanan</span>
+                                    <span class="label-text-alt" id="loading_edit1"></span>
+                                </div>
+                                <input type="text" name="nama" class="input input-bordered w-full text-blue-700" readonly />
+                            </label>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold">Harga</span>
+                                    <span class="label-text-alt" id="loading_edit2"></span>
+                                </div>
+                                <input type="number" min="0" step="0.01" name="harga" placeholder="Harga" class="input input-bordered w-full text-blue-700" readonly />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                {{-- Akhir Modal Show --}}
+
+                {{-- Awal Tabel Layanan Tambahan Trash --}}
+                <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <h6 class="font-bold dark:text-white">Layanan Tambahan Trash <span class="text-error">(data yang telah dihapus)</span></h6>
+                    </div>
+                    <div class="flex-auto px-0 pb-2 pt-0">
+                        <div class="overflow-x-auto p-0 px-6 pb-6">
+                            <table id="myTable4" class="nowrap stripe mb-3 w-full max-w-full border-collapse items-center align-top text-slate-500 dark:border-white/40" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="rounded-tl bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Nama Layanan
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Harga
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Created_at
+                                        </th>
+                                        <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            deleted_at
+                                        </th>
+                                        <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($layananTambahanTrash as $item)
+                                        <tr>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    {{ $item->nama }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                Rp{{ number_format($item->harga, 2, ',', '.') }}
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    {{ Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                    {{ Carbon\Carbon::parse($item->deleted_at)->translatedFormat('d F Y H:i:s') }}
+                                                </p>
+                                            </td>
+                                            <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                                <div>
+                                                    <label for="show_button_layanan_tambahan" class="btn btn-outline btn-info btn-sm" onclick="return show_button_layanan_tambahan('{{ $item->id }}')">
+                                                        <i class="ri-eye-line text-base"></i>
+                                                    </label>
+                                                    @if (!$cabang->deleted_at)
+                                                        <label for="restore_button_layanan_tambahan" class="btn btn-outline btn-primary btn-sm" onclick="return restore_button_layanan_tambahan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                            <i class="ri-history-line text-base"></i>
+                                                        </label>
+                                                        <label for="destroy_button_layanan_tambahan" class="btn btn-outline btn-error btn-sm" onclick="return destroy_button_layanan_tambahan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                            Hapus Permanen
+                                                        </label>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {{-- Akhir Tabel Layanan Tambahan Trash --}}
+            {{-- Akhir Layanan Tambahan --}}
         </div>
     </div>
 @endsection

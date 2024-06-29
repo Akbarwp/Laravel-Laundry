@@ -411,7 +411,7 @@
                                                 </td>
                                                 <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                     <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                        {{ $item->user->cabang ? $item->user->cabang->nama : "-" }}
+                                                        {{ $item->nama_cabang ? $item->nama_cabang : '-' }}
                                                     </p>
                                                 </td>
                                                 <td class="border-b border-slate-600 bg-transparent text-left align-middle">
@@ -463,7 +463,7 @@
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                 <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    {{ $item->user->cabang ? $item->user->cabang->nama : "-" }}
+                                                    {{ $item->nama_cabang ? $item->nama_cabang : '-' }}
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
@@ -514,7 +514,7 @@
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                 <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                    {{ $item->user->cabang ? $item->user->cabang->nama : "-" }}
+                                                    {{ $item->nama_cabang ? $item->nama_cabang : '-' }}
                                                 </p>
                                             </td>
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">

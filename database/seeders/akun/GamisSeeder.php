@@ -8,7 +8,6 @@ use App\Models\Gamis;
 use App\Models\Cabang;
 use App\Models\DetailGamis;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class GamisSeeder extends Seeder
 {
@@ -29,22 +28,9 @@ class GamisSeeder extends Seeder
         ]);
 
         //? Cabang 1
-        $gamis = User::factory()->create([
-            'username' => 'Gamis 1',
-            'email' => 'gamis@gmail.com',
-            'cabang_id' => $cabang->id,
-        ]);
-        $gamis->assignRole($roleGamis);
-        DetailGamis::create([
-            'nama' => 'Gamis 1',
-            'jenis_kelamin' => 'L',
-            'tempat_lahir' => 'Surabaya',
-            'tanggal_lahir' => '1999-01-01',
-            'telepon' => '084234567891',
-            'alamat' => 'Kelurahan Simokerto, Surabaya',
-            'gamis_id' => $keluargaGamis->id,
-            'user_id' => $gamis->id,
-        ]);
+        $this->createGamis($cabang, $keluargaGamis, $roleGamis, 1, ['nama' => 'Jual Pecel','gaji' => 1000000]);
+        $this->createGamis($cabang, $keluargaGamis, $roleGamis, 3, ['nama' => 'Antar Jemput','gaji' => 1000000]);
+        $this->createGamis($cabang, $keluargaGamis, $roleGamis, 4, ['nama' => '-','gaji' => 0]);
 
         //? Cabang 2
         $gamis2 = User::factory()->create([
@@ -63,6 +49,28 @@ class GamisSeeder extends Seeder
             'alamat' => 'Kelurahan Simokerto, Surabaya',
             'gamis_id' => $keluargaGamis->id,
             'user_id' => $gamis2->id,
+        ]);
+    }
+
+    public function createGamis($cabang, $keluargaGamis, $roleGamis, $angka, $pemasukkan)
+    {
+        $gamis = User::factory()->create([
+            'username' => 'Gamis '.$angka,
+            'email' => 'gamis'.$angka.'@gmail.com',
+            'cabang_id' => $cabang->id,
+        ]);
+        $gamis->assignRole($roleGamis);
+        DetailGamis::create([
+            'nama' => 'Gamis '.$angka,
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Surabaya',
+            'tanggal_lahir' => '1999-01-01',
+            'telepon' => '08423456789'.$angka,
+            'alamat' => 'Kelurahan Simokerto, Surabaya',
+            'nama_pemasukkan' => $pemasukkan['nama'],
+            'pemasukkan' => $pemasukkan['gaji'],
+            'gamis_id' => $keluargaGamis->id,
+            'user_id' => $gamis->id,
         ]);
     }
 }
