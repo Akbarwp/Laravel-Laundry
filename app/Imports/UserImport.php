@@ -18,6 +18,7 @@ class UserImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows)
     {
+        $roleUser = auth()->user()->roles[0]->name;
         foreach ($rows as $row) {
             $data = User::withTrashed()->where('email', $row['email'])->first();
             if (empty($data)) {
@@ -42,7 +43,11 @@ class UserImport implements ToCollection, WithHeadingRow
 
                 switch ($row['role']) {
                     case 'manajer_laundry':
-                        ManajerLaundry::create($validatedProfile);
+                        if ($roleUser == 'lurah') {
+                            ManajerLaundry::create($validatedProfile);
+                        } elseif ($roleUser == 'manajer_laundry') {
+                            break;
+                        }
                         break;
                     case 'pegawai_laundry':
                         PegawaiLaundry::create($validatedProfile);

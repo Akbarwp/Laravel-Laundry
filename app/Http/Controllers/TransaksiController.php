@@ -887,7 +887,7 @@ class TransaksiController extends Controller
         return view('dashboard.transaksi.struk.index', compact('title', 'transaksi', 'detailTransaksi', 'cabang', 'layananTambahanTransaksi'));
     }
 
-    public function konfirmasiUpahButton(Request $request)
+    public function konfirmasiUpah(Request $request)
     {
         if (!$request->konfirmasi) {
             Transaksi::where('id', $request->transaksi_id)->update([

@@ -7,8 +7,8 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Login | Laundry</title>
 
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset("img/apple-icon.png") }}" />
-        <link rel="icon" type="image/png" href="{{ asset("img/favicon.png") }}" />
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
+        <link rel="icon" type="image/png" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
 
         <link rel="stylesheet" href="{{ asset("css/argon-dashboard-tailwind.css?v=1.0.1") }}">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />

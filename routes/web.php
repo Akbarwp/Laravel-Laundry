@@ -292,7 +292,7 @@ Route::group([
             Route::get('/{cabang:slug}/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.lurah.cabang.edit.status');
             Route::post('/{cabang:slug}/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.lurah.cabang.update.status');
             Route::post('/{cabang:slug}/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.lurah.cabang.delete');
-            Route::post('/{cabang:slug}/konfirmasi-upah-gamis', [TransaksiController::class, 'konfirmasiUpahButton'])->name('transaksi.lurah.cabang.konfirmasiUpahButton');
+            Route::post('/{cabang:slug}/konfirmasi-upah-gamis', [TransaksiController::class, 'konfirmasiUpah'])->name('transaksi.lurah.cabang.konfirmasiUpah');
         });
 
         Route::get('/', [TransaksiController::class, 'index'])->name('transaksi');
@@ -310,7 +310,7 @@ Route::group([
         Route::get('/ubah-status', [TransaksiController::class, 'editStatusTransaksiCabang'])->name('transaksi.edit.status');
         Route::post('/ubah-status', [TransaksiController::class, 'updateStatusTransaksiCabang'])->name('transaksi.update.status');
         Route::post('/hapus', [TransaksiController::class, 'deleteTransaksiCabang'])->name('transaksi.delete');
-        Route::post('/konfirmasi-upah-gamis', [TransaksiController::class, 'konfirmasiUpahButton'])->name('transaksi.konfirmasiUpahButton');
+        Route::post('/konfirmasi-upah-gamis', [TransaksiController::class, 'konfirmasiUpah'])->name('transaksi.konfirmasiUpah');
 
         Route::get('/cetak-struk/{transaksi:id}', [TransaksiController::class, 'cetakStrukTransaksi'])->name('transaksi.cetak-struk');
     });

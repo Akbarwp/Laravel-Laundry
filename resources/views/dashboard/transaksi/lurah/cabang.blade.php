@@ -154,7 +154,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "post",
-                        url: "{{ route('transaksi.lurah.cabang.konfirmasiUpahButton', $cabang->slug) }}",
+                        url: "{{ route('transaksi.lurah.cabang.konfirmasiUpah', $cabang->slug) }}",
                         data: {
                             "_token": "{{ csrf_token() }}",
                             "transaksi_id": transaksi_id,
