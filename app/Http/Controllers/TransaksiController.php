@@ -42,7 +42,7 @@ class TransaksiController extends Controller
                 ->with(['pegawai' => function($query) {
                     $query->withTrashed();
                 }])
-                ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+                ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
                 ->where('cabang_id', $cabang->id)
                 ->orderBy('waktu', 'asc')->get();
 
@@ -107,7 +107,7 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
-            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+            ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
             ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->where('transaksi.cabang_id', $cabang->id)
             ->where('transaksi.status', '!=', 'Selesai')
@@ -140,7 +140,7 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
-            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+            ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
             ->where('cabang_id', $cabang->id)
             ->orderBy('waktu', 'asc')->get();
 
@@ -201,7 +201,7 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
-            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+            ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
             ->join('layanan_prioritas as lp', 'lp.id', '=', 'transaksi.layanan_prioritas_id')
             ->where('transaksi.cabang_id', $cabang->id)
             ->where('transaksi.status', '!=', 'Selesai')

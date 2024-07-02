@@ -16,14 +16,14 @@ class TransaksiSeeder extends Seeder
      */
     public function run(): void
     {
-        $jumlah = 10;
-        $jmlTransaksi = 10;
-        $tanggalAwal = 'now';
-        $tanggalAkhir = '2024-12-31';
+        $jmlPelanggan = 10;
+        $jmlTransaksi = 25;
+        $tanggalAwal = '2024-01-01';
+        $tanggalAkhir = 'now';
 
         for ($i = 1; $i <= $jmlTransaksi; $i++) {
             $this->createTransaksiReguler(
-                fake()->numberBetween(1, $jumlah),
+                fake()->numberBetween(1, $jmlPelanggan),
                 fake()->randomElement([1,2]),
                 fake()->randomElement(['Baru', 'Proses']),
                 fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')->format('dmY'),
@@ -32,7 +32,7 @@ class TransaksiSeeder extends Seeder
         }
         for ($i = 1; $i <= $jmlTransaksi; $i++) {
             $this->createTransaksiKilat(
-                fake()->numberBetween(1, $jumlah),
+                fake()->numberBetween(1, $jmlPelanggan),
                 fake()->randomElement([1,2]),
                 fake()->randomElement(['Baru', 'Proses']),
                 fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')->format('dmY'),
@@ -41,7 +41,7 @@ class TransaksiSeeder extends Seeder
         }
         for ($i = 1; $i <= $jmlTransaksi; $i++) {
             $this->createTransaksiCahaya(
-                fake()->numberBetween(1, $jumlah),
+                fake()->numberBetween(1, $jmlPelanggan),
                 fake()->randomElement([1,2]),
                 fake()->randomElement(['Baru', 'Proses']),
                 fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')->format('dmY'),
@@ -50,16 +50,38 @@ class TransaksiSeeder extends Seeder
         }
         for ($i = 1; $i <= $jmlTransaksi; $i++) {
             $this->createTransaksiRegulerTambahan(
-                fake()->numberBetween(1, $jumlah),
+                fake()->numberBetween(1, $jmlPelanggan),
                 fake()->randomElement([1,2]),
                 fake()->randomElement(['Baru', 'Proses']),
                 fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')->format('dmY'),
                 fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')
             );
         }
+
+        // Transaksi Selesai
+        for ($i = 1; $i <= $jmlTransaksi; $i++) {
+            $this->createTransaksiReguler(
+                fake()->numberBetween(1, $jmlPelanggan),
+                fake()->randomElement([1,2]),
+                'Selesai',
+                fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')->format('dmY'),
+                fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta'),
+                1
+            );
+        }
+        for ($i = 1; $i <= $jmlTransaksi; $i++) {
+            $this->createTransaksiRegulerTambahan(
+                fake()->numberBetween(1, $jmlPelanggan),
+                fake()->randomElement([1,2]),
+                'Selesai',
+                fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta')->format('dmY'),
+                fake()->dateTimeBetween($tanggalAwal, $tanggalAkhir, 'Asia/Jakarta'),
+                1
+            );
+        }
     }
 
-    public function createTransaksiReguler($pelanggan, $gamis, $status, $tanggalNota, $tanggal)
+    public function createTransaksiReguler($pelanggan, $gamis, $status, $tanggalNota, $tanggal, $konfirmasi = 0)
     {
         $nota1 = Carbon::now()->format('His') . '-' . $tanggalNota . '-' . str()->uuid();
         $transaksi = Transaksi::create([
@@ -74,6 +96,7 @@ class TransaksiSeeder extends Seeder
             'bayar' => 150000,
             'kembalian' => 12000,
             'status' => $status,
+            'konfirmasi_upah_gamis' => $konfirmasi,
             'layanan_prioritas_id' => 1,
             'pelanggan_id' => $pelanggan,
             'pegawai_id' => 7,
@@ -114,7 +137,7 @@ class TransaksiSeeder extends Seeder
         ]);
     }
 
-    public function createTransaksiKilat($pelanggan, $gamis, $status, $tanggalNota, $tanggal)
+    public function createTransaksiKilat($pelanggan, $gamis, $status, $tanggalNota, $tanggal, $konfirmasi = 0)
     {
         $nota1 = Carbon::now()->format('His') . '-' . $tanggalNota . '-' . str()->uuid();
         $transaksi = Transaksi::create([
@@ -129,6 +152,7 @@ class TransaksiSeeder extends Seeder
             'bayar' => 200000,
             'kembalian' => 8000,
             'status' => $status,
+            'konfirmasi_upah_gamis' => $konfirmasi,
             'layanan_prioritas_id' => 2,
             'pelanggan_id' => $pelanggan,
             'pegawai_id' => 7,
@@ -169,7 +193,7 @@ class TransaksiSeeder extends Seeder
         ]);
     }
 
-    public function createTransaksiCahaya($pelanggan, $gamis, $status, $tanggalNota, $tanggal)
+    public function createTransaksiCahaya($pelanggan, $gamis, $status, $tanggalNota, $tanggal, $konfirmasi = 0)
     {
         $nota1 = Carbon::now()->format('His') . '-' . $tanggalNota . '-' . str()->uuid();
         $transaksi = Transaksi::create([
@@ -184,6 +208,7 @@ class TransaksiSeeder extends Seeder
             'bayar' => 220000,
             'kembalian' => 10000,
             'status' => $status,
+            'konfirmasi_upah_gamis' => $konfirmasi,
             'layanan_prioritas_id' => 3,
             'pelanggan_id' => $pelanggan,
             'pegawai_id' => 7,
@@ -224,7 +249,7 @@ class TransaksiSeeder extends Seeder
         ]);
     }
 
-    public function createTransaksiRegulerTambahan($pelanggan, $gamis, $status, $tanggalNota, $tanggal)
+    public function createTransaksiRegulerTambahan($pelanggan, $gamis, $status, $tanggalNota, $tanggal, $konfirmasi = 0)
     {
         $nota1 = Carbon::now()->format('His') . '-' . $tanggalNota . '-' . str()->uuid();
         $transaksi = Transaksi::create([
@@ -239,6 +264,7 @@ class TransaksiSeeder extends Seeder
             'bayar' => 200000,
             'kembalian' => 42000,
             'status' => $status,
+            'konfirmasi_upah_gamis' => $konfirmasi,
             'layanan_prioritas_id' => 1,
             'pelanggan_id' => $pelanggan,
             'pegawai_id' => 7,

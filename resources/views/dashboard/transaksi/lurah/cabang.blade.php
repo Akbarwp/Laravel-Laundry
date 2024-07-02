@@ -148,7 +148,7 @@
                 showCancelButton: true,
                 confirmButtonColor: '#6419E6',
                 cancelButtonColor: '#F87272',
-                confirmButtonText: 'Hapus',
+                confirmButtonText: 'Ubah',
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
