@@ -146,7 +146,16 @@
                                         Upah
                                     </th>
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Pelanggan
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Total Bayar
+                                    </th>
+                                    <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Tanggal
+                                    </th>
+                                    <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
+                                        Aksi
                                     </th>
                                 </tr>
                             </thead>
@@ -160,13 +169,34 @@
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
-                                                Rp{{ number_format($item->upah_gamis, 2, ',', '.') }}
+                                                Rp{{ number_format($item->upah_gamis + $item->total_biaya_layanan_tambahan, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->pelanggan->nama }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                Rp{{ number_format($item->total_bayar_akhir, 2, ',', '.') }}
                                             </p>
                                         </td>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}
                                             </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <div>
+                                                @if (!$cabang->deleted_at)
+                                                    @if (!$item->konfirmasi_upah_gamis)
+                                                        <div class="badge badge-warning">Belum dibayar</div>
+                                                    @else
+                                                        <div class="badge badge-success">Sudah dibayar</div>
+                                                    @endif
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -8,7 +8,7 @@
     <title>{{ $title }}</title>
 
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
-        <link rel="icon" type="image/png" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('img/logo-laundry-simokerto.png') }}" />
 
     @vite(["resources/css/app.css", "resources/js/app.js"])
     <link rel="stylesheet" href="{{ asset('css/landing-page.css') }}" />
@@ -360,7 +360,15 @@
                                 Status:
                                 <span class="text-blue-600 font-semibold"> `+ data[0].status +`</span>
                             </p>
-                            <p class="text-slate-800 mb-4 mt-1 leading-relaxed">Detail Layanan:</p>
+                            <p class="text-slate-800 mb-4 mt-1 leading-relaxed font-bold">
+                                Layanan Tambahan:
+                                `+
+                                    data[2].map(value => {
+                                        return `<span class="text-blue-600 font-semibold"> `+value.layanan+`</span>`
+                                    })
+                                +`
+                            </p>
+                            <p class="text-slate-800 mb-4 mt-1 leading-relaxed font-bold">Detail Layanan:</p>
                             `+
                                 data[1].map(item => {
                                     return `

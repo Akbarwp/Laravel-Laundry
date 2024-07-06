@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailTransaksi;
+use App\Models\LayananTambahanTransaksi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,7 @@ class LandingPageController extends Controller
             ->join('cabang as c', 'transaksi.cabang_id', '=', 'c.id')
             ->where('nota_pelanggan', $request->nota)->select('transaksi.id', 'transaksi.nota_pelanggan', DB::raw('DATE(transaksi.waktu) as tanggal'), 'c.nama as cabang_nama', 'transaksi.jenis_pembayaran', 'transaksi.total_bayar_akhir', 'transaksi.bayar', 'transaksi.kembalian', 'transaksi.status')->first();
         $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+        $layananTambahan = LayananTambahanTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
 
         $detailLayanan = [];
         foreach ($detailTransaksi as $value => $item) {
@@ -33,8 +35,15 @@ class LandingPageController extends Controller
             }
         }
 
+        $detailLayananTambahan = [];
+        foreach ($layananTambahan as $value => $item) {
+            $detailLayananTambahan[$value] = [
+                'layanan' => $item->layananTambahan->nama,
+            ];
+        }
+
         if ($transaksi) {
-            return [$transaksi, $detailLayanan];
+            return [$transaksi, $detailLayanan, $detailLayananTambahan];
         } else {
             return abort(400);
         }

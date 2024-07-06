@@ -919,6 +919,7 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
             ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
             ->where('dg.user_id', auth()->user()->id)
             ->where('transaksi.cabang_id', $cabang->id)
@@ -927,19 +928,37 @@ class TransaksiController extends Controller
             ->orderBy('waktu', 'asc')->get();
 
         $monitoring = Transaksi::query()
+            ->with('pelanggan')
             ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
             ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
             ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
             ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
             ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
             ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-            ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
+            ->select(
+                'transaksi.id as transaksi_id',
+                'transaksi.pelanggan_id',
+                'transaksi.total_bayar_akhir',
+                'dg.nama as nama_gamis',
+                DB::raw("DATE(transaksi.waktu) as tanggal"),
+                DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"),
+                'transaksi.total_biaya_layanan_tambahan',
+                'transaksi.konfirmasi_upah_gamis'
+            )
             ->where('transaksi.cabang_id', $cabang->id)
             ->where('jl.for_gamis', true)
             ->where('transaksi.status', 'Selesai')
             ->where('dg.user_id', auth()->user()->id)
             ->where(DB::raw('DATE(transaksi.waktu)'), Carbon::now()->format('Y-m-d'))
-            ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
+            ->groupBy(
+                'transaksi.id',
+                'transaksi.pelanggan_id',
+                'transaksi.total_bayar_akhir',
+                'dg.nama',
+                DB::raw("DATE(transaksi.waktu)"),
+                'transaksi.total_biaya_layanan_tambahan',
+                'transaksi.konfirmasi_upah_gamis'
+            )
             ->orderBy('transaksi.waktu', 'asc')
             ->orderBy('transaksi.gamis_id', 'asc')
             ->get();
@@ -966,6 +985,7 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
             ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
             ->where('dg.user_id', auth()->user()->id)
             ->where('transaksi.cabang_id', $cabang->id)
@@ -973,21 +993,39 @@ class TransaksiController extends Controller
             ->orderBy('waktu', 'asc')->get();
 
         $monitoring = Transaksi::query()
-                ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
-                ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
-                ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
-                ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
-                ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
-                ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
-                ->select('dg.nama as  nama_gamis', DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"), DB::raw("DATE(transaksi.waktu) as tanggal"))
-                ->where('transaksi.cabang_id', $cabang->id)
-                ->where('jl.for_gamis', true)
-                ->where('transaksi.status', 'Selesai')
-                ->where('dg.user_id', auth()->user()->id)
-                ->groupBy('dg.nama', DB::raw("DATE(transaksi.waktu)"))
-                ->orderBy('transaksi.waktu', 'asc')
-                ->orderBy('transaksi.gamis_id', 'asc')
-                ->get();
+            ->with('pelanggan')
+            ->join('detail_transaksi as dt', 'transaksi.id', '=', 'dt.transaksi_id')
+            ->join('detail_layanan_transaksi as dlt', 'dt.id', '=', 'dlt.detail_transaksi_id')
+            ->join('harga_jenis_layanan as hjl', 'hjl.id', '=', 'dlt.harga_jenis_layanan_id')
+            ->join('jenis_layanan as jl', 'jl.id', '=', 'hjl.jenis_layanan_id')
+            ->join('jenis_pakaian as jp', 'jp.id', '=', 'hjl.jenis_pakaian_id')
+            ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
+            ->select(
+                'transaksi.id as transaksi_id',
+                'transaksi.pelanggan_id',
+                'transaksi.total_bayar_akhir',
+                'dg.nama as nama_gamis',
+                DB::raw("DATE(transaksi.waktu) as tanggal"),
+                DB::raw("SUM(dt.total_pakaian * hjl.harga) as upah_gamis"),
+                'transaksi.total_biaya_layanan_tambahan',
+                'transaksi.konfirmasi_upah_gamis'
+            )
+            ->where('transaksi.cabang_id', $cabang->id)
+            ->where('jl.for_gamis', true)
+            ->where('transaksi.status', 'Selesai')
+            ->where('dg.user_id', auth()->user()->id)
+            ->groupBy(
+                'transaksi.id',
+                'transaksi.pelanggan_id',
+                'transaksi.total_bayar_akhir',
+                'dg.nama',
+                DB::raw("DATE(transaksi.waktu)"),
+                'transaksi.total_biaya_layanan_tambahan',
+                'transaksi.konfirmasi_upah_gamis'
+            )
+            ->orderBy('transaksi.waktu', 'asc')
+            ->orderBy('transaksi.gamis_id', 'asc')
+            ->get();
 
         return view('dashboard.transaksi.gamis.index', compact('title', 'cabang', 'transaksi', 'monitoring', 'isHarian'));
     }
@@ -1003,6 +1041,7 @@ class TransaksiController extends Controller
             ->with(['pegawai' => function($query) {
                 $query->withTrashed();
             }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas:id,nama', 'gamis:id,nama'])
             ->join('detail_gamis as dg', 'dg.id', '=', 'transaksi.gamis_id')
             ->where('dg.user_id', auth()->user()->id)
             ->where('transaksi.id', $request->transaksi)
@@ -1010,6 +1049,7 @@ class TransaksiController extends Controller
             ->first();
 
         $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
-        return view('dashboard.transaksi.gamis.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'isHarian'));
+        $layananTambahanTransaksi = LayananTambahanTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
+        return view('dashboard.transaksi.gamis.lihat', compact('title', 'cabang', 'transaksi', 'detailTransaksi', 'layananTambahanTransaksi', 'isHarian'));
     }
 }
