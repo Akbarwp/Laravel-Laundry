@@ -160,7 +160,9 @@
 
                     <div class="mt-5 flex flex-wrap justify-center gap-2">
                         @if (!$trash)
-                            <a href="{{ route("user.edit", $user->slug) }}" class="btn btn-warning w-full max-w-md text-slate-700">Ubah User</a>
+                            @role(["pic", "manajer_laundry"])
+                                <a href="{{ route("user.edit", $user->slug) }}" class="btn btn-warning w-full max-w-md text-slate-700">Ubah User</a>
+                            @endrole
                         @endif
                         <a href="{{ url()->previous() }}" class="btn btn-ghost w-full max-w-md bg-slate-500 text-white dark:bg-slate-500 dark:hover:opacity-80">Kembali</a>
                     </div>

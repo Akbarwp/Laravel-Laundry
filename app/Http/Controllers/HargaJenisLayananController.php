@@ -56,7 +56,7 @@ class HargaJenisLayananController extends Controller
 
         if ($userRole == 'manajer_laundry') {
             $validated['cabang_id'] = auth()->user()->cabang_id;
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             $cabang = Cabang::where('slug', $request->cabang_slug)->first();
             $validated['cabang_id'] = $cabang->id;
         }
@@ -64,7 +64,7 @@ class HargaJenisLayananController extends Controller
         if (HargaJenisLayanan::where('cabang_id', $validated['cabang_id'])->where('jenis_layanan_id', $validated['jenis_layanan_id'])->where('jenis_pakaian_id', $validated['jenis_pakaian_id'])->first()) {
             if ($userRole == 'manajer_laundry') {
                 return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Sudah Ada');
-            } else if ($userRole == 'lurah') {
+            } else if ($userRole == 'pic') {
                 return back()->with('error', 'Harga Jenis Layanan Sudah Ada');
             }
         }
@@ -77,7 +77,7 @@ class HargaJenisLayananController extends Controller
             } else {
                 return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Gagal Ditambahkan');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($tambah) {
                 return back()->with('success', 'Harga Jenis Layanan Berhasil Ditambahkan');
             } else {
@@ -110,7 +110,7 @@ class HargaJenisLayananController extends Controller
 
         if ($userRole == 'manajer_laundry') {
             $validated['cabang_id'] = auth()->user()->cabang_id;
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             $cabang = Cabang::where('slug', $request->cabang_slug)->first();
             $validated['cabang_id'] = $cabang->id;
         }
@@ -127,7 +127,7 @@ class HargaJenisLayananController extends Controller
                     } else {
                         return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Gagal Diperbarui');
                     }
-                } else if ($userRole == 'lurah') {
+                } else if ($userRole == 'pic') {
                     if ($perbarui) {
                         return back()->with('success', 'Harga Jenis Layanan Berhasil Diperbarui');
                     } else {
@@ -138,7 +138,7 @@ class HargaJenisLayananController extends Controller
             } else {
                 if ($userRole == 'manajer_laundry') {
                     return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Sudah Ada');
-                } else if ($userRole == 'lurah') {
+                } else if ($userRole == 'pic') {
                     return back()->with('error', 'Harga Jenis Layanan Sudah Ada');
                 }
             }
@@ -152,7 +152,7 @@ class HargaJenisLayananController extends Controller
             } else {
                 return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Gagal Diperbarui');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($perbarui) {
                 return back()->with('success', 'Harga Jenis Layanan Berhasil Diperbarui');
             } else {
@@ -196,14 +196,14 @@ class HargaJenisLayananController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         try {
             Excel::import(new HargaJenisLayananImport, $request->file('impor'));
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Harga Jenis Layanan Berhasil Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('harga-jenis-layanan')->with('success', 'Harga Jenis Layanan Berhasil Ditambahkan');
             }
         } catch(\Exception $ex) {
             Log::info($ex);
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Harga Jenis Layanan Gagal Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('harga-jenis-layanan')->with('error', 'Harga Jenis Layanan Gagal Ditambahkan');

@@ -43,6 +43,21 @@ class LaporanController extends Controller
             ->orderBy('transaksi.waktu', 'asc')
             ->get();
 
+        $transaksiTidakGamis = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+            ->join('cabang as c', 'c.id', '=', 'transaksi.cabang_id')
+            ->select('transaksi.nota_layanan', DB::raw("DATE(transaksi.waktu) as tanggal"), 'transaksi.layanan_prioritas_id', 'transaksi.total_bayar_akhir', 'transaksi.pelanggan_id', 'transaksi.pegawai_id', 'transaksi.total_bayar_akhir as pendapatan_laundry', 'transaksi.gamis_id as gamis_id', 'c.nama as nama_cabang', 'c.id as cabang_id')
+            ->where(DB::raw("DATE(transaksi.waktu)"), '>=', $tanggalAwal)
+            ->where(DB::raw("DATE(transaksi.waktu)"), '<=', $tanggalAkhir)
+            ->where('transaksi.status', 'Selesai')
+            ->where('transaksi.gamis_id', null)
+            ->groupBy('transaksi.nota_layanan', DB::raw("DATE(transaksi.waktu)"), 'transaksi.layanan_prioritas_id', 'transaksi.total_bayar_akhir', 'transaksi.pelanggan_id', 'transaksi.pegawai_id', 'transaksi.gamis_id', 'c.nama', 'c.id')
+            ->orderBy('transaksi.waktu', 'asc')
+            ->get();
+
         if ($request->cabang_id) {
             $transaksi = $transaksi->where('cabang_id', $request->cabang_id);
             $nama_cabang = $cabang->where('id', $request->cabang_id)->first();
@@ -58,7 +73,7 @@ class LaporanController extends Controller
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
-        return view('dashboard.laporan.pendapatan-laundry', compact('title', 'transaksi', 'cabang', 'nama_cabang'));
+        return view('dashboard.laporan.pendapatan-laundry', compact('title', 'transaksi', 'cabang', 'nama_cabang', 'transaksiTidakGamis'));
     }
 
     public function pdfLaporanPendapatanLaundry(Request $request)
@@ -91,6 +106,21 @@ class LaporanController extends Controller
             ->orderBy('transaksi.waktu', 'asc')
             ->get();
 
+        $transaksiTidakGamis = Transaksi::query()
+            ->with(['pegawai' => function($query) {
+                $query->withTrashed();
+            }])
+            ->with(['pelanggan:id,nama', 'layananPrioritas', 'gamis'])
+            ->join('cabang as c', 'c.id', '=', 'transaksi.cabang_id')
+            ->select('transaksi.nota_layanan', DB::raw("DATE(transaksi.waktu) as tanggal"), 'transaksi.layanan_prioritas_id', 'transaksi.total_bayar_akhir', 'transaksi.pelanggan_id', 'transaksi.pegawai_id', 'transaksi.total_bayar_akhir as pendapatan_laundry', 'transaksi.gamis_id as gamis_id', 'c.nama as nama_cabang', 'c.id as cabang_id')
+            ->where(DB::raw("DATE(transaksi.waktu)"), '>=', $tanggalAwal)
+            ->where(DB::raw("DATE(transaksi.waktu)"), '<=', $tanggalAkhir)
+            ->where('transaksi.status', 'Selesai')
+            ->where('transaksi.gamis_id', null)
+            ->groupBy('transaksi.nota_layanan', DB::raw("DATE(transaksi.waktu)"), 'transaksi.layanan_prioritas_id', 'transaksi.total_bayar_akhir', 'transaksi.pelanggan_id', 'transaksi.pegawai_id', 'transaksi.gamis_id', 'c.nama', 'c.id')
+            ->orderBy('transaksi.waktu', 'asc')
+            ->get();
+
         if ($request->cabang_id) {
             $transaksi = $transaksi->where('cabang_id', $request->cabang_id);
             $nama_cabang = Cabang::withTrashed()->where('id', $request->cabang_id)->first();
@@ -111,6 +141,7 @@ class LaporanController extends Controller
             'judul' => $title,
             'judulTabel' => $title,
             'transaksi' => $transaksi,
+            'transaksiTidakGamis' => $transaksiTidakGamis,
             'tanggalAwal' => $tanggalAwal,
             'tanggalAkhir' => $tanggalAkhir,
             'nama_cabang' => $nama_cabang,

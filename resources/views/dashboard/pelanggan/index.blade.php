@@ -448,15 +448,19 @@
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
                     <h6 class="font-bold dark:text-white">{{ $title }}</h6>
                     <div class="w-1/2 max-w-full flex-none px-3 text-right">
-                        <label for="create_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                            <i class="ri-add-fill"></i>
-                            Tambah
-                        </label>
-                        @role(['lurah', 'manajer_laundry'])
+                        @role(['pic', 'manajer_laundry', 'pegawai_laundry'])
+                            <label for="create_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-add-fill"></i>
+                                Tambah
+                            </label>
+                        @endrole
+                        @role(['pic', 'manajer_laundry'])
                             <label for="impor_modal" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
                                 <i class="ri-upload-2-line"></i>
                                 Impor
                             </label>
+                        @endrole
+                        @role(['pic', 'manajer_laundry', 'lurah'])
                             <form action="{{ route('pelanggan.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
                                 @csrf
                                 <button type="submit" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
@@ -517,12 +521,14 @@
                                                 <label for="show_button" class="btn btn-outline btn-info btn-sm" onclick="return show_button('{{ $item->id }}')">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </label>
-                                                <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
-                                                    <i class="ri-pencil-fill text-base"></i>
-                                                </label>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
-                                                    <i class="ri-delete-bin-line text-base"></i>
-                                                </label>
+                                                @role(['pic', 'manajer_laundry', 'pegawai_laundry'])
+                                                    <label for="edit_button" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button('{{ $item->id }}')">
+                                                        <i class="ri-pencil-fill text-base"></i>
+                                                    </label>
+                                                    <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}', '{{ $item->nama }}')">
+                                                        <i class="ri-delete-bin-line text-base"></i>
+                                                    </label>
+                                                @endrole
                                             </div>
                                         </td>
                                     </tr>

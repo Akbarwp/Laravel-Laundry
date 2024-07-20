@@ -20,7 +20,7 @@ class DetailLayananTransaksiController extends Controller
             abort(404);
         }
 
-        if ($userRole == 'lurah') {
+        if ($userRole == 'lurah' || $userRole == 'pic') {
             $cabang = Cabang::withTrashed()->where('slug', $request->cabang)->first();
             $transaksi = Transaksi::where('id', $request->transaksi)->first();
             $detailTransaksi = DetailTransaksi::where('id', $request->detailTransaksi)->orderBy('id', 'asc')->first();

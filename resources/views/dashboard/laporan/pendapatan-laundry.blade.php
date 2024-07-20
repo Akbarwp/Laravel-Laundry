@@ -31,7 +31,7 @@
                         <form action="{{ route('laporan.pendapatan.laundry.pdf') }}" method="post" enctype="multipart/form-data" target="_blank">
                             @csrf
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                                @role('lurah')
+                                @role(['lurah', 'pic'])
                                     <label class="form-control w-full lg:w-1/3">
                                         <div class="label">
                                             <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
@@ -44,13 +44,13 @@
                                         </select>
                                     </label>
                                 @endrole
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Awal</span>
                                     </div>
                                     <input type="date" name="tanggalAwal" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ \Carbon\Carbon::now()->format('Y-') . \Carbon\Carbon::now()->format('m-') . '01' }}" />
                                 </label>
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Akhir</span>
                                     </div>
@@ -76,7 +76,7 @@
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <form action="{{ route('laporan.pendapatan.laundry') }}" method="get" enctype="multipart/form-data" class="mb-3">
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                                @role('lurah')
+                                @role(['lurah', 'pic'])
                                     <label class="form-control w-full lg:w-1/3">
                                         <div class="label">
                                             <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
@@ -89,13 +89,13 @@
                                         </select>
                                     </label>
                                 @endrole
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Awal</span>
                                     </div>
                                     <input type="date" name="tanggalAwal" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ \Carbon\Carbon::now()->format('Y-') . \Carbon\Carbon::now()->format('m-') . '01' }}" />
                                 </label>
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Akhir</span>
                                     </div>
@@ -169,8 +169,55 @@
                                                     {{ $item->pegawai->manajer[0]->nama }}
                                                 @elseif ($item->pegawai->roles[0]->name == 'pegawai_laundry')
                                                     {{ $item->pegawai->pegawai[0]->nama }}
-                                                @elseif ($item->pegawai->roles[0]->name == 'lurah')
-                                                    {{ $item->pegawai->lurah[0]->nama }}
+                                                @endif
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->gamis_id ? $item->gamis->nama : "-" }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->nama_cabang }}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                @foreach ($transaksiTidakGamis as $value => $item)
+                                    <tr>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->layananPrioritas->nama }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                Rp{{ number_format($item->total_bayar_akhir, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                Rp{{ number_format($item->pendapatan_laundry, 2, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                {{ $item->pelanggan->nama }}
+                                            </p>
+                                        </td>
+                                        <td class="border-b border-slate-600 bg-transparent text-left align-middle">
+                                            <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
+                                                @if ($item->pegawai->roles[0]->name == 'manajer_laundry')
+                                                    {{ $item->pegawai->manajer[0]->nama }}
+                                                @elseif ($item->pegawai->roles[0]->name == 'pegawai_laundry')
+                                                    {{ $item->pegawai->pegawai[0]->nama }}
                                                 @endif
                                             </p>
                                         </td>
@@ -198,13 +245,13 @@
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Pendapatan Kotor</span>
                                     </div>
-                                    <input type="text" name="total_pendapatan_laundry" value="Rp{{ number_format($transaksi->sum('total_bayar_akhir'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
+                                    <input type="text" name="total_pendapatan_laundry" value="Rp{{ number_format(($transaksi->sum('total_bayar_akhir') + $transaksiTidakGamis->sum('total_bayar_akhir')), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
                                 </label>
                                 <label class="form-control w-full lg:w-1/2">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Pendapatan Bersih</span>
                                     </div>
-                                    <input type="text" name="total_pendapatan_laundry" value="Rp{{ number_format($transaksi->sum('pendapatan_laundry'), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
+                                    <input type="text" name="total_pendapatan_laundry" value="Rp{{ number_format(($transaksi->sum('pendapatan_laundry') + $transaksiTidakGamis->sum('pendapatan_laundry')), 2, ',', '.') }}" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" readonly />
                                 </label>
                             </div>
                         </div>

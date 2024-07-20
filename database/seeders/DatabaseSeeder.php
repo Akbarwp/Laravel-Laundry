@@ -8,6 +8,7 @@ use Database\Seeders\akun\RWSeeder;
 use Database\Seeders\TransaksiSeeder;
 use Database\Seeders\akun\GamisSeeder;
 use Database\Seeders\akun\LurahSeeder;
+use Database\Seeders\akun\PICSeeder;
 use Database\Seeders\akun\ManajerSeeder;
 use Database\Seeders\akun\PegawaiSeeder;
 use Database\Seeders\layanan\JenisLayananSeeder;
@@ -33,6 +34,7 @@ class DatabaseSeeder extends Seeder
             //? Data Akun
             RoleSeeder::class,
             LurahSeeder::class,
+            PICSeeder::class,
             RWSeeder::class,
             ManajerSeeder::class,
             PegawaiSeeder::class,

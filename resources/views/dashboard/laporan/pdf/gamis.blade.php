@@ -1,7 +1,7 @@
 @extends('dashboard.laporan.layouts.main')
 
 @section('tanggal')
-    <p style="padding-bottom: 0px">Tanggal: <span style="font-weight: 500">{{ \Carbon\Carbon::parse($tanggalAwal)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($tanggalAkhir)->format('d/m/Y') }}</span></p>
+    <p style="padding-bottom: 0px">Tanggal: <span style="font-weight: 500">{{ \Carbon\Carbon::parse($tanggalAwal)->format('F Y') }} - {{ \Carbon\Carbon::parse($tanggalAkhir)->format('F Y') }}</span></p>
     <p style="padding-bottom: 20px">Cabang: <span style="font-weight: 500">{{ $nama_cabang ? $nama_cabang->nama : 'Semua Cabang' }}</span></p>
 @endsection
 

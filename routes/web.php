@@ -64,7 +64,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'cabang',
-        'middleware' => ['role:lurah'],
+        'middleware' => ['role:lurah|pic'],
     ], function() {
 
         Route::get('/', [CabangController::class, 'index'])->name('cabang');
@@ -80,7 +80,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'umr',
-        'middleware' => ['role:lurah'],
+        'middleware' => ['role:lurah|pic'],
     ], function() {
 
         Route::get('/', [UMRController::class, 'index'])->name('umr');
@@ -114,7 +114,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'user',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [UserController::class, 'index'])->name('user');
@@ -137,7 +137,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'layanan-cabang',
-        'middleware' => ['role:lurah'],
+        'middleware' => ['role:lurah|pic'],
     ], function() {
 
         Route::get('/', [LayananCabangController::class, 'index'])->name('layanan-cabang');
@@ -147,7 +147,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'jenis-layanan',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [JenisLayananController::class, 'index'])->name('jenis-layanan');
@@ -164,26 +164,8 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'layanan-tambahan',
-        'middleware' => ['role:lurah|manajer_laundry'],
-    ], function() {
-
-        Route::get('/', [LayananTambahanController::class, 'index'])->name('layanan-tambahan');
-        Route::post('/tambah', [LayananTambahanController::class, 'store'])->name('layanan-tambahan.store');
-        Route::get('/lihat', [LayananTambahanController::class, 'show'])->name('layanan-tambahan.show');
-        Route::get('/ubah', [LayananTambahanController::class, 'edit'])->name('layanan-tambahan.edit');
-        Route::post('/ubah', [LayananTambahanController::class, 'update'])->name('layanan-tambahan.update');
-        Route::post('/hapus', [LayananTambahanController::class, 'delete'])->name('layanan-tambahan.delete');
-        Route::get('/trash', [LayananTambahanController::class, 'trash'])->name('layanan-tambahan.trash');
-        Route::post('/pulihkan', [LayananTambahanController::class, 'restore'])->name('layanan-tambahan.restore');
-        Route::post('/hapus-permanen', [LayananTambahanController::class, 'destroy'])->name('layanan-tambahan.destroy');
-        Route::post('/impor', [LayananTambahanController::class, 'import'])->name('layanan-tambahan.import');
-        Route::get('/ekspor', [LayananTambahanController::class, 'export'])->name('layanan-tambahan.export');
-    });
-
-    Route::group([
         'prefix' => 'jenis-pakaian',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [JenisPakaianController::class, 'index'])->name('jenis-pakaian');
@@ -201,7 +183,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'harga-jenis-layanan',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [HargaJenisLayananController::class, 'index'])->name('harga-jenis-layanan');
@@ -219,7 +201,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'layanan-prioritas',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [LayananPrioritasController::class, 'index'])->name('layanan-prioritas');
@@ -236,8 +218,26 @@ Route::group([
     });
 
     Route::group([
+        'prefix' => 'layanan-tambahan',
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
+    ], function() {
+
+        Route::get('/', [LayananTambahanController::class, 'index'])->name('layanan-tambahan');
+        Route::post('/tambah', [LayananTambahanController::class, 'store'])->name('layanan-tambahan.store');
+        Route::get('/lihat', [LayananTambahanController::class, 'show'])->name('layanan-tambahan.show');
+        Route::get('/ubah', [LayananTambahanController::class, 'edit'])->name('layanan-tambahan.edit');
+        Route::post('/ubah', [LayananTambahanController::class, 'update'])->name('layanan-tambahan.update');
+        Route::post('/hapus', [LayananTambahanController::class, 'delete'])->name('layanan-tambahan.delete');
+        Route::get('/trash', [LayananTambahanController::class, 'trash'])->name('layanan-tambahan.trash');
+        Route::post('/pulihkan', [LayananTambahanController::class, 'restore'])->name('layanan-tambahan.restore');
+        Route::post('/hapus-permanen', [LayananTambahanController::class, 'destroy'])->name('layanan-tambahan.destroy');
+        Route::post('/impor', [LayananTambahanController::class, 'import'])->name('layanan-tambahan.import');
+        Route::get('/ekspor', [LayananTambahanController::class, 'export'])->name('layanan-tambahan.export');
+    });
+
+    Route::group([
         'prefix' => 'pelanggan',
-        'middleware' => ['role:lurah|manajer_laundry|pegawai_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pegawai_laundry|pic'],
     ], function() {
 
         Route::get('/', [PelangganController::class, 'index'])->name('pelanggan');
@@ -252,7 +252,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'gamis',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [GamisController::class, 'index'])->name('gamis');
@@ -268,12 +268,12 @@ Route::group([
 
     Route::group([
         'prefix' => 'transaksi',
-        'middleware' => ['role:lurah|manajer_laundry|pegawai_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pegawai_laundry|pic'],
     ], function() {
 
         Route::group([
             'prefix' => 'lurah',
-            'middleware' => ['role:lurah'],
+            'middleware' => ['role:lurah|pic'],
         ], function() {
 
             Route::get('/', [TransaksiController::class, 'index'])->name('transaksi.lurah');
@@ -317,7 +317,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'monitoring-program-gamis',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/', [MonitoringGamisController::class, 'index'])->name('monitoring');
@@ -351,7 +351,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'laporan',
-        'middleware' => ['role:lurah|manajer_laundry'],
+        'middleware' => ['role:lurah|manajer_laundry|pic'],
     ], function() {
 
         Route::get('/pendapatan-laundry', [LaporanController::class, 'laporanPendapatanLaundry'])->name('laporan.pendapatan.laundry');

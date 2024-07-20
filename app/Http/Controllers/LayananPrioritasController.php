@@ -39,7 +39,7 @@ class LayananPrioritasController extends Controller
 
         if ($userRole == 'manajer_laundry') {
             $validated['cabang_id'] = auth()->user()->cabang_id;
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             $cabang = Cabang::where('slug', $request->cabang_slug)->first();
             $validated['cabang_id'] = $cabang->id;
         }
@@ -52,7 +52,7 @@ class LayananPrioritasController extends Controller
             } else {
                 return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Ditambahkan');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($tambah) {
                 return back()->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
             } else {
@@ -85,7 +85,7 @@ class LayananPrioritasController extends Controller
             } else {
                 return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Diperbarui');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($perbarui) {
                 return back()->with('success', 'Layanan Prioritas Berhasil Diperbarui');
             } else {
@@ -129,14 +129,14 @@ class LayananPrioritasController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         try {
             Excel::import(new LayananPrioritasImport, $request->file('impor'));
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('layanan-prioritas')->with('success', 'Layanan Prioritas Berhasil Ditambahkan');
             }
         } catch(\Exception $ex) {
             Log::info($ex);
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Layanan Prioritas Gagal Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('layanan-prioritas')->with('error', 'Layanan Prioritas Gagal Ditambahkan');

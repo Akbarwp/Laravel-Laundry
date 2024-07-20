@@ -39,23 +39,19 @@ class UserExport implements FromCollection, WithHeadings, WithMapping, WithStyle
         foreach ($user as $key => $item) {
             switch ($item->roles[0]->name) {
                 case 'manajer_laundry':
-                    if ($roleUser == 'lurah') {
-                        $profile = ManajerLaundry::where('user_id', $item->id)->first();
+                    $profile = ManajerLaundry::where('user_id', $item->id)->first();
 
-                        $user[$key]['role'] = $item->roles[0]->name;
-                        $user[$key]['nama_lengkap'] = $profile->nama;
-                        $user[$key]['jenis_kelamin'] = $profile->jenis_kelamin;
-                        $user[$key]['tempat_lahir'] = $profile->tempat_lahir;
-                        $user[$key]['tanggal_lahir'] = $profile->tanggal_lahir;
-                        $user[$key]['telepon'] = $profile->telepon;
-                        $user[$key]['alamat'] = $profile->alamat;
-                        $user[$key]['mulai_kerja'] = $profile->mulai_kerja;
-                        $user[$key]['selesai_kerja'] = $profile->selesai_kerja;
-
-                    } elseif ($roleUser == 'manajer_laundry') {
-                        break;
-                    }
+                    $user[$key]['role'] = $item->roles[0]->name;
+                    $user[$key]['nama_lengkap'] = $profile->nama;
+                    $user[$key]['jenis_kelamin'] = $profile->jenis_kelamin;
+                    $user[$key]['tempat_lahir'] = $profile->tempat_lahir;
+                    $user[$key]['tanggal_lahir'] = $profile->tanggal_lahir;
+                    $user[$key]['telepon'] = $profile->telepon;
+                    $user[$key]['alamat'] = $profile->alamat;
+                    $user[$key]['mulai_kerja'] = $profile->mulai_kerja;
+                    $user[$key]['selesai_kerja'] = $profile->selesai_kerja;
                     break;
+
                 case 'pegawai_laundry':
                     $profile = PegawaiLaundry::where('user_id', $item->id)->first();
 
@@ -68,8 +64,8 @@ class UserExport implements FromCollection, WithHeadings, WithMapping, WithStyle
                     $user[$key]['alamat'] = $profile->alamat;
                     $user[$key]['mulai_kerja'] = $profile->mulai_kerja;
                     $user[$key]['selesai_kerja'] = $profile->selesai_kerja;
-
                     break;
+
                 case 'gamis':
                     $profile = DetailGamis::where('user_id', $item->id)->first();
 
@@ -85,7 +81,6 @@ class UserExport implements FromCollection, WithHeadings, WithMapping, WithStyle
                     $user[$key]['kartu_keluarga'] = $profile->gamis->kartu_keluarga;
                     $user[$key]['nama_pemasukkan'] = $profile->nama_pemasukkan;
                     $user[$key]['pemasukkan'] = $profile->pemasukkan;
-
                     break;
             }
         }

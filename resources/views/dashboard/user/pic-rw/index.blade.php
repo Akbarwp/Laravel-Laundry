@@ -264,7 +264,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($lurah as $item)
+                                @foreach ($pic as $item)
                                     <tr>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
@@ -396,7 +396,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($lurahTrash as $item)
+                                @foreach ($picTrash as $item)
                                     <tr>
                                         <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                             <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">

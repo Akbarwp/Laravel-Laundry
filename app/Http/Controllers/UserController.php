@@ -10,6 +10,7 @@ use App\Models\Gamis;
 use App\Models\Lurah;
 use App\Models\ManajerLaundry;
 use App\Models\PegawaiLaundry;
+use App\Models\PIC;
 use App\Models\RW;
 use App\Models\User;
 use Carbon\Carbon;
@@ -31,7 +32,7 @@ class UserController extends Controller
         $cabang = Cabang::get();
         $role = Role::get();
 
-        if ($userRole == 'lurah') {
+        if ($userRole == 'lurah' || $userRole == 'pic') {
             $manajer = ManajerLaundry::query()
                 ->join('users as u', 'manajer_laundry.user_id', '=', 'u.id')
                 ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
@@ -91,7 +92,7 @@ class UserController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $user = User::where('slug', $request->user)->first();
 
-        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah' && $userRole != 'pic') {
             abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
@@ -117,6 +118,10 @@ class UserController extends Controller
         $title = "Tambah User";
         $userRole = auth()->user()->roles[0]->name;
 
+        if ($userRole == 'lurah') {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
         if ($cabang && $cabang->deleted_at) {
             abort(403, 'USER DOES NOT HAVE PERMISSION.');
@@ -125,11 +130,11 @@ class UserController extends Controller
         $kkGamis = Gamis::get();
         $isCabang = [false];
 
-        if ($userRole == 'lurah') {
-            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
+        if ($userRole == 'pic') {
+            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->where('name', '!=', 'pic')->get();
             $cabang = Cabang::where('deleted_at', null)->get();
         } else if ($userRole == 'manajer_laundry') {
-            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'manajer_laundry')->where('name', '!=', 'rw')->get();
+            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'manajer_laundry')->where('name', '!=', 'rw')->where('name', '!=', 'pic')->get();
             $cabang = Cabang::where('deleted_at', null)->where('id', auth()->user()->cabang_id)->get();
         }
         return view('dashboard.user.tambah', compact('title', 'cabang', 'role', 'kkGamis', 'isCabang'));
@@ -217,21 +222,25 @@ class UserController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $kkGamis = Gamis::get();
 
+        if ($userRole == 'lurah') {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
+
         $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
         if ($cabang && $cabang->deleted_at) {
             abort(403, 'USER DOES NOT HAVE PERMISSION.');
         }
 
-        if ($userRole == 'lurah') {
-            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
+        if ($userRole == 'pic') {
+            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->where('name', '!=', 'pic')->get();
             $cabang = Cabang::where('deleted_at', null)->get();
         } else if ($userRole == 'manajer_laundry') {
-            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'manajer_laundry')->where('name', '!=', 'rw')->get();
+            $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'manajer_laundry')->where('name', '!=', 'rw')->where('name', '!=', 'pic')->get();
             $cabang = Cabang::where('deleted_at', null)->where('id', auth()->user()->cabang_id)->get();
         }
 
         $user = User::where('slug', $request->user)->first();
-        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'pic') {
             abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
@@ -239,6 +248,8 @@ class UserController extends Controller
 
         if ($user->getRoleNames()[0] == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'manajer_laundry') {
@@ -364,6 +375,11 @@ class UserController extends Controller
     public function editPassword(Request $request)
     {
         $title = "Ubah Password User";
+        $userRole = auth()->user()->roles[0]->name;
+
+        if ($userRole == 'lurah') {
+            abort(403, 'USER DOES NOT HAVE PERMISSION.');
+        }
 
         $cabang = Cabang::where('id', auth()->user()->cabang_id)->withTrashed()->first();
         if ($cabang && $cabang->deleted_at) {
@@ -371,8 +387,7 @@ class UserController extends Controller
         }
 
         $user = User::where('slug', $request->user)->first();
-        $userRole = auth()->user()->roles[0]->name;
-        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'pic') {
             abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
@@ -426,7 +441,7 @@ class UserController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $user = User::where('slug', $request->user)->onlyTrashed()->first();
 
-        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah') {
+        if ($user == null || $user->cabang_id != auth()->user()->cabang_id && $userRole != 'lurah' && $userRole != 'pic') {
             abort(404, 'USER TIDAK DITEMUKAN.');
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
@@ -434,6 +449,8 @@ class UserController extends Controller
 
         if ($user->getRoleNames()[0] == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'manajer_laundry') {
@@ -474,6 +491,8 @@ class UserController extends Controller
 
         if ($userRole == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->delete();
+        } else if ($userRole == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->delete();
         } else if ($userRole == 'rw') {
             $profile = RW::where('user_id', $user->id)->delete();
         } else if ($userRole == 'manajer_laundry') {
@@ -499,7 +518,7 @@ class UserController extends Controller
         $title = "Users Management";
 
         $userRole = auth()->user()->roles[0]->name;
-        if ($userRole != 'lurah') {
+        if ($userRole != 'lurah' && $userRole != 'pic') {
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
@@ -525,7 +544,7 @@ class UserController extends Controller
     public function createUserCabang(Request $request)
     {
         $userRole = auth()->user()->roles[0]->name;
-        if ($userRole != 'lurah') {
+        if ($userRole != 'pic') {
             abort(403, 'USER DOES NOT HAVE THE RIGHT ROLES.');
         }
 
@@ -535,7 +554,7 @@ class UserController extends Controller
         }
 
         $kkGamis = Gamis::get();
-        $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->get();
+        $role = Role::where('name', '!=', 'lurah')->where('name', '!=', 'rw')->where('name', '!=', 'pic')->get();
         $title = "Tambah User";
         $isCabang = [true, $cabang[0]->nama, $cabang[0]->id];
 

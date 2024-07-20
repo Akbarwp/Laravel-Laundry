@@ -21,8 +21,8 @@
                 </a>
             </li>
 
-            @role(["lurah", "manajer_laundry"])
-                @role("lurah")
+            @role(["lurah", "manajer_laundry", "pic"])
+                @role(["lurah", "pic"])
                     {{-- Awal Data Master --}}
                     <li class="mt-4 w-full">
                         <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Data Master</h6>
@@ -68,7 +68,7 @@
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                                 <i class="ri-user-star-line relative top-0 text-lg leading-normal text-blue-500"></i>
                             </div>
-                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Lurah & RW</span>
+                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">PIC & RW</span>
                         </a>
                     </li>
                 @endrole
@@ -88,7 +88,7 @@
                     <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Layanan</h6>
                 </li>
 
-                @role("lurah")
+                @role(["lurah", "pic"])
                     <li class="mt-0.5 w-full">
                         <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["layanan-cabang", "layanan-cabang.cabang", "layanan-cabang.trash"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("layanan-cabang") }}">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -148,7 +148,7 @@
                 {{-- Akhir Layanan --}}
             @endrole
 
-            @role(["lurah", "manajer_laundry", "pegawai_laundry"])
+            @role(["lurah", "manajer_laundry", "pegawai_laundry", "pic"])
                 {{-- Awal Transaksi --}}
                 <li class="mt-4 w-full">
                     <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Transaksi</h6>
@@ -163,7 +163,7 @@
                     </a>
                 </li>
 
-                @role('lurah')
+                @role(["lurah", "pic"])
                     <li class="mt-0.5 w-full">
                         <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["transaksi.lurah", "transaksi.lurah.cabang", "transaksi.lurah.cabang.jadwal", "transaksi.lurah.view", "transaksi.lurah.view.layanan", "transaksi.lurah.cabang.create", "transaksi.lurah.cabang.edit"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("transaksi.lurah") }}">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -175,23 +175,23 @@
                 @endrole
 
                 @role(["manajer_laundry", "pegawai_laundry"])
-                <li class="mt-0.5 w-full">
-                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["transaksi", "transaksi", "transaksi.view", "transaksi.view.layanan", "transaksi.create", "transaksi.edit"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("transaksi") }}">
-                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="ri-todo-fill relative top-0 text-lg leading-normal text-blue-500"></i>
-                        </div>
-                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Transaksi Layanan</span>
-                    </a>
-                </li>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["transaksi", "transaksi", "transaksi.view", "transaksi.view.layanan", "transaksi.create", "transaksi.edit"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("transaksi") }}">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="ri-todo-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                            </div>
+                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Transaksi Layanan</span>
+                        </a>
+                    </li>
 
-                <li class="mt-0.5 w-full">
-                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["transaksi.jadwal"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("transaksi.jadwal") }}">
-                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                            <i class="ri-timeline-view relative top-0 text-lg leading-normal text-blue-500"></i>
-                        </div>
-                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Jadwal Layanan</span>
-                    </a>
-                </li>
+                    <li class="mt-0.5 w-full">
+                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["transaksi.jadwal"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("transaksi.jadwal") }}">
+                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                                <i class="ri-timeline-view relative top-0 text-lg leading-normal text-blue-500"></i>
+                            </div>
+                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Jadwal Layanan</span>
+                        </a>
+                    </li>
                 @endrole
                 {{-- Akhir Transaksi --}}
             @endrole
@@ -222,13 +222,13 @@
                 {{-- Akhir Monitoring Transaksi Gamis --}}
             @endrole
 
-            @role(["lurah", "manajer_laundry", "rw"])
+            @role(["lurah", "manajer_laundry", "rw", "pic"])
                 {{-- Awal Monitoring Gamis --}}
                 <li class="mt-4 w-full">
                     <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Monitoring Gamis</h6>
                 </li>
 
-                @role(["lurah", "manajer_laundry"])
+                @role(["lurah", "manajer_laundry", "pic"])
                     <li class="mt-0.5 w-full">
                         <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["monitoring", "monitoring.gamis.riwayat"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("monitoring") }}">
                             <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
@@ -252,46 +252,44 @@
                 {{-- Akhir Monitoring Gamis --}}
             @endrole
 
-            @role(["lurah", "manajer_laundry"])
+            @role(["lurah", "manajer_laundry", "pic"])
                 {{-- Awal Laporan --}}
                 <li class="mt-4 w-full">
                     <h6 class="ml-2 pl-6 text-xs font-bold uppercase leading-tight opacity-60 dark:text-white">Laporan</h6>
                 </li>
 
-                @role(["lurah", "manajer_laundry"])
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.pendapatan.laundry"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.pendapatan.laundry") }}">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
-                            </div>
-                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pendapatan Laundry</span>
-                        </a>
-                    </li>
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.pendapatan.gamis"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.pendapatan.gamis") }}">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
-                            </div>
-                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pendapatan Gamis</span>
-                        </a>
-                    </li>
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.pelanggan"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.pelanggan") }}">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
-                            </div>
-                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pelanggan</span>
-                        </a>
-                    </li>
-                    <li class="mt-0.5 w-full">
-                        <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.gamis"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.gamis") }}">
-                            <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
-                                <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
-                            </div>
-                            <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Gamis</span>
-                        </a>
-                    </li>
-                @endrole
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.pendapatan.laundry"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.pendapatan.laundry") }}">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pendapatan Laundry</span>
+                    </a>
+                </li>
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.pendapatan.gamis"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.pendapatan.gamis") }}">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pendapatan Gamis</span>
+                    </a>
+                </li>
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.pelanggan"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.pelanggan") }}">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Pelanggan</span>
+                    </a>
+                </li>
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 ease-nav-brand {{ Request::routeIs(["laporan.gamis"]) ? "rounded-lg font text-slate-700 bg-blue-500/10" : "" }} mx-2 my-0 flex items-center whitespace-nowrap px-4 text-sm transition-colors hover:rounded-lg hover:bg-blue-500/10 dark:text-white" href="{{ route("laporan.gamis") }}">
+                        <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
+                            <i class="ri-book-fill relative top-0 text-lg leading-normal text-blue-500"></i>
+                        </div>
+                        <span class="ease pointer-events-none ml-1 opacity-100 duration-300">Gamis</span>
+                    </a>
+                </li>
                 {{-- Akhir Laporan --}}
             @endrole
 

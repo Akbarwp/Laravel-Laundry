@@ -353,6 +353,7 @@
                                 </div>
                             @enderror
                         </label>
+                        {{-- Pelanggan & Gamis --}}
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
@@ -388,93 +389,8 @@
                                 @enderror
                             </label>
                         </div>
-                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                            <label class="form-control w-full lg:w-1/2">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">
-                                        <x-label-input-required :value="'Total Biaya Layanan'" />
-                                    </span>
-                                </div>
-                                <input type="number" min="0" name="total_biaya_layanan" placeholder="Total Biaya Layanan" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_biaya_layanan }}" readonly required />
-                                @error("total_biaya_layanan")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                            <label class="form-control w-full lg:w-1/2">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">
-                                        <x-label-input-required :value="'Total Biaya Prioritas'" />
-                                    </span>
-                                </div>
-                                <input type="number" min="0" name="total_biaya_prioritas" placeholder="Total Biaya Prioritas" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_biaya_prioritas }}" readonly required />
-                                @error("total_biaya_prioritas")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                        </div>
-                        <label class="form-control w-full">
-                            <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">
-                                    <x-label-input-required :value="'Total Bayar'" />
-                                </span>
-                            </div>
-                            <input type="number" min="0" name="total_bayar_akhir" placeholder="Total Bayar" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_bayar_akhir }}" readonly required />
-                            @error("total_bayar_akhir")
-                                <div class="label">
-                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </label>
-                        <label class="form-control w-full">
-                            <div class="label">
-                                <span class="label-text font-semibold dark:text-slate-100">
-                                    <x-label-input-required :value="'Jenis Pembayaran'" />
-                                </span>
-                            </div>
-                            <select name="jenis_pembayaran" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
-                                @foreach ($jenisPembayaran as $item)
-                                    <option value="{{ $item->value }}" @if ($item->value == $transaksi->jenis_pembayaran) selected @endif>{{ $item->value }}</option>
-                                @endforeach
-                            </select>
-                            @error("jenis_pembayaran")
-                                <div class="label">
-                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </label>
-                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                            <label class="form-control w-full lg:w-1/2">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">
-                                        <x-label-input-required :value="'Bayar'" />
-                                    </span>
-                                </div>
-                                <input type="number" min="0" name="bayar" placeholder="Bayar" class="input input-bordered w-full text-blue-700 dark:bg-slate-100"  value="{{ $transaksi->bayar }}" required />
-                                @error("bayar")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                            <label class="form-control w-full lg:w-1/2">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">
-                                        <x-label-input-required :value="'Kembalian'" />
-                                    </span>
-                                </div>
-                                <input type="text" name="kembalian" placeholder="Kembalian" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $transaksi->kembalian }}" readonly required />
-                                @error("kembalian")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                        </div>
 
+                        {{-- Detail Transaksi --}}
                         <div>
                             <div class="my-3">
                                 <h6 class="font-bold dark:text-white">Detail Transaksi</h6>
@@ -589,6 +505,94 @@
                                     </div>
                                 @endforeach
                             </div>
+                        </div>
+
+                        {{-- Total Bayar --}}
+                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                            <label class="form-control w-full lg:w-1/2">
+                                <div class="label">
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Total Biaya Layanan'" />
+                                    </span>
+                                </div>
+                                <input type="number" min="0" name="total_biaya_layanan" placeholder="Total Biaya Layanan" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_biaya_layanan }}" readonly required />
+                                @error("total_biaya_layanan")
+                                    <div class="label">
+                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <label class="form-control w-full lg:w-1/2">
+                                <div class="label">
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Total Biaya Prioritas'" />
+                                    </span>
+                                </div>
+                                <input type="number" min="0" name="total_biaya_prioritas" placeholder="Total Biaya Prioritas" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_biaya_prioritas }}" readonly required />
+                                @error("total_biaya_prioritas")
+                                    <div class="label">
+                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                        </div>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Total Bayar'" />
+                                </span>
+                            </div>
+                            <input type="number" min="0" name="total_bayar_akhir" placeholder="Total Bayar" class="input input-bordered w-full text-blue-700 bg-slate-300" value="{{ $transaksi->total_bayar_akhir }}" readonly required />
+                            @error("total_bayar_akhir")
+                                <div class="label">
+                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </label>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-semibold dark:text-slate-100">
+                                    <x-label-input-required :value="'Jenis Pembayaran'" />
+                                </span>
+                            </div>
+                            <select name="jenis_pembayaran" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
+                                @foreach ($jenisPembayaran as $item)
+                                    <option value="{{ $item->value }}" @if ($item->value == $transaksi->jenis_pembayaran) selected @endif>{{ $item->value }}</option>
+                                @endforeach
+                            </select>
+                            @error("jenis_pembayaran")
+                                <div class="label">
+                                    <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </label>
+                        <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                            <label class="form-control w-full lg:w-1/2">
+                                <div class="label">
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Bayar'" />
+                                    </span>
+                                </div>
+                                <input type="number" min="0" name="bayar" placeholder="Bayar" class="input input-bordered w-full text-blue-700 dark:bg-slate-100"  value="{{ $transaksi->bayar }}" required />
+                                @error("bayar")
+                                    <div class="label">
+                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <label class="form-control w-full lg:w-1/2">
+                                <div class="label">
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Kembalian'" />
+                                    </span>
+                                </div>
+                                <input type="text" name="kembalian" placeholder="Kembalian" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ $transaksi->kembalian }}" readonly required />
+                                @error("kembalian")
+                                    <div class="label">
+                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
                         </div>
 
                         <div class="my-5 flex flex-wrap justify-center gap-2">

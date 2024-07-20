@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RW;
 use App\Models\User;
-use App\Models\Lurah;
+use App\Models\PIC;
 use App\Models\Cabang;
 use App\Exports\User2Export;
 use App\Imports\User2Import;
@@ -30,22 +30,22 @@ class RWController extends Controller
 
     public function index()
     {
-        $title = "Lurah & RW Management";
+        $title = "PIC & RW Management";
         $userRole = auth()->user()->roles[0]->name;
 
-        $lurah = Lurah::query()
-            ->join('users as u', 'lurah.user_id', '=', 'u.id')
+        $pic = PIC::query()
+            ->join('users as u', 'pic.user_id', '=', 'u.id')
             ->where('u.deleted_at', null)
-            ->orderBy('lurah.created_at', 'asc')->get()->except(auth()->id());
+            ->orderBy('pic.created_at', 'asc')->get();
         $rw = RW::query()
             ->join('users as u', 'rw.user_id', '=', 'u.id')
             ->where('u.deleted_at', null)
             ->orderBy('rw.created_at', 'asc')->get();
 
-        $lurahTrash = User::join('lurah as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
+        $picTrash = User::join('pic as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
         $rwTrash = User::join('rw as p', 'p.user_id', '=', 'users.id')->onlyTrashed()->orderBy('p.created_at', 'asc')->get();
 
-        return view('dashboard.user.lurah-rw.index', compact('title', 'lurah', 'rw', 'lurahTrash', 'rwTrash'));
+        return view('dashboard.user.pic-rw.index', compact('title', 'pic', 'rw', 'picTrash', 'rwTrash'));
     }
 
     public function view(Request $request)
@@ -61,21 +61,21 @@ class RWController extends Controller
             return to_route('profile', $user->slug);
         }
 
-        if ($user->getRoleNames()[0] == 'lurah') {
-            $profile = Lurah::where('user_id', $user->id)->first();
+        if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         }
 
-        return view('dashboard.user.lurah-rw.lihat', compact('title', 'user', 'profile', 'trash'));
+        return view('dashboard.user.pic-rw.lihat', compact('title', 'user', 'profile', 'trash'));
     }
 
     public function create()
     {
         $title = "Tambah User";
         $userRole = auth()->user()->roles[0]->name;
-        $role = Role::where('name', 'lurah')->orWhere('name', 'rw')->get();
-        return view('dashboard.user.lurah-rw.tambah', compact('title', 'role'));
+        $role = Role::where('name', 'pic')->orWhere('name', 'rw')->get();
+        return view('dashboard.user.pic-rw.tambah', compact('title', 'role'));
     }
 
     public function store(Request $request)
@@ -134,8 +134,8 @@ class RWController extends Controller
         $validatedProfile['user_id'] = $user->id;
 
         switch ($request->role) {
-            case 'lurah':
-                $profile = Lurah::create($validatedProfile);
+            case 'pic':
+                $profile = PIC::create($validatedProfile);
                 break;
             case 'rw':
                 $profile = RW::create($validatedProfile);
@@ -154,7 +154,7 @@ class RWController extends Controller
         $title = "Ubah User";
         $userRole = auth()->user()->roles[0]->name;
 
-        $role = Role::where('name', 'lurah')->orWhere('name', 'rw')->get();
+        $role = Role::where('name', 'pic')->orWhere('name', 'rw')->get();
         $cabang = Cabang::where('deleted_at', null)->get();
 
         $user = User::where('slug', $request->user)->first();
@@ -164,13 +164,13 @@ class RWController extends Controller
             return to_route('profile', $user->slug);
         }
 
-        if ($user->getRoleNames()[0] == 'lurah') {
-            $profile = Lurah::where('user_id', $user->id)->first();
+        if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         }
 
-        return view('dashboard.user.lurah-rw.ubah', compact('title', 'cabang', 'role', 'user', 'profile'));
+        return view('dashboard.user.pic-rw.ubah', compact('title', 'cabang', 'role', 'user', 'profile'));
     }
 
     public function update(Request $request)
@@ -232,11 +232,23 @@ class RWController extends Controller
         $validatedProfile['user_id'] = $user->id;
 
         switch ($request->role) {
-            case 'lurah':
-                $profileUpdate = Lurah::where('user_id', $user->id)->update($validatedProfile);
+            case 'pic':
+                if (RW::where('user_id', $user->id)->first()) {
+                    RW::where('user_id', $user->id)->delete();
+                    $profileUpdate = PIC::create($validatedProfile);
+
+                } else {
+                    $profileUpdate = PIC::where('user_id', $user->id)->update($validatedProfile);
+                }
                 break;
             case 'rw':
-                $profileUpdate = RW::where('user_id', $user->id)->update($validatedProfile);
+                if (PIC::where('user_id', $user->id)->first()) {
+                    PIC::where('user_id', $user->id)->delete();
+                    $profileUpdate = RW::create($validatedProfile);
+
+                } else {
+                    $profileUpdate = RW::where('user_id', $user->id)->update($validatedProfile);
+                }
                 break;
         }
 
@@ -258,7 +270,7 @@ class RWController extends Controller
         } else if ($user->slug == auth()->user()->slug ) {
             return to_route('profile', $user->slug);
         }
-        return view('dashboard.user.lurah-rw.ubahPassword', compact('title', 'user'));
+        return view('dashboard.user.pic-rw.ubahPassword', compact('title', 'user'));
     }
 
     public function updatePassword(Request $request)
@@ -308,13 +320,13 @@ class RWController extends Controller
             return to_route('profile', $user->slug);
         }
 
-        if ($user->getRoleNames()[0] == 'lurah') {
-            $profile = Lurah::where('user_id', $user->id)->first();
+        if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         }
 
-        return view('dashboard.user.lurah-rw.lihat', compact('title', 'user', 'profile', 'trash'));
+        return view('dashboard.user.pic-rw.lihat', compact('title', 'user', 'profile', 'trash'));
     }
 
     public function restore(Request $request)
@@ -332,8 +344,8 @@ class RWController extends Controller
         $user = User::where('slug', $request->slug)->onlyTrashed()->first();
         $userRole = $user->roles[0]->name;
 
-        if ($userRole == 'lurah') {
-            $profile = Lurah::where('user_id', $user->id)->delete();
+        if ($userRole == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->delete();
         } else if ($userRole == 'rw') {
             $profile = RW::where('user_id', $user->id)->delete();
         }
@@ -361,6 +373,6 @@ class RWController extends Controller
 
     public function export()
     {
-        return Excel::download(new User2Export, 'Data Pegawai Inti '.Carbon::now()->format('d-m-Y').'.xlsx');
+        return Excel::download(new User2Export, 'Data PIC-RW '.Carbon::now()->format('d-m-Y').'.xlsx');
     }
 }

@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $umr = UMR::where('is_used', true)->first();
 
-        if ($userRole == 'lurah') {
+        if ($userRole == 'lurah' || $userRole == 'pic') {
             $cabang = null;
             $jmlCabang = Cabang::count();
             $jmlUser = User::count();

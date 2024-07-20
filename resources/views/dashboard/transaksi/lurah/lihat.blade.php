@@ -57,10 +57,12 @@
                             </a>
                         @endif
                         @if (!$cabang->deleted_at)
-                            <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                <i class="ri-pencil-fill"></i>
-                                Ubah
-                            </a>
+                            @role(["manajer_laundry", "pegawai_laundry"])
+                                <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $transaksi->id, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                    <i class="ri-pencil-fill"></i>
+                                    Ubah
+                                </a>
+                            @endrole
                         @endif
                     </div>
                 </div>

@@ -25,7 +25,7 @@ class MonitoringGamisController extends Controller
         $cabangId = $request->cabang_id ? $request->cabang_id : null;
         $cabang = Cabang::withTrashed()->get();
 
-        if ($userRole == 'lurah') {
+        if ($userRole == 'lurah' || $userRole == 'pic') {
             $gamis = DetailGamis::query()
                 ->join('users as u', 'u.id', '=', 'detail_gamis.user_id')
                 ->join('cabang as c', 'c.id', '=', 'u.cabang_id')
@@ -283,7 +283,7 @@ class MonitoringGamisController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $umr = UMR::where('is_used', true)->first();
 
-        if ($userRole == 'lurah') {
+        if ($userRole == 'lurah' || $userRole == 'pic') {
             $gamis = User::query()
                 ->withTrashed()
                 ->join('detail_gamis as dg', 'dg.user_id', '=', 'users.id')
@@ -456,7 +456,7 @@ class MonitoringGamisController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         $umr = UMR::where('is_used', true)->first();
 
-        if ($userRole == 'lurah') {
+        if ($userRole == 'lurah' || $userRole == 'pic') {
             $gamis = User::query()
                 ->withTrashed()
                 ->join('detail_gamis as dg', 'dg.user_id', '=', 'users.id')

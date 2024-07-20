@@ -198,10 +198,12 @@
                             Kembali
                         </a>
                         @if (!$cabang->deleted_at)
-                            <a href="{{ route("transaksi.lurah.cabang.create", ['cabang' => $cabang->slug, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                <i class="ri-add-fill"></i>
-                                Tambah
-                            </a>
+                            @role(["manajer_laundry", "pegawai_laundry"])
+                                <a href="{{ route("transaksi.lurah.cabang.create", ['cabang' => $cabang->slug, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                    <i class="ri-add-fill"></i>
+                                    Tambah
+                                </a>
+                            @endrole
                         @endif
                     </div>
                 </div>
@@ -265,8 +267,6 @@
                                                     {{ $item->pegawai->manajer[0]->nama }}
                                                 @elseif ($item->pegawai->roles[0]->name == 'pegawai_laundry')
                                                     {{ $item->pegawai->pegawai[0]->nama }}
-                                                @elseif ($item->pegawai->roles[0]->name == 'lurah')
-                                                    {{ $item->pegawai->lurah[0]->nama }}
                                                 @endif
                                             </p>
                                         </td>
@@ -286,15 +286,17 @@
                                                     <i class="ri-eye-line text-base"></i>
                                                 </a>
                                                 @if (!$cabang->deleted_at)
-                                                    <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
-                                                        <i class="ri-pencil-fill text-base"></i>
-                                                    </a>
-                                                    <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
-                                                        <i class="ri-delete-bin-line text-base"></i>
-                                                    </label>
-                                                    <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
-                                                        <i class="ri-draft-line text-base"></i>
-                                                    </label>
+                                                    @role(["manajer_laundry", "pegawai_laundry"])
+                                                        <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
+                                                            <i class="ri-pencil-fill text-base"></i>
+                                                        </a>
+                                                        <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
+                                                            <i class="ri-delete-bin-line text-base"></i>
+                                                        </label>
+                                                        <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
+                                                            <i class="ri-draft-line text-base"></i>
+                                                        </label>
+                                                    @endrole
                                                 @endif
                                                 <a href="{{ route("transaksi.cetak-struk", ['transaksi' => $item->id]) }}" target="_blank" class="btn btn-outline btn-ghost dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white dark:hover:text-slate-700 btn-sm tooltip" data-tip="Cetak Struk">
                                                     <i class="ri-receipt-line text-base"></i>
@@ -409,13 +411,23 @@
                                             <div>
                                                 @if (!$cabang->deleted_at)
                                                     @if (!$item->konfirmasi_upah_gamis)
-                                                        <label for="konfirmasi_upah_button" class="btn btn-outline btn-primary btn-sm tooltip" data-tip="Konfirmasi Upah Gamis" onclick="return konfirmasi_upah_button('{{ $item->transaksi_id }}', '{{ $item->nama_gamis }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', {{ $item->konfirmasi_upah_gamis }})">
-                                                            <i class="ri-receipt-line text-base"></i>
-                                                        </label>
+                                                        @role(["manajer_laundry"])
+                                                            <label for="konfirmasi_upah_button" class="btn btn-outline btn-primary btn-sm tooltip" data-tip="Konfirmasi Upah Gamis" onclick="return konfirmasi_upah_button('{{ $item->transaksi_id }}', '{{ $item->nama_gamis }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', {{ $item->konfirmasi_upah_gamis }})">
+                                                                <i class="ri-receipt-line text-base"></i>
+                                                            </label>
+                                                        @endrole
+                                                        @role(["lurah", "pic", "pegawai_laundry"])
+                                                            <div class="badge badge-warning">Belum dibayar</div>
+                                                        @endrole
                                                     @else
-                                                        <label for="konfirmasi_upah_button" class="btn btn-outline btn-error btn-sm tooltip" data-tip="Pembatalan Upah Gamis" onclick="return konfirmasi_upah_button('{{ $item->transaksi_id }}', '{{ $item->nama_gamis }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', {{ $item->konfirmasi_upah_gamis }})">
-                                                            <i class="ri-close-line text-base"></i>
-                                                        </label>
+                                                        @role(["manajer_laundry"])
+                                                            <label for="konfirmasi_upah_button" class="btn btn-outline btn-error btn-sm tooltip" data-tip="Pembatalan Upah Gamis" onclick="return konfirmasi_upah_button('{{ $item->transaksi_id }}', '{{ $item->nama_gamis }}', '{{ \Carbon\Carbon::parse($item->tanggal)->format('d F Y') }}', {{ $item->konfirmasi_upah_gamis }})">
+                                                                <i class="ri-close-line text-base"></i>
+                                                            </label>
+                                                        @endrole
+                                                        @role(["lurah", "pic", "pegawai_laundry"])
+                                                            <div class="badge badge-success">Sudah dibayar</div>
+                                                        @endrole
                                                     @endif
                                                 @endif
                                             </div>

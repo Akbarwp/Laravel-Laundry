@@ -15,7 +15,7 @@ class LayananCabangController extends Controller
 {
     public function __construct()
     {
-        if (!auth()->user()->roles[0]->name == 'lurah') {
+        if (!auth()->user()->roles[0]->name == 'lurah' || !auth()->user()->roles[0]->name == 'pic') {
             abort(403);
         }
     }

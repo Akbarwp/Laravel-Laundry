@@ -31,7 +31,7 @@
                         <form action="{{ route('laporan.gamis.pdf') }}" method="post" enctype="multipart/form-data" target="_blank">
                             @csrf
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                                @role('lurah')
+                                @role(['lurah', 'pic'])
                                     <label class="form-control w-full lg:w-1/3">
                                         <div class="label">
                                             <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
@@ -44,13 +44,13 @@
                                         </select>
                                     </label>
                                 @endrole
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Awal</span>
                                     </div>
                                     <input type="month" name="tanggalAwal" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ \Carbon\Carbon::now()->format('Y-') . \Carbon\Carbon::now()->format('m') }}" />
                                 </label>
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Akhir</span>
                                     </div>
@@ -76,7 +76,7 @@
                     <div class="overflow-x-auto p-0 px-6 pb-6">
                         <form action="{{ route('laporan.gamis') }}" method="get" enctype="multipart/form-data" class="mb-3">
                             <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                                @role('lurah')
+                                @role(['lurah', 'pic'])
                                     <label class="form-control w-full lg:w-1/3">
                                         <div class="label">
                                             <span class="label-text font-semibold dark:text-slate-100 text-lg">Cabang</span>
@@ -89,13 +89,13 @@
                                         </select>
                                     </label>
                                 @endrole
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Awal</span>
                                     </div>
                                     <input type="month" name="tanggalAwal" class="input input-bordered w-full text-blue-700 dark:bg-slate-100" value="{{ \Carbon\Carbon::now()->format('Y-') . \Carbon\Carbon::now()->format('m') }}" />
                                 </label>
-                                <label class="form-control w-full @if(auth()->user()->hasRole('lurah'))lg:w-1/3 @else lg:w-1/2 @endif">
+                                <label class="form-control w-full @if(auth()->user()->hasRole(['lurah', 'pic']))lg:w-1/3 @else lg:w-1/2 @endif">
                                     <div class="label">
                                         <span class="label-text font-semibold dark:text-slate-100 text-lg">Tanggal Akhir</span>
                                     </div>
@@ -121,7 +121,7 @@
                                     <th class="bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                         Total Transaksi Dikerjakan
                                     </th>
-                                    @role('lurah')
+                                    @role(['lurah', 'pic'])
                                         <th class="rounded-tr bg-blue-500 text-xs font-bold uppercase text-white dark:text-white">
                                             Cabang
                                         </th>
@@ -151,7 +151,7 @@
                                                 {{ $item->total_transaksi }}
                                             </p>
                                         </td>
-                                        @role('lurah')
+                                        @role(['lurah', 'pic'])
                                             <td class="border-b border-slate-600 bg-transparent text-left align-middle">
                                                 <p class="text-base font-semibold leading-tight text-slate-500 dark:text-slate-200">
                                                     {{ $item->nama_cabang }}

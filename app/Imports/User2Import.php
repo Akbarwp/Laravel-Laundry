@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Models\RW;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Lurah;
+use App\Models\PIC;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -38,8 +38,8 @@ class User2Import implements ToCollection, WithHeadingRow
                 ];
 
                 switch ($row['role']) {
-                    case 'lurah':
-                        Lurah::create($validatedProfile);
+                    case 'pic':
+                        PIC::create($validatedProfile);
                         break;
                     case 'rw':
                         $validatedProfile['nomor_rw'] = $row['nomor_rw'];

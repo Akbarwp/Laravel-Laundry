@@ -15,7 +15,7 @@
             });
         });
 
-        @role(['lurah', 'manajer_laundry', 'pegawai_laundry', 'gamis'])
+        @role(['lurah', 'manajer_laundry', 'pegawai_laundry', 'gamis', 'pic'])
             // Pendapatan Per Bulan
             if (document.querySelector("#chart-pendapatan-bulanan")) {
                 let bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
@@ -204,7 +204,7 @@
             </div>
         </div>
 
-        @role(['lurah', 'manajer_laundry', 'pegawai_laundry'])
+        @role(['lurah', 'manajer_laundry', 'pegawai_laundry', 'pic'])
             <!-- row 1 -->
             <div class="-mx-3 mb-3 flex flex-wrap">
                 <!-- Jumlah Cabang -->
@@ -215,10 +215,10 @@
                                 <div class="w-2/3 max-w-full flex-none px-3">
                                     <div>
                                         <p class="mb-0 font-sans text-sm font-semibold uppercase leading-normal dark:text-white dark:opacity-60">
-                                            {{ $userRole == 'lurah' ? 'Jumlah Cabang Aktif' : 'Cabang' }}
+                                            {{ $userRole == 'lurah' || $userRole == 'pic' ? 'Jumlah Cabang Aktif' : 'Cabang' }}
                                         </p>
                                         <h5 class="mb-2 font-bold text-blue-700 dark:text-white">
-                                            {{ $userRole == 'lurah' ? $jmlCabang : ($cabang ? $cabang->nama : 'Cabang Non Aktif') }}
+                                            {{ $userRole == 'lurah' || $userRole == 'pic' ? $jmlCabang : ($cabang ? $cabang->nama : 'Cabang Non Aktif') }}
                                         </h5>
                                     </div>
                                 </div>
@@ -526,7 +526,7 @@
                                                     {{ $item->pegawai->manajer->first()->nama }}
                                                 @elseif ($userRole == 'pegawai_laundry')
                                                     {{ $item->pegawai->pegawai->first()->nama }}
-                                                @elseif ($userRole == 'lurah')
+                                                @elseif ($userRole == 'lurah' || 'pic')
                                                     {{ $item->pegawai->lurah->first()->nama }}
                                                 @endif
                                             </p>

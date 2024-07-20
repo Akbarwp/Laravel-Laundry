@@ -261,8 +261,6 @@
                                                     {{ $item->pegawai->manajer[0]->nama }}
                                                 @elseif ($item->pegawai->roles[0]->name == 'pegawai_laundry')
                                                     {{ $item->pegawai->pegawai[0]->nama }}
-                                                @elseif ($item->pegawai->roles[0]->name == 'lurah')
-                                                    {{ $item->pegawai->lurah[0]->nama }}
                                                 @endif
                                             </p>
                                         </td>

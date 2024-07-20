@@ -40,7 +40,7 @@ class JenisPakaianController extends Controller
 
         if ($userRole == 'manajer_laundry') {
             $validated['cabang_id'] = auth()->user()->cabang_id;
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             $cabang = Cabang::where('slug', $request->cabang_slug)->first();
             $validated['cabang_id'] = $cabang->id;
         }
@@ -53,7 +53,7 @@ class JenisPakaianController extends Controller
             } else {
                 return to_route('jenis-pakaian')->with('error', 'Jenis Pakaian Gagal Ditambahkan');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($tambah) {
                 return back()->with('success', 'Jenis Pakaian Berhasil Ditambahkan');
             } else {
@@ -86,7 +86,7 @@ class JenisPakaianController extends Controller
             } else {
                 return to_route('jenis-pakaian')->with('error', 'Jenis Pakaian Gagal Diperbarui');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($perbarui) {
                 return back()->with('success', 'Jenis Pakaian Berhasil Diperbarui');
             } else {
@@ -144,14 +144,14 @@ class JenisPakaianController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         try {
             Excel::import(new JenisPakaianImport, $request->file('impor'));
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Jenis Pakaian Berhasil Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('jenis-pakaian')->with('success', 'Jenis Pakaian Berhasil Ditambahkan');
             }
         } catch(\Exception $ex) {
             Log::info($ex);
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Jenis Pakaian Gagal Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('jenis-pakaian')->with('error', 'Jenis Pakaian Gagal Ditambahkan');

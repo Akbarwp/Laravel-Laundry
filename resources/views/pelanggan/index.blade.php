@@ -333,12 +333,20 @@
                                 <span class="text-blue-600 font-semibold"> `+ data[0].nota_pelanggan +`</span>
                             </p>
                             <p class="text-slate-800 mb-4 mt-1 leading-relaxed">
+                                Status:
+                                <span class="text-blue-600 font-semibold"> `+ data[0].status +`</span>
+                            </p>
+                            <p class="text-slate-800 mb-4 mt-1 leading-relaxed">
                                 Tanggal:
                                 <span class="text-blue-600 font-semibold"> `+ tanggal +`</span>
                             </p>
                             <p class="text-slate-800 mb-4 mt-1 leading-relaxed">
                                 Cabang:
                                 <span class="text-blue-600 font-semibold"> `+ data[0].cabang_nama +`</span>
+                            </p>
+                            <p class="text-slate-800 mb-4 mt-1 leading-relaxed">
+                                Pelanggan:
+                                <span class="text-blue-600 font-semibold"> `+ data[0].pelanggan_nama +`</span>
                             </p>
                             <p class="text-slate-800 mb-4 mt-1 leading-relaxed">
                                 Jenis Pembayaran:
@@ -356,10 +364,9 @@
                                 Kembalian:
                                 <span class="text-blue-600 font-semibold"> Rp`+ data[0].kembalian +`</span>
                             </p>
-                            <p class="text-slate-800 mb-4 mt-1 leading-relaxed">
-                                Status:
-                                <span class="text-blue-600 font-semibold"> `+ data[0].status +`</span>
-                            </p>
+
+                            <div class="divider"></div>
+
                             <p class="text-slate-800 mb-4 mt-1 leading-relaxed font-bold">
                                 Layanan Tambahan:
                                 `+
@@ -368,32 +375,38 @@
                                     })
                                 +`
                             </p>
+
                             <p class="text-slate-800 mb-4 mt-1 leading-relaxed font-bold">Detail Layanan:</p>
-                            `+
-                                data[1].map(item => {
-                                    return `
-                                        <div>
-                                            <p class="mb-4 mt-1 leading-relaxed font-semibold">${nomor++}.</p>
-                                            <p class="mb-4 mt-1 leading-relaxed text-blue-600 font-semibold">
-                                                Pakaian:
-                                                <span class="text-blue-800 font-semibold">${item.pakaian}</span>
-                                            </p>
-                                            <p class="mb-4 mt-1 leading-relaxed text-blue-600 font-semibold">
-                                                Total Berat:
-                                                <span class="text-blue-800 font-semibold">${item.total} kg</span>
-                                            </p>
-                                            <p class="mb-4 mt-1 leading-relaxed text-blue-600 font-semibold">
-                                                Layanan yang diambil:
-                                                `+
-                                                    item.layanan.map(value => {
-                                                        return `<span class="text-blue-800 font-semibold"> `+value+`</span>`
-                                                    })
-                                                +`
-                                            </p>
-                                        </div>
-                                    `
-                                }).join('')
-                            +`
+                            <div class="overflow-x-auto">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="text-blue-600 text-center text-sm">
+                                            <th>Pakaian</th>
+                                            <th>Berat</th>
+                                            <th>Layanan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        `+
+                                            data[1].map(item => {
+                                                return `
+                                                    <tr class="text-slate-800 text-center text-base">
+                                                        <td>${item.pakaian}</td>
+                                                        <td>${item.total} kg</td>
+                                                        <td>
+                                                            `+
+                                                                item.layanan.map(value => {
+                                                                    return value
+                                                                })
+                                                            +`
+                                                        </td>
+                                                    </tr>
+                                                `
+                                            }).join('')
+                                        +`
+                                    </tbody>
+                                </table>
+                            </div>
                         `);
                     },
                     error: function(data) {

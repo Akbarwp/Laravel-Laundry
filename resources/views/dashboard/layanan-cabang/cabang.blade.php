@@ -957,14 +957,16 @@
                         <h6 class="font-bold dark:text-white">Jenis Layanan</h6>
                         <div class="w-1/2 max-w-full flex-none px-3 text-right">
                             @if (!$cabang->deleted_at)
-                                <label for="create_modal_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-add-fill"></i>
-                                    Tambah
-                                </label>
-                                <label for="impor_modal_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-upload-2-line"></i>
-                                    Impor
-                                </label>
+                                @role("pic")
+                                    <label for="create_modal_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-add-fill"></i>
+                                        Tambah
+                                    </label>
+                                    <label for="impor_modal_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-upload-2-line"></i>
+                                        Impor
+                                    </label>
+                                @endrole
                                 <form action="{{ route('jenis-layanan.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
                                     @csrf
                                     <label class="form-control w-full">
@@ -1023,12 +1025,14 @@
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     @if (!$cabang->deleted_at)
-                                                        <label for="edit_button_jenis_layanan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_jenis_layanan('{{ $item->id }}')">
-                                                            <i class="ri-pencil-fill text-base"></i>
-                                                        </label>
-                                                        <label for="delete_button_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
-                                                            <i class="ri-delete-bin-line text-base"></i>
-                                                        </label>
+                                                        @role("pic")
+                                                            <label for="edit_button_jenis_layanan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_jenis_layanan('{{ $item->id }}')">
+                                                                <i class="ri-pencil-fill text-base"></i>
+                                                            </label>
+                                                            <label for="delete_button_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                                <i class="ri-delete-bin-line text-base"></i>
+                                                            </label>
+                                                        @endrole
                                                     @endif
                                                 </div>
                                             </td>
@@ -1195,14 +1199,16 @@
                         <h6 class="font-bold dark:text-white">Jenis Pakaian</h6>
                         <div class="w-1/2 max-w-full flex-none px-3 text-right">
                             @if (!$cabang->deleted_at)
-                                <label for="create_modal_jenis_pakaian" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-add-fill"></i>
-                                    Tambah
-                                </label>
-                                <label for="impor_modal_jenis_pakaian" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-upload-2-line"></i>
-                                    Impor
-                                </label>
+                                @role("pic")
+                                    <label for="create_modal_jenis_pakaian" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-add-fill"></i>
+                                        Tambah
+                                    </label>
+                                    <label for="impor_modal_jenis_pakaian" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-upload-2-line"></i>
+                                        Impor
+                                    </label>
+                                @endrole
                                 <form action="{{ route('jenis-pakaian.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
                                     @csrf
                                     <label class="form-control w-full">
@@ -1251,12 +1257,14 @@
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     @if (!$cabang->deleted_at)
-                                                        <label for="edit_button_jenis_pakaian" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_jenis_pakaian('{{ $item->id }}')">
-                                                            <i class="ri-pencil-fill text-base"></i>
-                                                        </label>
-                                                        <label for="delete_button_jenis_pakaian" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_jenis_pakaian('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
-                                                            <i class="ri-delete-bin-line text-base"></i>
-                                                        </label>
+                                                        @role("pic")
+                                                            <label for="edit_button_jenis_pakaian" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_jenis_pakaian('{{ $item->id }}')">
+                                                                <i class="ri-pencil-fill text-base"></i>
+                                                            </label>
+                                                            <label for="delete_button_jenis_pakaian" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_jenis_pakaian('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                                <i class="ri-delete-bin-line text-base"></i>
+                                                            </label>
+                                                        @endrole
                                                     @endif
                                                 </div>
                                             </td>
@@ -1345,7 +1353,7 @@
                                     <select name="jenis_satuan" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
                                         <option disabled selected>Pilih Jenis Satuan!</option>
                                         @foreach ($jenisSatuanLayanan as $item)
-                                            <option value="{{ $item->value }}">{{ $item->value }}</option>
+                                            <option selected value="{{ $item->value }}">{{ $item->value }}</option>
                                         @endforeach
                                     </select>
                                     @error('jenis_satuan')
@@ -1520,14 +1528,16 @@
                         <h6 class="font-bold dark:text-white">Harga Jenis Layanan</h6>
                         <div class="w-1/2 max-w-full flex-none px-3 text-right">
                             @if (!$cabang->deleted_at)
-                                <label for="create_modal_harga_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-add-fill"></i>
-                                    Tambah
-                                </label>
-                                <label for="impor_modal_harga_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-upload-2-line"></i>
-                                    Impor
-                                </label>
+                                @role("pic")
+                                    <label for="create_modal_harga_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-add-fill"></i>
+                                        Tambah
+                                    </label>
+                                    <label for="impor_modal_harga_jenis_layanan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-upload-2-line"></i>
+                                        Impor
+                                    </label>
+                                @endrole
                                 <form action="{{ route('harga-jenis-layanan.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
                                     @csrf
                                     <label class="form-control w-full">
@@ -1600,12 +1610,14 @@
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     @if (!$cabang->deleted_at)
-                                                        <label for="edit_button_harga_jenis_layanan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_harga_jenis_layanan('{{ $item->id }}')">
-                                                            <i class="ri-pencil-fill text-base"></i>
-                                                        </label>
-                                                        <label for="delete_button_harga_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_harga_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
-                                                            <i class="ri-delete-bin-line text-base"></i>
-                                                        </label>
+                                                        @role("pic")
+                                                            <label for="edit_button_harga_jenis_layanan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_harga_jenis_layanan('{{ $item->id }}')">
+                                                                <i class="ri-pencil-fill text-base"></i>
+                                                            </label>
+                                                            <label for="delete_button_harga_jenis_layanan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_harga_jenis_layanan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama_layanan }}', '{{ $item->nama_pakaian }}')">
+                                                                <i class="ri-delete-bin-line text-base"></i>
+                                                            </label>
+                                                        @endrole
                                                     @endif
                                                 </div>
                                             </td>
@@ -1836,14 +1848,16 @@
                         <h6 class="font-bold dark:text-white">Layanan Prioritas</h6>
                         <div class="w-1/2 max-w-full flex-none px-3 text-right">
                             @if (!$cabang->deleted_at)
-                                <label for="create_modal_layanan_prioritas" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-add-fill"></i>
-                                    Tambah
-                                </label>
-                                <label for="impor_modal_layanan_prioritas" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-upload-2-line"></i>
-                                    Impor
-                                </label>
+                                @role("pic")
+                                    <label for="create_modal_layanan_prioritas" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-add-fill"></i>
+                                        Tambah
+                                    </label>
+                                    <label for="impor_modal_layanan_prioritas" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-upload-2-line"></i>
+                                        Impor
+                                    </label>
+                                @endrole
                                 <form action="{{ route('layanan-prioritas.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
                                     @csrf
                                     <label class="form-control w-full">
@@ -1908,12 +1922,14 @@
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     @if (!$cabang->deleted_at)
-                                                        <label for="edit_button_layanan_prioritas" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_layanan_prioritas('{{ $item->id }}')">
-                                                            <i class="ri-pencil-fill text-base"></i>
-                                                        </label>
-                                                        <label for="delete_button_layanan_prioritas" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_layanan_prioritas('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
-                                                            <i class="ri-delete-bin-line text-base"></i>
-                                                        </label>
+                                                        @role("pic")
+                                                            <label for="edit_button_layanan_prioritas" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_layanan_prioritas('{{ $item->id }}')">
+                                                                <i class="ri-pencil-fill text-base"></i>
+                                                            </label>
+                                                            <label for="delete_button_layanan_prioritas" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_layanan_prioritas('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                                <i class="ri-delete-bin-line text-base"></i>
+                                                            </label>
+                                                        @endrole
                                                     @endif
                                                 </div>
                                             </td>
@@ -2083,14 +2099,16 @@
                         <h6 class="font-bold dark:text-white">Layanan Tambahan</h6>
                         <div class="w-1/2 max-w-full flex-none px-3 text-right">
                             @if (!$cabang->deleted_at)
-                                <label for="create_modal_layanan_tambahan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-add-fill"></i>
-                                    Tambah
-                                </label>
-                                <label for="impor_modal_layanan_tambahan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                                    <i class="ri-upload-2-line"></i>
-                                    Impor
-                                </label>
+                                @role("pic")
+                                    <label for="create_modal_layanan_tambahan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-add-fill"></i>
+                                        Tambah
+                                    </label>
+                                    <label for="impor_modal_layanan_tambahan" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-purple-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-purple-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                        <i class="ri-upload-2-line"></i>
+                                        Impor
+                                    </label>
+                                @endrole
                                 <form action="{{ route('layanan-tambahan.export') }}" method="GET" enctype="multipart/form-data" class="inline-block">
                                     @csrf
                                     <label class="form-control w-full">
@@ -2147,12 +2165,14 @@
                                                         <i class="ri-eye-line text-base"></i>
                                                     </label>
                                                     @if (!$cabang->deleted_at)
-                                                        <label for="edit_button_layanan_tambahan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_layanan_tambahan('{{ $item->id }}')">
-                                                            <i class="ri-pencil-fill text-base"></i>
-                                                        </label>
-                                                        <label for="delete_button_layanan_tambahan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_layanan_tambahan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
-                                                            <i class="ri-delete-bin-line text-base"></i>
-                                                        </label>
+                                                        @role("pic")
+                                                            <label for="edit_button_layanan_tambahan" class="btn btn-outline btn-warning btn-sm" onclick="return edit_button_layanan_tambahan('{{ $item->id }}')">
+                                                                <i class="ri-pencil-fill text-base"></i>
+                                                            </label>
+                                                            <label for="delete_button_layanan_tambahan" class="btn btn-outline btn-error btn-sm" onclick="return delete_button_layanan_tambahan('{{ $item->id }}', '{{ $item->cabang_id }}', '{{ $item->nama }}')">
+                                                                <i class="ri-delete-bin-line text-base"></i>
+                                                            </label>
+                                                        @endrole
                                                     @endif
                                                 </div>
                                             </td>

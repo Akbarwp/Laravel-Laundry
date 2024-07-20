@@ -20,7 +20,20 @@ class LandingPageController extends Controller
     {
         $transaksi = Transaksi::query()
             ->join('cabang as c', 'transaksi.cabang_id', '=', 'c.id')
-            ->where('nota_pelanggan', $request->nota)->select('transaksi.id', 'transaksi.nota_pelanggan', DB::raw('DATE(transaksi.waktu) as tanggal'), 'c.nama as cabang_nama', 'transaksi.jenis_pembayaran', 'transaksi.total_bayar_akhir', 'transaksi.bayar', 'transaksi.kembalian', 'transaksi.status')->first();
+            ->join('pelanggan as p', 'transaksi.pelanggan_id', '=', 'p.id')
+            ->where('nota_pelanggan', $request->nota)
+            ->select(
+                'transaksi.id',
+                'transaksi.nota_pelanggan',
+                DB::raw('DATE(transaksi.waktu) as tanggal'),
+                'c.nama as cabang_nama',
+                'p.nama as pelanggan_nama',
+                'transaksi.jenis_pembayaran',
+                'transaksi.total_bayar_akhir',
+                'transaksi.bayar',
+                'transaksi.kembalian',
+                'transaksi.status')
+            ->first();
         $detailTransaksi = DetailTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
         $layananTambahan = LayananTambahanTransaksi::where('transaksi_id', $transaksi->id)->orderBy('id', 'asc')->get();
 

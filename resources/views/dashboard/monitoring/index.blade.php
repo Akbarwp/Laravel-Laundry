@@ -705,6 +705,56 @@
             </div>
             {{-- Akhir Filter Cabang Tahun --}}
 
+            {{-- Awal Diagram Monitoring Gamis --}}
+            <div class="w-full lg:flex flex-none gap-3">
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Pendapatan Gamis <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-pendapatan-gamis" height="300"></canvas>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Gamis Terdaftar <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-gamis-terdaftar" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:flex flex-none gap-3">
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Gamis Berstatus Lulus <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-status-lulus" height="300"></canvas>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
+                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
+                        <div>
+                            <h6 class="font-bold dark:text-white">Gamis Berstatus Gamis <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="chart-status-gamis" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            {{-- Akhir Diagram Monitoring Gamis --}}
+
             {{-- Awal Tabel Monitoring Gamis --}}
             <div class="dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
                 <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
@@ -715,11 +765,11 @@
                     <div class="w-1/2 max-w-full flex-none px-3 text-right">
                         <button class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-2 lg:mb-0 inline-block cursor-pointer rounded-lg border border-solid border-yellow-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-yellow-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2" onclick="return updateMonitoringGamis()">
                             <i class="ri-arrow-up-line"></i>
-                            Perbarui Data
+                            Perbarui Data Bulan Ini
                         </button>
                         <button class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-slate-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-slate-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2" onclick="return resetMonitoringGamis()">
                             <i class="ri-loop-right-line"></i>
-                            Reset Data
+                            Perbarui Data Keseluruhan
                         </button>
                     </div>
                 </div>
@@ -801,56 +851,6 @@
                 </div>
             </div>
             {{-- Akhir Tabel Monitoring Gamis --}}
-
-            {{-- Awal Diagram Monitoring Gamis --}}
-            <div class="w-full lg:flex flex-none gap-3">
-                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
-                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                        <div>
-                            <h6 class="font-bold dark:text-white">Pendapatan Gamis <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
-                        </div>
-                    </div>
-                    <div>
-                        <canvas id="chart-pendapatan-gamis" height="300"></canvas>
-                    </div>
-                </div>
-
-                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
-                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                        <div>
-                            <h6 class="font-bold dark:text-white">Gamis Terdaftar <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
-                        </div>
-                    </div>
-                    <div>
-                        <canvas id="chart-gamis-terdaftar" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="w-full lg:flex flex-none gap-3">
-                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
-                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                        <div>
-                            <h6 class="font-bold dark:text-white">Gamis Berstatus Lulus <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
-                        </div>
-                    </div>
-                    <div>
-                        <canvas id="chart-status-lulus" height="300"></canvas>
-                    </div>
-                </div>
-
-                <div class="w-full lg:w-1/2 dark:bg-slate-850 dark:shadow-dark-xl relative mb-6 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid border-transparent bg-white bg-clip-border shadow-xl">
-                    <div class="border-b-solid mb-0 flex items-center justify-between rounded-t-2xl border-b-0 border-b-transparent p-6 pb-3">
-                        <div>
-                            <h6 class="font-bold dark:text-white">Gamis Berstatus Gamis <span class="text-blue-500">({{ $tahun ? $tahun : 'Semua Tahun' }})</span></h6>
-                        </div>
-                    </div>
-                    <div>
-                        <canvas id="chart-status-gamis" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-            {{-- Akhir Diagram Monitoring Gamis --}}
         </div>
     </div>
 @endsection

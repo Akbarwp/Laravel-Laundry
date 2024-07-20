@@ -131,10 +131,12 @@
                             <i class="ri-arrow-left-line"></i>
                             Kembali
                         </a>
-                        <a href="{{ route("transaksi.lurah.cabang.create", ['cabang' => $cabang->slug, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
-                            <i class="ri-add-fill"></i>
-                            Tambah
-                        </a>
+                        @role(["manajer_laundry", "pegawai_laundry"])
+                            <a href="{{ route("transaksi.lurah.cabang.create", ['cabang' => $cabang->slug, 'isJadwal' => $isJadwal]) }}" class="bg-150 active:opacity-85 tracking-tight-rem bg-x-25 mb-0 inline-block cursor-pointer rounded-lg border border-solid border-emerald-500 bg-transparent px-4 py-1 text-center align-middle text-sm font-bold leading-normal text-emerald-500 shadow-none transition-all ease-in hover:-translate-y-px hover:opacity-75 md:px-8 md:py-2">
+                                <i class="ri-add-fill"></i>
+                                Tambah
+                            </a>
+                        @endrole
                     </div>
                 </div>
                 <div class="flex-auto px-0 pb-2 pt-0">
@@ -220,15 +222,17 @@
                                                 <a href="{{ route("transaksi.lurah.view", ['cabang' => $cabang->slug, 'transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-info btn-sm">
                                                     <i class="ri-eye-line text-base"></i>
                                                 </a>
-                                                <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
-                                                    <i class="ri-pencil-fill text-base"></i>
-                                                </a>
-                                                <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
-                                                    <i class="ri-delete-bin-line text-base"></i>
-                                                </label>
-                                                <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
-                                                    <i class="ri-draft-line text-base"></i>
-                                                </label>
+                                                @role(["manajer_laundry", "pegawai_laundry"])
+                                                    <a href="{{ route("transaksi.lurah.cabang.edit", ['cabang' => $cabang->slug, 'transaksi' => $item->id, 'isJadwal' => $isJadwal]) }}" class="btn btn-outline btn-warning btn-sm">
+                                                        <i class="ri-pencil-fill text-base"></i>
+                                                    </a>
+                                                    <label for="delete_button" class="btn btn-outline btn-error btn-sm" onclick="return delete_button('{{ $item->id }}')">
+                                                        <i class="ri-delete-bin-line text-base"></i>
+                                                    </label>
+                                                    <label for="edit_status_button" class="btn btn-outline btn-primary tooltip btn-sm" data-tip="Ubah Status" onclick="return edit_status_button('{{ $item->id }}')">
+                                                        <i class="ri-draft-line text-base"></i>
+                                                    </label>
+                                                @endrole
                                                 <a href="{{ route("transaksi.cetak-struk", ['transaksi' => $item->id]) }}" target="_blank" class="btn btn-outline btn-ghost dark:border-white dark:text-white dark:bg-transparent dark:hover:bg-white dark:hover:text-slate-700 btn-sm tooltip" data-tip="Cetak Struk">
                                                     <i class="ri-receipt-line text-base"></i>
                                                 </a>

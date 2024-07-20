@@ -6,6 +6,7 @@ use App\Models\DetailGamis;
 use App\Models\Lurah;
 use App\Models\ManajerLaundry;
 use App\Models\PegawaiLaundry;
+use App\Models\PIC;
 use App\Models\RW;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,6 +30,8 @@ class ProfileController extends Controller
 
         if ($user->getRoleNames()[0] == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'manajer_laundry') {
@@ -52,6 +55,8 @@ class ProfileController extends Controller
 
         if ($user->getRoleNames()[0] == 'lurah') {
             $profile = Lurah::where('user_id', $user->id)->first();
+        } else if ($user->getRoleNames()[0] == 'pic') {
+            $profile = PIC::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'rw') {
             $profile = RW::where('user_id', $user->id)->first();
         } else if ($user->getRoleNames()[0] == 'manajer_laundry') {
@@ -112,6 +117,13 @@ class ProfileController extends Controller
                     Storage::delete($lurah->foto);
                 }
                 $profileUpdate = $lurah->update($validatedProfile);
+                break;
+            case 'pic':
+                $pic = PIC::where('user_id', $user->id)->first();
+                if ($pic->foto) {
+                    Storage::delete($pic->foto);
+                }
+                $profileUpdate = $pic->update($validatedProfile);
                 break;
             case 'rw':
                 $rw = RW::where('user_id', $user->id)->first();

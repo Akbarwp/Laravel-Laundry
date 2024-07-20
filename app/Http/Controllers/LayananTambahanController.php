@@ -38,7 +38,7 @@ class LayananTambahanController extends Controller
 
         if ($userRole == 'manajer_laundry') {
             $validated['cabang_id'] = auth()->user()->cabang_id;
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             $cabang = Cabang::where('slug', $request->cabang_slug)->first();
             $validated['cabang_id'] = $cabang->id;
         }
@@ -51,7 +51,7 @@ class LayananTambahanController extends Controller
             } else {
                 return to_route('layanan-tambahan')->with('error', 'Layanan Tambahan Gagal Ditambahkan');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($tambah) {
                 return back()->with('success', 'Layanan Tambahan Berhasil Ditambahkan');
             } else {
@@ -84,7 +84,7 @@ class LayananTambahanController extends Controller
             } else {
                 return to_route('layanan-tambahan')->with('error', 'Layanan Tambahan Gagal Diperbarui');
             }
-        } else if ($userRole == 'lurah') {
+        } else if ($userRole == 'pic') {
             if ($perbarui) {
                 return back()->with('success', 'Layanan Tambahan Berhasil Diperbarui');
             } else {
@@ -109,14 +109,14 @@ class LayananTambahanController extends Controller
         $userRole = auth()->user()->roles[0]->name;
         try {
             Excel::import(new LayananTambahanImport, $request->file('impor'));
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('success', 'Layanan Tambahan Berhasil Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('layanan-tambahan')->with('success', 'Layanan Tambahan Berhasil Ditambahkan');
             }
         } catch(\Exception $ex) {
             Log::info($ex);
-            if ($userRole == 'lurah') {
+            if ($userRole == 'pic') {
                 return to_route('layanan-cabang.cabang', $request->cabang)->with('error', 'Layanan Tambahan Gagal Ditambahkan');
             } else if ($userRole == 'manajer_laundry') {
                 return to_route('layanan-tambahan')->with('error', 'Layanan Tambahan Gagal Ditambahkan');

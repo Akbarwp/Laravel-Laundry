@@ -19,9 +19,12 @@
     </style>
 </head>
 
-{{-- <body style='font-family:tahoma; font-size:8pt;' onload="javascript:window.print()"> --}}
-<body style='font-family:tahoma; font-size:8pt;'>
+<body style='font-family:tahoma; font-size:8pt;' onload="javascript:window.print()">
+{{-- <body style='font-family:tahoma; font-size:8pt;'> --}}
     <center>
+        <div id="logo">
+            <img src="{!! asset("img/logo-laundry-simokerto.png") !!}" alt="logo" style="width: 70px; border-radius: 999px">
+        </div>
         <table style='width:550px; font-size:8pt; font-family:calibri; border-collapse: collapse;' border = '0'>
             <td width='70%' align='left' style='padding-right:80px; vertical-align:top'>
                 <span style='font-size:12pt'><b>{{ $cabang->nama }}</b></span></br>

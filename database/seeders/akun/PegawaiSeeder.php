@@ -36,6 +36,22 @@ class PegawaiSeeder extends Seeder
             'user_id' => $pegawai_laundry->id,
         ]);
 
+        $pegawai_laundry4 = User::factory()->create([
+            'username' => 'Pegawai Laundry 4',
+            'email' => 'pegawai4@gmail.com',
+            'cabang_id' => $cabang->id,
+        ]);
+        $pegawai_laundry4->assignRole($rolePegawai);
+        PegawaiLaundry::create([
+            'nama' => 'Pegawai Laundry 4',
+            'jenis_kelamin' => 'P',
+            'tempat_lahir' => 'Surabaya',
+            'tanggal_lahir' => '1997-03-03',
+            'telepon' => '082234567893',
+            'alamat' => 'Kelurahan Simokerto, Surabaya',
+            'user_id' => $pegawai_laundry4->id,
+        ]);
+
         //? Cabang 2
         $pegawai_laundry2 = User::factory()->create([
             'username' => 'Pegawai Laundry 2',

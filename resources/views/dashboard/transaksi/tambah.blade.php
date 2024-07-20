@@ -315,6 +315,7 @@
                 <div class="flex-auto px-6 pb-6 pt-0">
                     <form method="POST" enctype="multipart/form-data">
                         @csrf
+                        {{-- Pelanggan & Gamis --}}
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
@@ -342,8 +343,8 @@
                                     <span class="label-text font-semibold dark:text-slate-100">Gamis</span>
                                 </div>
                                 <select name="gamis_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100">
-                                    <option disabled selected>Pilih Gamis!</option>
-                                    <option value="null">Tidak Perlu Gamis</option>
+                                    {{-- <option disabled selected>Pilih Gamis!</option> --}}
+                                    <option value="null" selected>Tidak Perlu Gamis</option>
                                     @foreach ($gamis as $item)
                                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                     @endforeach
@@ -355,6 +356,66 @@
                                 @enderror
                             </label>
                         </div>
+
+                        {{-- Detail Transaksi --}}
+                        <div>
+                            <div class="my-3">
+                                <h6 class="font-bold dark:text-white">Detail Transaksi</h6>
+                            </div>
+                            <label class="form-control w-full">
+                                <div class="label">
+                                    <span class="label-text font-semibold dark:text-slate-100">
+                                        <x-label-input-required :value="'Layanan Prioritas'" />
+                                    </span>
+                                </div>
+                                <select name="layanan_prioritas_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
+                                    @foreach ($layananPrioritas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->nama }} (Rp{{ number_format($item->harga, 2, ',', '.') }}/kg)</option>
+                                    @endforeach
+                                </select>
+                                @error("layanan_prioritas_id")
+                                    <div class="label">
+                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
+                                    </div>
+                                @enderror
+                            </label>
+                            <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
+                                <label class="form-control w-full">
+                                    <div class="label">
+                                        <span class="label-text font-semibold dark:text-slate-100">Layanan Tambahan</span>
+                                    </div>
+                                    <select id="layananTambahan" name="layanan_tambahan_id[]" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" onchange="return ubahLayananTambahan($(this).val());" multiple>
+                                        <option disabled selected>Pilih Layanan Tambahan!</option>
+                                        @foreach ($layananTambahan as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                                <label class="form-control w-full">
+                                    <div class="label">
+                                        <span class="label-text font-semibold dark:text-slate-100">Total Biaya Layanan Tambahan</span>
+                                    </div>
+                                    <input type="number" min="0" value="0" name="total_biaya_layanan_tambahan" placeholder="Total Biaya Layanan Tambahan" class="input input-bordered w-full text-blue-700 bg-slate-300" readonly required />
+                                </label>
+                            </div>
+                            <div class="w-full mb-2">
+                                <div class="label">
+                                    <span class="label-text font-semibold dark:text-slate-100">Aksi Layanan</span>
+                                </div>
+                                <button type="button" id="addLayanan" class="btn btn-warning tooltip btn-sm w-10 h-10 text-white" data-tip="Tambah Layanan">
+                                    <i class="ri-add-fill text-base"></i>
+                                </button>
+                                <button type="button" id="deleteLayanan" class="btn btn-error tooltip btn-sm w-10 h-10 text-white" data-tip="Hapus Layanan (*paling bawah)">
+                                    <i class="ri-delete-bin-line text-base"></i>
+                                </button>
+                                <button type="button" id="saveLayanan" class="btn btn-info btn-sm tooltip w-10 h-10 text-white" data-tip="Cek Total Bayar">
+                                    <i class="ri-save-3-line text-base"></i>
+                                </button>
+                            </div>
+                            <div id="layananCart"></div>
+                        </div>
+
+                        {{-- Total Bayar --}}
                         <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
                             <label class="form-control w-full lg:w-1/2">
                                 <div class="label">
@@ -441,63 +502,6 @@
                                     </div>
                                 @enderror
                             </label>
-                        </div>
-
-                        <div>
-                            <div class="my-3">
-                                <h6 class="font-bold dark:text-white">Detail Transaksi</h6>
-                            </div>
-                            <label class="form-control w-full">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">
-                                        <x-label-input-required :value="'Layanan Prioritas'" />
-                                    </span>
-                                </div>
-                                <select name="layanan_prioritas_id" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" required>
-                                    @foreach ($layananPrioritas as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nama }} (Rp{{ number_format($item->harga, 2, ',', '.') }}/kg)</option>
-                                    @endforeach
-                                </select>
-                                @error("layanan_prioritas_id")
-                                    <div class="label">
-                                        <span class="label-text-alt text-sm text-error">{{ $message }}</span>
-                                    </div>
-                                @enderror
-                            </label>
-                            <div class="w-full flex flex-wrap justify-center gap-2 lg:flex-nowrap">
-                                <label class="form-control w-full">
-                                    <div class="label">
-                                        <span class="label-text font-semibold dark:text-slate-100">Layanan Tambahan</span>
-                                    </div>
-                                    <select id="layananTambahan" name="layanan_tambahan_id[]" class="select select-bordered text-base text-blue-700 dark:bg-slate-100" onchange="return ubahLayananTambahan($(this).val());" multiple>
-                                        <option disabled selected>Pilih Layanan Tambahan!</option>
-                                        @foreach ($layananTambahan as $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                </label>
-                                <label class="form-control w-full">
-                                    <div class="label">
-                                        <span class="label-text font-semibold dark:text-slate-100">Total Biaya Layanan Tambahan</span>
-                                    </div>
-                                    <input type="number" min="0" value="0" name="total_biaya_layanan_tambahan" placeholder="Total Biaya Layanan Tambahan" class="input input-bordered w-full text-blue-700 bg-slate-300" readonly required />
-                                </label>
-                            </div>
-                            <div class="w-full">
-                                <div class="label">
-                                    <span class="label-text font-semibold dark:text-slate-100">Aksi Layanan</span>
-                                </div>
-                                <button type="button" id="addLayanan" class="btn btn-warning tooltip btn-sm w-10 h-10 text-white" data-tip="Tambah Layanan">
-                                    <i class="ri-add-fill text-base"></i>
-                                </button>
-                                <button type="button" id="deleteLayanan" class="btn btn-error tooltip btn-sm w-10 h-10 text-white" data-tip="Hapus Layanan (*paling bawah)">
-                                    <i class="ri-delete-bin-line text-base"></i>
-                                </button>
-                                <button type="button" id="saveLayanan" class="btn btn-info btn-sm tooltip w-10 h-10 text-white" data-tip="Cek Total Bayar">
-                                    <i class="ri-save-3-line text-base"></i>
-                                </button>
-                            </div>
-                            <div id="layananCart"></div>
                         </div>
 
                         <div class="my-5 flex flex-wrap justify-center gap-2">
